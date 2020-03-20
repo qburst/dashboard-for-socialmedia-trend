@@ -8,7 +8,7 @@ from database_models.mongo_models import TwitterData
 from configs import spark_config
 from utils.constants import KEYWORDS, MANDATORY_HASHTAGS, \
     CATEGORIES, COUNTRIES, DB_NAME, INFECTED_KEYWORDS, RECOVERED_KEYWORDS, \
-    DEATH_KEYWORDS, TRAVEL_HISTORY_KEYWORDS
+    DEATH_KEYWORDS, TRAVEL_HISTORY_KEYWORDS, VACCINE_KEYWORDS, CURE_KEYWORDS
 
 
 def saveMongo(data):
@@ -57,6 +57,8 @@ def getCategory(text):
     category += processCategory(DEATH_KEYWORDS, text, "DEATH")
     category += processCategory(RECOVERED_KEYWORDS, text, "RECOVERED")
     category += processCategory(TRAVEL_HISTORY_KEYWORDS, text, "TRAVEL_HISTORY")
+    category += processCategory(VACCINE_KEYWORDS, text, "VACCINE")
+    category += processCategory(CURE_KEYWORDS, text, "CURE")
 
     if len(category) == 0:
         category.append("--NA--")
