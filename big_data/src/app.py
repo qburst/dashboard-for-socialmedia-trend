@@ -1,20 +1,15 @@
 import time
 import sys
-from datetime import datetime
 from json import loads
 from os import path
-from mongoengine import DynamicDocument, StringField, connect, DateTimeField
+from mongoengine import connect
 
+from database_models.mongo_models import TwitterData
 from configs import spark_config
 from utils.constants import KEYWORDS, MANDATORY_HASHTAGS, \
     CATEGORIES, COUNTRIES, DB_NAME, INFECTED_KEYWORDS, RECOVERED_KEYWORDS, \
-    DEATH_KEYWORDS
+    DEATH_KEYWORDS, TRAVEL_HISTORY_KEYWORDS
 
-
-class TwitterData(DynamicDocument):
-    text = StringField(required=True, max_length=200)
-    created_at = DateTimeField(default=datetime.utcnow())
-    meta = {'allow_inheritance': True}
 
 def saveMongo(data):
     data = loads(data)
@@ -47,32 +42,33 @@ def filterKeyword(text):
 
 
 def getCountry(text):
+    countries = []
     for country in COUNTRIES:
         if country in text.lower():
-            return country
-    return "--NA--"
+            countries.append(country)
+    if len(countries) == 0:
+        countries.append("--NA--")
+    return countries
 
 
 def getCategory(text):
     category = []
-    for keyword in INFECTED_KEYWORDS:
-        if keyword in text.lower():
-            category.append("INFECTED")
-            break
-    for keyword in DEATH_KEYWORDS:
-        if keyword in text.lower():
-            category.append("DEATH")
-            break
-
-    for keyword in RECOVERED_KEYWORDS:
-        if keyword in text.lower():
-            category.append("RECOVERED")
-            break
+    category += processCategory(INFECTED_KEYWORDS, text, "INFECTED")
+    category += processCategory(DEATH_KEYWORDS, text, "DEATH")
+    category += processCategory(RECOVERED_KEYWORDS, text, "RECOVERED")
+    category += processCategory(TRAVEL_HISTORY_KEYWORDS, text, "TRAVEL_HISTORY")
 
     if len(category) == 0:
         category.append("--NA--")
 
     return category
+
+
+def processCategory(keywords, text, category):
+    for keyword in keywords:
+        if keyword in text.lower():
+            return [category]
+    return []
 
 
 if __name__ == "__main__":
