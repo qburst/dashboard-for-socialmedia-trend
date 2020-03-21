@@ -1,16 +1,20 @@
 from pycountry import countries
 
-DB_NAME = 'streamdb3'
+# DB constants
+DB_NAME = "test"
+HOST = "dap-cluster-uteti.mongodb.net"
+USERNAME = "big_data"
+PASSWORD = "bigdatapassword"
 
 
-COUNTRIES = [country.name.lower() for country in list(countries)] + ['US', 'UK', 'SA', 'USA', 'worldwide']
+COUNTRIES = [country.name.lower() for country in list(countries)] + ['us', 'uk', 'sa', 'usa', 'worldwide']
 CATEGORIES = ['INFECTED', 'RECOVERED', 'DEATH', 'POSITIVE', 'NEGATIVE', 'TRAVEL_HISTORY']
 
 INFECTED_KEYWORDS = ['infected', 'infect', 'tested positive', 'confirmed', 'positive', 'new case']
 RECOVERED_KEYWORDS = ['recover', 'recovered', 'tested negative', 'negative']
 DEATH_KEYWORDS = ['death toll', 'died', 'deaths', 'death']
 TRAVEL_HISTORY_KEYWORDS = ['travel history']
-SUPPLY_KEYWORDS = []
+SUPPLY_KEYWORDS = ['demand', 'need']
 VACCINE_KEYWORDS = ['vaccine']
 CURE_KEYWORDS = ['cure']
 
