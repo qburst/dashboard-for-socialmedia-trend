@@ -7,7 +7,7 @@ USERNAME = "big_data"
 PASSWORD = "bigdatapassword"
 
 
-COUNTRIES = [country.name.lower() for country in list(countries)] + ['uk', 'sa', 'usa', 'worldwide']
+COUNTRIES = [country.name.lower() for country in list(countries)] + ['usa', 'worldwide']
 CATEGORIES = ['INFECTED', 'RECOVERED', 'DEATH', 'POSITIVE', 'NEGATIVE', 'TRAVEL_HISTORY']
 
 INFECTED_KEYWORDS = ['infected', 'infect', 'tested positive', 'confirmed', 'positive', 'new case']
