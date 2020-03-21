@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from mongoengine import connect
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = '-8wzbh&jo$b=55i_189&pss@f^sx9lpm+!+1&+fs1-e#r^q@(_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_mongoengine',
+    'corona_tweet_analysis'
 ]
 
 MIDDLEWARE = [
@@ -75,11 +79,24 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'streamdb'),
+        'ENGINE': '',
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'twitter_data_analysis',
+#         'HOST': 'mongodb+srv://big_data:bigdatapassword@dap-cluster-uteti.mongodb.net/test_django?retryWrites=true&w=majority',
+#         'USER': 'big_data',
+#         'PASSWORD': 'bigdatapassword',
+#     }
+# }
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
 
 
 # Password validation
@@ -119,3 +136,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# DB constants
+DB_NAME = "test"
+HOST = "dap-cluster-uteti.mongodb.net"
+USERNAME = "big_data"
+PASSWORD = "bigdatapassword"
+
+connect(host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority')
