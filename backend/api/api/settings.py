@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from mongoengine import connect
+import mongoengine
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -79,26 +79,38 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
-# DATABASES = {
+# MONGODB_DATABASES = {
 #     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME': 'twitter_data_analysis',
-#         'HOST': 'mongodb+srv://big_data:bigdatapassword@dap-cluster-uteti.mongodb.net/test_django?retryWrites=true&w=majority',
-#         'USER': 'big_data',
-#         'PASSWORD': 'bigdatapassword',
+#         'ENGINE': '',
 #     }
 # }
+
+MONGODB_DATABASES = {
+    "default": {
+        "name": "test",
+        # "host": "dap-cluster-uteti.mongodb.net",
+        "host":"mongodb+srv://big_data:bigdatapassword@dap-cluster-uteti.mongodb.net/test?retryWrites=true&w=majority",
+        "username":"big_data",
+        "password":"bigdatapassword",
+        "port": 27017,
+        "tz_aware": True,  # if you use timezones in django (USE_TZ = True)
+    },
+}
+
+mongoengine.connect(
+    db=MONGODB_DATABASES['default']['name'],
+    host=MONGODB_DATABASES['default']['host']
+)
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -138,9 +150,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # DB constants
-DB_NAME = "test"
-HOST = "dap-cluster-uteti.mongodb.net"
-USERNAME = "big_data"
-PASSWORD = "bigdatapassword"
+# DB_NAME = "test"
+# HOST = "dap-cluster-uteti.mongodb.net"
+# USERNAME = "big_data"
+# PASSWORD = "bigdatapassword"
 
-connect(host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority')
+# mongoengine.connect(host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority')

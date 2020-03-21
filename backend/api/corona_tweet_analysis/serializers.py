@@ -1,15 +1,14 @@
-from .models import TwitterData
-# from rest_framework import serializers
 from rest_framework_mongoengine import serializers
+from .models import TwitterData, Category
 
 
 class TwitterDataSerializer(serializers.DocumentSerializer):
     class Meta:
         model = TwitterData
-        fields = ('id', 'text')
+        fields = '__all__'
 
 
 class CategorySerializer(serializers.DocumentSerializer):
     class Meta:
-        model = TwitterData
-        fields = ('text')
+        model = Category
+        fields = '__all__'

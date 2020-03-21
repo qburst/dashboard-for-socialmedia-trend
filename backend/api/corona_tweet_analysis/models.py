@@ -1,24 +1,20 @@
-from mongoengine import DynamicDocument, StringField, DateTimeField
-# from mongoengine import *
+from mongoengine import *
 import datetime
 
+class HashTag(EmbeddedDocument):
+    text = StringField()
+    indices = ListField(IntField(), default=list)
+
+class Category(DynamicDocument):
+    name = StringField()
 
 class TwitterData(DynamicDocument):
-    text = StringField(required=True, max_length=200)
+    text = StringField(required=True)
+    country = StringField(required=True)
     created_at = DateTimeField(default=datetime.datetime.now())
+    category = ListField(StringField(), default=list)
+    # Use this once separate Cateory table is formed
+    # category = ListField(ReferenceField(Category))
+    hashtags = ListField(EmbeddedDocumentField(HashTag), default=list)
     meta = {'allow_inheritance': True}
 
-# class TwitterData(models.Model):   
-#     _id = models.IntegerField(db_column='_id') 
-#     _cls = models.CharField(max_length=100)
-#     text = models.TextField()
-#     created_at = models.DateTimeField(
-#         default=datetime.datetime.now, editable=False,
-#     )
-#     hashtags = models.ListField(default=[])
-#     country = models.CharField(max_length=100)
-    # category = models.EmbeddedDictField(model_container=dict)
-    # category = models.ListField(default=[])
-    
-    # class Meta:        
-    #     abstract = True
