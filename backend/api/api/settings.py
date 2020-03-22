@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_mongoengine',
+    # 'mongoengine.django.mongo_auth',
     'corona_tweet_analysis'
 ]
 
@@ -77,6 +78,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# Given as default to provide a default engine
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -84,23 +86,26 @@ DATABASES = {
     }
 }
 
-# MONGODB_DATABASES = {
-#     'default': {
-#         'ENGINE': '',
-#     }
-# }
-
+#To connect to local db
 MONGODB_DATABASES = {
-    "default": {
-        "name": "test",
-        # "host": "dap-cluster-uteti.mongodb.net",
-        "host":"mongodb+srv://big_data:bigdatapassword@dap-cluster-uteti.mongodb.net/test?retryWrites=true&w=majority",
-        "username":"big_data",
-        "password":"bigdatapassword",
-        "port": 27017,
-        "tz_aware": True,  # if you use timezones in django (USE_TZ = True)
-    },
+    'default': {
+        'name':'streamdb2',
+        'host':'localhost'
+    }
 }
+
+# To connect to remote db on Cloud Atlas
+# MONGODB_DATABASES = {
+#     "default": {
+#         "name": "test",
+#         # "host": "dap-cluster-uteti.mongodb.net",
+#         "host":"mongodb+srv://big_data:bigdatapassword@dap-cluster-uteti.mongodb.net/test?retryWrites=true&w=majority",
+#         "username":"big_data",
+#         "password":"bigdatapassword",
+#         "port": 27017,
+#         "tz_aware": True,  # if you use timezones in django (USE_TZ = True)
+#     },
+# }
 
 mongoengine.connect(
     db=MONGODB_DATABASES['default']['name'],
@@ -128,6 +133,14 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# AUTH_USER_MODEL = 'mongo_auth.MongoUser'
+
+# MONGOENGINE_USER_DOCUMENT = 'mongoengine.django.auth.User'
+
+# AUTHENTICATION_BACKENDS = (
+#     'mongoengine.django.auth.MongoEngineBackend'
+# )
 
 
 # Internationalization

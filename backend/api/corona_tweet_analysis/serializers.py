@@ -1,5 +1,5 @@
 from rest_framework_mongoengine import serializers
-from .models import TwitterData, Category
+from  corona_tweet_analysis.models import TwitterData, Category
 
 
 class TwitterDataSerializer(serializers.DocumentSerializer):
