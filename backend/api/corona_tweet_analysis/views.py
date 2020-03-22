@@ -1,3 +1,4 @@
+import mongoengine
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
 from corona_tweet_analysis.utils.base_view import BaseViewManager
@@ -22,10 +23,13 @@ class SpamCountView(generics.ListCreateAPIView):
     serializer_class = TwitterDataSerializer
 
     def put(self, request, *args, **kwargs):
+        # user = authenticate(username=request.user.username, password=request.user.password)
+        # assert isinstance(user, mongoengine.django.auth.User)
         tweet_id = request.query_params.get('tweet_id')
         if not tweet_id:
             return send_response({'status': INVALID_PARAMETERS, 'message':'Tweet id is required'})
-        tweet = TwitterData.objects(id=tweet_id)
+        tweet = TwitterData.objects(id=tweet_id).first()
+        print(tweet)
         countries = TwitterData.objects(country__ne='--NA--').distinct('country')
         country_recovery_list= []
         for country in countries:
@@ -33,9 +37,8 @@ class SpamCountView(generics.ListCreateAPIView):
             country_recovery_list.append({country:recovered_count})
         if not tweet:
             return send_response({'status': FAIL, 'message':'Tweet not found'})
-        print("TWEEEEEEET", countries, country_recovery_list)
-        spam_count = tweet[0].spam_count + 1
-        tweet[0].update(spam_count=spam_count)
+        spam_count = tweet.spam_count + 1
+        tweet.update(spam_count=spam_count)
         return send_response({'status': SUCCESS, 'data': 'Spam count updated'})
 
 class StatisticsView(generics.ListCreateAPIView):

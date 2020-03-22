@@ -138,9 +138,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # MONGOENGINE_USER_DOCUMENT = 'mongoengine.django.auth.User'
 
-# AUTHENTICATION_BACKENDS = (
-#     'mongoengine.django.auth.MongoEngineBackend'
-# )
+AUTHENTICATION_BACKENDS = (
+    'mongoengine.django.auth.MongoEngineBackend'
+)
 
 
 # Internationalization
