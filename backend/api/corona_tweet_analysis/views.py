@@ -48,7 +48,7 @@ class StatisticsView(generics.ListCreateAPIView):
         # get the number of infected cases for eah country
         countries = TwitterData.objects(country__ne='--NA--').distinct('country')
         for country in countries:
-            recovered_count = TwitterData.objects(category='INFECTED').count()  
+            recovered_count = TwitterData.objects(category='INFECTED', country=country).count()  
             country_confirmed_dict[country] = recovered_count
         
         # Calculate the number of infected cases, deaths and recovery cases based on category
