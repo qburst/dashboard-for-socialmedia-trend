@@ -6,5 +6,6 @@ urlpatterns = [
     path('categories/', views.CategoryView.as_view(), name='CategoryView'),
     path('tweets/', views.TwitterDataView.as_view(), name='TwitterDataView'),
     path('add_spam_count/', views.SpamCountView.as_view(), name='SpamCountView'),
+    path('get_statistics/', views.StatisticsView.as_view(), name='StatisticsView'),
 ]
 

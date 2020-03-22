@@ -89,7 +89,7 @@ DATABASES = {
 #To connect to local db
 MONGODB_DATABASES = {
     'default': {
-        'name':'streamdb2',
+        'name':'streamdb',
         'host':'localhost'
     }
 }
