@@ -131,5 +131,5 @@ HOST = "dap-cluster-uteti.mongodb.net"
 USERNAME = "big_data"
 PASSWORD = "bigdatapassword"
 
-connect(db="streamdb", host="localhost")
-    # host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority')
+connect(
+    host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority')
