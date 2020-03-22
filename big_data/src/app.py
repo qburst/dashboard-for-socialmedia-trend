@@ -29,7 +29,7 @@ def saveMongo(data):
 
             
             tweet = TwitterData(text=text)
-            tweet.hashtags = hashtags
+            tweet.hashtags = [hashtag["text"] for hashtag in hashtags]
             tweet.user = data.get('user')
             tweet.country = getCountry(text)
             tweet.category = categories
