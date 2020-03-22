@@ -77,9 +77,12 @@ WSGI_APPLICATION = 'testmongo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# Keeping this default configuration for Djangoto not throw any errors
+
 DATABASES = {
     'default': {
-        'ENGINE': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -128,4 +131,5 @@ HOST = "dap-cluster-uteti.mongodb.net"
 USERNAME = "big_data"
 PASSWORD = "bigdatapassword"
 
-connect(host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority')
+connect(db="streamdb", host="localhost")
+    # host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority')
