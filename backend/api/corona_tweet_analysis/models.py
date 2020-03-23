@@ -43,7 +43,8 @@ class Category(DynamicDocument):
 
 class TwitterData(DynamicDocument):
     text = fields.StringField(required=True)
-    country = fields.ListField(fields.StringField(),default=list)
+    # country = fields.ListField(fields.StringField(),default=list)
+    country = fields.StringField()
     created_at = fields.DateTimeField(default=datetime.datetime.now())
     # category = fields.ListField(fields.StringField(), default=list)
     # Use this once separate Cateory table is formed
