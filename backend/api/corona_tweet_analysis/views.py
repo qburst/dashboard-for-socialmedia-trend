@@ -10,6 +10,7 @@ from rest_framework import generics, permissions
 from rest_framework_mongoengine import viewsets, generics
 from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer
 
+
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -23,6 +24,9 @@ class TwitterDataView(generics.ListAPIView):
             tweets = TwitterData.objects.all()
             category = request.query_params.get('category')
             if category:
+                category_obj = Category.objects(_id=category).first()
+                if not category_obj:
+                    return send_response({'status': INVALID_PARAMETERS, 'message':'Ctagory not found'})
                 tweets = tweets(category=category)            
             serializer = self.serializer_class(tweets, many=True) 
             if serializer.is_valid:
