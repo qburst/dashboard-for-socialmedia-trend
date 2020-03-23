@@ -51,5 +51,6 @@ class TwitterData(DynamicDocument):
     hashtags = fields.ListField(fields.EmbeddedDocumentField(HashTag), default=list)
     # spam_count = fields.ListField(fields.ReferenceField(User))
     spam_count = fields.IntField(default=0)
+    is_spam = fields.BooleanField(default=False)
     meta = {'allow_inheritance': True}
 

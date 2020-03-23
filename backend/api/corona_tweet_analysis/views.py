@@ -56,7 +56,10 @@ class SpamCountView(generics.ListCreateAPIView):
             if not tweet:
                 return send_response({'status': FAIL, 'message':'Tweet not found'})
             spam_count = tweet.spam_count + 1
-            tweet.update(spam_count=spam_count)
+            is_spam = False
+            if spam_count > 10:
+                is_spam = True
+            tweet.update(spam_count=spam_count, is_spam=is_spam)
             return send_response({'status': SUCCESS, 'data': 'Spam count updated'})
         except Exception as err:
             return send_response({'status': FAIL})
