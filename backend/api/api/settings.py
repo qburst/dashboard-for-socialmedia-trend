@@ -32,17 +32,19 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
+    'users',
+    'corona_tweet_analysis',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework_mongoengine',
+    # 'rest_framework',
+    # 'rest_framework_mongoengine',
     'corsheaders',
-    # 'mongoengine.django.mongo_auth',
-    'corona_tweet_analysis'
 ]
 
 MIDDLEWARE = [
@@ -80,18 +82,20 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# Given as default to provide a default engine
+# Database
+# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'djongo',
+        'NAME': 'testdjongo',
     }
 }
 
 #To connect to local db
 MONGODB_DATABASES = {
     'default': {
-        'name':'streamdb',
+        'name':'testdjongo',
         'host':'localhost'
     }
 }
@@ -110,8 +114,8 @@ MONGODB_DATABASES = {
 # }
 
 mongoengine.connect(
-    db=MONGODB_DATABASES['default']['name'],
-    host=MONGODB_DATABASES['default']['host']
+    db=DATABASES['default']['name'],
+    host=DATABASES['default']['host']
 )
 
 REST_FRAMEWORK = {
@@ -136,13 +140,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# AUTH_USER_MODEL = 'mongo_auth.MongoUser'
-
-# MONGOENGINE_USER_DOCUMENT = 'mongoengine.django.auth.User'
-
-AUTHENTICATION_BACKENDS = (
-    'mongoengine.django.auth.MongoEngineBackend'
-)
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -157,17 +154,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-CORS_ORIGIN_ALLOW_ALL = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 
-# DB constants
-# DB_NAME = "test"
-# HOST = "dap-cluster-uteti.mongodb.net"
-# USERNAME = "big_data"
-# PASSWORD = "bigdatapassword"
-
-# mongoengine.connect(host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority')
+AUTH_USER_MODEL = 'users.UserProfile'
+CORS_ORIGIN_ALLOW_ALL = True
