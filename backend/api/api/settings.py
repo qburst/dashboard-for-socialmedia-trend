@@ -89,33 +89,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'testdjongo',
+        'HOST': 'localhost'
     }
 }
-
-#To connect to local db
-MONGODB_DATABASES = {
-    'default': {
-        'name':'testdjongo',
-        'host':'localhost'
-    }
-}
-
-# To connect to remote db on Cloud Atlas
-# MONGODB_DATABASES = {
-#     "default": {
-#         "name": "test",
-#         # "host": "dap-cluster-uteti.mongodb.net",
-#         "host":"mongodb+srv://big_data:bigdatapassword@dap-cluster-uteti.mongodb.net/test?retryWrites=true&w=majority",
-#         "username":"big_data",
-#         "password":"bigdatapassword",
-#         "port": 27017,
-#         "tz_aware": True,  # if you use timezones in django (USE_TZ = True)
-#     },
-# }
 
 mongoengine.connect(
-    db=DATABASES['default']['name'],
-    host=DATABASES['default']['host']
+    db=DATABASES['default']['NAME'],
+    host=DATABASES['default']['HOST']
 )
 
 REST_FRAMEWORK = {
