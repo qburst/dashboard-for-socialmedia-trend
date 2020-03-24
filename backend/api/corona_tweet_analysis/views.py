@@ -40,7 +40,7 @@ class SpamCountView(generics.ListCreateAPIView):
     queryset = TwitterData.objects.all()
     serializer_class = TwitterDataSerializer
     authentication_classes = (TokenAuthentication,)
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         try:
