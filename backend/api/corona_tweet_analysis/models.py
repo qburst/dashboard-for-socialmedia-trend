@@ -55,11 +55,15 @@ class TwitterData(DynamicDocument):
     meta = {'allow_inheritance': True}
 
 
+class Data(EmbeddedDocument):
+    name = fields.StringField(required=True)
+    new_cases = fields.StringField(required=True)
+    new_deaths = fields.StringField(required=True)
+    total_cases = fields.StringField(required=True)
+    total_deaths = fields.StringField(required=True)
+
+
 class CoronaReport(DynamicDocument):
     created_at = DateTimeField()
-    country = StringField(required=True, max_length=200)
-    new_cases = IntField(default=0)
-    new_deaths = IntField(default=0)
-    total_cases = IntField(default=0)
-    total_deaths = IntField(default=0)
+    data = fields.ListField(fields.EmbeddedDocumentField(Data), default=list)
     meta = {'allow_inheritance': True}

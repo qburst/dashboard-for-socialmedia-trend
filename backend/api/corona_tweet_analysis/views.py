@@ -16,8 +16,9 @@ class CategoryView(generics.ListAPIView):
     serializer_class = CategorySerializer
 
 class CoronaReportView(generics.ListAPIView):
-    queryset = CoronaReport.objects.all()
+    queryset = CoronaReport.objects.order_by('-created_at').limit(1)
     serializer_class = CoronaReportSerializer
+
 
 class TwitterDataView(generics.ListAPIView):
     queryset = TwitterData.objects.all()
