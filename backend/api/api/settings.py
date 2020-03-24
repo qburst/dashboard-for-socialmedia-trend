@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'testdjongo',
+        'NAME': 'streamdb',
         'HOST': 'localhost'
     }
 }
