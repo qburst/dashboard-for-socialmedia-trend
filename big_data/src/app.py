@@ -18,7 +18,7 @@ def saveMongo(data):
     if not text.startswith("RT @") and filterKeyword(text) and "retweeted_status" not in data.keys() and text != '--NA--':
         hashtags = data.get('entities', {}).get('hashtags', [])
         if filterHash(hashtags):
-                db_client = connect(
+            db_client = connect(
                 db=DB_NAME
                 # host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority'
             )
