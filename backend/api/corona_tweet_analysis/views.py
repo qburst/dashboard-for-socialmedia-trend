@@ -9,24 +9,31 @@ from corona_tweet_analysis import serializers
 from rest_framework import generics, permissions
 from rest_framework_mongoengine import viewsets, generics
 from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer
-
+from rest_framework.authentication import TokenAuthentication
+from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer
+# from users import permissions
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticated]
 
 class TwitterDataView(generics.ListAPIView):
     queryset = TwitterData.objects.all()
     serializer_class = TwitterDataSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):     
         try:  
+            print(request.user, request.user.is_authenticated)
             tweets = TwitterData.objects.all()
             category = request.query_params.get('category')
             if category:
                 category_obj = Category.objects(_id=category).first()
                 if not category_obj:
-                    return send_response({'status': INVALID_PARAMETERS, 'message':'Ctagory not found'})
+                    return send_response({'status': INVALID_PARAMETERS, 'message':'Category not found'})
                 tweets = tweets(category=category)            
             serializer = self.serializer_class(tweets, many=True) 
             if serializer.is_valid:
