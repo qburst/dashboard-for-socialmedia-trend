@@ -30,7 +30,7 @@ def sendData(c_socket):
     auth.set_access_token(stream_source_config.access_token, stream_source_config.access_secret)
 
     twitter_stream = Stream(auth, TweetsListener(c_socket))
-    covidtags = ['COVID19,coronavirus,Corona,CoronaVirusUpdate,coronavirusindia']
+    covidtags = ['COVID19,coronavirus,Corona,CoronaVirusUpdate,coronavirusindia,IndiaFightsCorona,CoronavirusLockdown,Covid19India,StayAtHomeOrder']
     try:
         twitter_stream.filter(track=covidtags)
     except KeyboardInterrupt as e:
