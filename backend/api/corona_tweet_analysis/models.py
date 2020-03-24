@@ -1,6 +1,8 @@
 import datetime
 import mongoengine
-from mongoengine import fields, DynamicDocument, EmbeddedDocument
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+from mongoengine import fields, DynamicDocument, EmbeddedDocument, StringField, DateTimeField, IntField
 
 class HashTag(EmbeddedDocument):
     text = fields.StringField()
@@ -21,4 +23,16 @@ class TwitterData(DynamicDocument):
     spam_users = fields.ListField(fields.StringField(), default=list)
     url = fields.StringField()
 
+
+class Data(EmbeddedDocument):
+    name = fields.StringField(required=True)
+    new_cases = fields.StringField(required=True)
+    new_deaths = fields.StringField(required=True)
+    total_cases = fields.StringField(required=True)
+    total_deaths = fields.StringField(required=True)
+
+
+class CoronaReport(DynamicDocument):
+    created_at = DateTimeField()
+    data = fields.ListField(fields.EmbeddedDocumentField(Data), default=list)
     meta = {'allow_inheritance': True}
