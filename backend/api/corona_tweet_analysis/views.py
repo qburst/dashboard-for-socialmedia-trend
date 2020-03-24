@@ -1,17 +1,14 @@
 import mongoengine
 from django.shortcuts import render
-from django.contrib.auth.models import User, Group
 from corona_tweet_analysis.utils.base_view import BaseViewManager
 from corona_tweet_analysis.utils.responses import send_response
-from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST
+from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST, UNAUTHORIZED
 from corona_tweet_analysis.models import TwitterData, Category
 from corona_tweet_analysis import serializers
-from rest_framework import generics, permissions
-from rest_framework_mongoengine import viewsets, generics
-from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer
+from rest_framework_mongoengine import generics
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import permissions
 from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer
-
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
@@ -24,7 +21,7 @@ class TwitterDataView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):     
         try:  
-            tweets = TwitterData.objects.filter(is_spam=False)
+            tweets = TwitterData.objects(is_spam__ne=True)
             category = request.query_params.get('category')
             if category:
                 category_obj = Category.objects(_id=category).first()
@@ -43,7 +40,7 @@ class SpamCountView(generics.ListCreateAPIView):
     queryset = TwitterData.objects.all()
     serializer_class = TwitterDataSerializer
     authentication_classes = (TokenAuthentication,)
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         try:
@@ -52,13 +49,19 @@ class SpamCountView(generics.ListCreateAPIView):
                 return send_response({'status': INVALID_PARAMETERS, 'message':'Tweet id is required'})
             tweet = TwitterData.objects(id=tweet_id).first()
             if not tweet:
-                return send_response({'status': FAIL, 'message':'Tweet not found'})
-            spam_count = tweet.spam_count + 1
-            is_spam = False
-            if spam_count > 10 or request.user.is_superuser:
-                is_spam = True
-            tweet.update(spam_count=spam_count, is_spam=is_spam)
-            return send_response({'status': SUCCESS, 'data': 'Spam count updated'})
+                return send_response({'status': FAIL, 'message':'Tweet not found'})   
+
+            # Handling spam tweets 
+            spam_users = tweet.spam_users
+            spam_count = tweet.spam_count
+            if request.user.email not in spam_users:
+                spam_users.append(request.user.email)
+                spam_count = tweet.spam_count + 1
+            
+            if len(spam_users) > 10 or request.user.is_superuser:
+                tweet.update(spam_count=spam_count, is_spam=True, spam_users=spam_users)
+                return send_response({'status': SUCCESS, 'data': 'Spam count updated'})
+            return send_response({'status': BAD_REQUEST, 'data': 'You have already mark this as spam'})
         except Exception as err:
             return send_response({'status': FAIL})
 
