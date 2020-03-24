@@ -19,12 +19,12 @@ class CategoryView(generics.ListAPIView):
 
 
 class TwitterDataView(generics.ListAPIView):
-    queryset = TwitterData.objects.filter(is_spam=False)
+    queryset = TwitterData.objects.all()
     serializer_class = TwitterDataSerializer
 
     def get(self, request, *args, **kwargs):     
         try:  
-            tweets = TwitterData.objects.all()
+            tweets = TwitterData.objects.filter(is_spam=False)
             category = request.query_params.get('category')
             if category:
                 category_obj = Category.objects(_id=category).first()
@@ -47,22 +47,15 @@ class SpamCountView(generics.ListCreateAPIView):
 
     def put(self, request, *args, **kwargs):
         try:
-            # user = authenticate(username=request.user.username, password=request.user.password)
-            # assert isinstance(user, mongoengine.django.auth.User)
             tweet_id = request.query_params.get('tweet_id')
             if not tweet_id:
                 return send_response({'status': INVALID_PARAMETERS, 'message':'Tweet id is required'})
             tweet = TwitterData.objects(id=tweet_id).first()
-            countries = TwitterData.objects(country__ne='--NA--').distinct('country')
-            country_recovery_list= []
-            for country in countries:
-                recovered_count = TwitterData.objects(category='RECOVRED').count()
-                country_recovery_list.append({country:recovered_count})
             if not tweet:
                 return send_response({'status': FAIL, 'message':'Tweet not found'})
             spam_count = tweet.spam_count + 1
             is_spam = False
-            if spam_count > 10:
+            if spam_count > 10 or request.user.is_superuser:
                 is_spam = True
             tweet.update(spam_count=spam_count, is_spam=is_spam)
             return send_response({'status': SUCCESS, 'data': 'Spam count updated'})
