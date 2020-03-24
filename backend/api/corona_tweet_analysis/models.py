@@ -43,7 +43,8 @@ class Category(DynamicDocument):
 
 class TwitterData(DynamicDocument):
     text = fields.StringField(required=True)
-    country = fields.ListField(fields.StringField(),default=list)
+    # country = fields.ListField(fields.StringField(),default=list)
+    country = fields.StringField()
     created_at = fields.DateTimeField(default=datetime.datetime.now())
     # category = fields.ListField(fields.StringField(), default=list)
     # Use this once separate Cateory table is formed
@@ -51,5 +52,6 @@ class TwitterData(DynamicDocument):
     hashtags = fields.ListField(fields.EmbeddedDocumentField(HashTag), default=list)
     # spam_count = fields.ListField(fields.ReferenceField(User))
     spam_count = fields.IntField(default=0)
+    is_spam = fields.BooleanField(default=False)
     meta = {'allow_inheritance': True}
 

@@ -32,19 +32,23 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
+    'users',
+    'corona_tweet_analysis',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework_mongoengine',
-    # 'mongoengine.django.mongo_auth',
-    'corona_tweet_analysis'
+    # 'rest_framework',
+    # 'rest_framework_mongoengine',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -78,38 +82,20 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-# Given as default to provide a default engine
+# Database
+# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'djongo',
+        'NAME': 'testdjongo',
+        'HOST': 'localhost'
     }
 }
-
-#To connect to local db
-MONGODB_DATABASES = {
-    'default': {
-        'name':'streamdb',
-        'host':'localhost'
-    }
-}
-
-# To connect to remote db on Cloud Atlas
-# MONGODB_DATABASES = {
-#     "default": {
-#         "name": "test",
-#         # "host": "dap-cluster-uteti.mongodb.net",
-#         "host":"mongodb+srv://big_data:bigdatapassword@dap-cluster-uteti.mongodb.net/test?retryWrites=true&w=majority",
-#         "username":"big_data",
-#         "password":"bigdatapassword",
-#         "port": 27017,
-#         "tz_aware": True,  # if you use timezones in django (USE_TZ = True)
-#     },
-# }
 
 mongoengine.connect(
-    db=MONGODB_DATABASES['default']['name'],
-    host=MONGODB_DATABASES['default']['host']
+    db=DATABASES['default']['NAME'],
+    host=DATABASES['default']['HOST']
 )
 
 REST_FRAMEWORK = {
@@ -134,13 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# AUTH_USER_MODEL = 'mongo_auth.MongoUser'
-
-# MONGOENGINE_USER_DOCUMENT = 'mongoengine.django.auth.User'
-
-AUTHENTICATION_BACKENDS = (
-    'mongoengine.django.auth.MongoEngineBackend'
-)
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -161,10 +140,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# DB constants
-# DB_NAME = "test"
-# HOST = "dap-cluster-uteti.mongodb.net"
-# USERNAME = "big_data"
-# PASSWORD = "bigdatapassword"
-
-# mongoengine.connect(host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority')
+AUTH_USER_MODEL = 'users.UserProfile'
+CORS_ORIGIN_ALLOW_ALL = True
