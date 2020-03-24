@@ -11,23 +11,19 @@ from rest_framework_mongoengine import viewsets, generics
 from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer
 from rest_framework.authentication import TokenAuthentication
 from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer
-# from users import permissions
+
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = [permissions.IsAuthenticated]
+
 
 class TwitterDataView(generics.ListAPIView):
-    queryset = TwitterData.objects.all()
+    queryset = TwitterData.objects.filter(is_spam=False)
     serializer_class = TwitterDataSerializer
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):     
         try:  
-            print(request.user, request.user.is_authenticated)
             tweets = TwitterData.objects.all()
             category = request.query_params.get('category')
             if category:
@@ -46,6 +42,8 @@ class TwitterDataView(generics.ListAPIView):
 class SpamCountView(generics.ListCreateAPIView):
     queryset = TwitterData.objects.all()
     serializer_class = TwitterDataSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         try:
