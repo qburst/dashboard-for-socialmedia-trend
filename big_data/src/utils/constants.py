@@ -1,7 +1,7 @@
 from pycountry import countries
 
 # DB constants
-DB_NAME = "test"
+DB_NAME = "streamdb"
 HOST = "dap-cluster-uteti.mongodb.net"
 USERNAME = "big_data"
 PASSWORD = "bigdatapassword"

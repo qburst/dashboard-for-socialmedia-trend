@@ -14,12 +14,13 @@ from utils.constants import KEYWORDS, MANDATORY_HASHTAGS, \
 def saveMongo(data):
     data = loads(data.asDict()['value'])
     text = data.get("text", '--NA--')
-
+    print("Processing data from user:"+data.get('user',{}).get('name', '--NA--'))
     if not text.startswith("RT @") and filterKeyword(text) and "retweeted_status" not in data.keys() and text != '--NA--':
         hashtags = data.get('entities', {}).get('hashtags', [])
         if filterHash(hashtags):
             db_client = connect(
-                host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority'
+                db=DB_NAME
+                # host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority'
             )
             categories = getCategory(text)
             cat_objs = Category.objects.in_bulk(categories)
