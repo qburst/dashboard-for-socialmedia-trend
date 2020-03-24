@@ -34,6 +34,7 @@ def saveMongo(data):
             tweet.user = data.get('user')
             tweet.country = getCountry(text)
             tweet.category = categories
+            tweet.url = "https://twitter.com/user/status/" + data.get("id_str")
             tweet.save()
             db_client.close()
 
