@@ -22,6 +22,7 @@ class TwitterData(DynamicDocument):
     is_spam = fields.BooleanField(default=False)
     spam_users = fields.ListField(fields.StringField(), default=list)
     url = fields.StringField()
+    meta = {'allow_inheritance': True}
 
 
 class Data(EmbeddedDocument):
