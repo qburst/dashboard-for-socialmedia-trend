@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 # from django.contrib import auth
 # from django.contrib.auth.models import User
 # from mongoengine.django.auth import User
-from mongoengine import fields, DynamicDocument, EmbeddedDocument
+from mongoengine import fields, DynamicDocument, EmbeddedDocument, StringField, DateTimeField, IntField
 
 
 class User(DynamicDocument):    
@@ -54,3 +54,16 @@ class TwitterData(DynamicDocument):
     is_spam = fields.BooleanField(default=False)
     meta = {'allow_inheritance': True}
 
+
+class Data(EmbeddedDocument):
+    name = fields.StringField(required=True)
+    new_cases = fields.StringField(required=True)
+    new_deaths = fields.StringField(required=True)
+    total_cases = fields.StringField(required=True)
+    total_deaths = fields.StringField(required=True)
+
+
+class CoronaReport(DynamicDocument):
+    created_at = DateTimeField()
+    data = fields.ListField(fields.EmbeddedDocumentField(Data), default=list)
+    meta = {'allow_inheritance': True}

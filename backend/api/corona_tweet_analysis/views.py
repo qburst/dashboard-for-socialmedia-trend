@@ -4,16 +4,21 @@ from django.contrib.auth.models import User, Group
 from corona_tweet_analysis.utils.base_view import BaseViewManager
 from corona_tweet_analysis.utils.responses import send_response
 from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST
-from corona_tweet_analysis.models import TwitterData, Category
+from corona_tweet_analysis.models import TwitterData, Category, CoronaReport
 from corona_tweet_analysis import serializers
 from rest_framework import generics, permissions
 from rest_framework_mongoengine import viewsets, generics
-from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer
+from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer, CoronaReportSerializer
 
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+class CoronaReportView(generics.ListAPIView):
+    queryset = CoronaReport.objects.order_by('-created_at').limit(1)
+    serializer_class = CoronaReportSerializer
+
 
 class TwitterDataView(generics.ListAPIView):
     queryset = TwitterData.objects.all()
