@@ -20,6 +20,7 @@ class UserProfileViewset(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.UpdateOwnProfile,)
     filter_backends = (filters.SearchFilter,)
+    http_method_names = ['post']
     search_fields = ('name', 'email',)
 
 
@@ -38,6 +39,8 @@ class UserLoginApiView(ObtainAuthToken):
 
 
 class LogoutView(views.APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         logout(request)

@@ -19,7 +19,7 @@ class CoronaReportView(generics.ListAPIView):
 
 
 class TwitterDataView(generics.ListAPIView):
-    queryset = TwitterData.objects(is_spam__ne=True).order_by('-created_at', '-id')
+    queryset = TwitterData.objects(is_spam__ne=True).order_by('-created_at', '-_id')
     serializer_class = TwitterDataSerializer
 
     def get(self, request, *args, **kwargs):
@@ -29,7 +29,7 @@ class TwitterDataView(generics.ListAPIView):
             if not category_obj:
                 return send_response({'status': INVALID_PARAMETERS, 'message':'Category not found'})
             else:
-                self.queryset = self.queryset(category=category).order_by('-created_at', '-id')
+                self.queryset = self.queryset(category=category).order_by('-created_at', '-_id')
         return super().get(request, *args, **kwargs)
 
 
