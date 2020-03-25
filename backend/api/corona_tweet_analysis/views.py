@@ -5,7 +5,6 @@ from corona_tweet_analysis.utils.responses import send_response
 from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST, UNAUTHORIZED
 from corona_tweet_analysis.models import TwitterData, Category, CoronaReport
 from corona_tweet_analysis import serializers
-# from rest_framework_mongoengine import generics
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import permissions, generics
 from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer, CoronaReportSerializer
