@@ -4,13 +4,11 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from mongoengine import fields, DynamicDocument, EmbeddedDocument, StringField, DateTimeField, IntField
 
-class HashTag(EmbeddedDocument):
-    text = fields.StringField()
-    indices = fields.ListField(fields.IntField(), default=list)
 
 class Category(DynamicDocument):
     _id = fields.StringField(primary_key=True)
     created_at = fields.DateTimeField(default=datetime.datetime.now())
+
 
 class TwitterData(DynamicDocument):
     text = fields.StringField(required=True)
