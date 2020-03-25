@@ -132,3 +132,4 @@ dmypy.json
 tweets/
 .idea/
 big_data/*.zip
+big_data/src/configs/stream_source_config.py
