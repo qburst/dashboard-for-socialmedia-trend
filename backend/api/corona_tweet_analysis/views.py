@@ -5,6 +5,7 @@ from corona_tweet_analysis.utils.responses import send_response
 from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST, UNAUTHORIZED
 from corona_tweet_analysis.models import TwitterData, Category, CoronaReport
 from corona_tweet_analysis import serializers
+# from rest_framework_mongoengine import generics
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import permissions, generics
 from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer, CoronaReportSerializer
@@ -25,9 +26,11 @@ class TwitterDataView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         category = request.query_params.get('category')
         if category:
-            self.queryset = Category.objects(_id=category).first()
+            category_obj = Category.objects(_id=category).first()
             if not category_obj:
                 return send_response({'status': INVALID_PARAMETERS, 'message':'Category not found'})
+            else:
+                self.queryset = self.queryset(category=category)
         return super().get(request, *args, **kwargs)
 
 
