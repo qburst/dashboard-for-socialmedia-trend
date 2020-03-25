@@ -5,9 +5,8 @@ from corona_tweet_analysis.utils.responses import send_response
 from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST, UNAUTHORIZED
 from corona_tweet_analysis.models import TwitterData, Category, CoronaReport
 from corona_tweet_analysis import serializers
-from rest_framework_mongoengine import generics
 from rest_framework.authentication import TokenAuthentication
-from rest_framework import permissions
+from rest_framework import permissions, generics
 from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer, CoronaReportSerializer
 
 class CategoryView(generics.ListAPIView):
@@ -20,24 +19,18 @@ class CoronaReportView(generics.ListAPIView):
 
 
 class TwitterDataView(generics.ListAPIView):
-    queryset = TwitterData.objects.all()
+    queryset = TwitterData.objects(is_spam__ne=True)
     serializer_class = TwitterDataSerializer
 
-    def get(self, request, *args, **kwargs):     
-        try:  
-            tweets = TwitterData.objects(is_spam__ne=True)
-            category = request.query_params.get('category')
-            if category:
-                category_obj = Category.objects(_id=category).first()
-                if not category_obj:
-                    return send_response({'status': INVALID_PARAMETERS, 'message':'Category not found'})
-                tweets = tweets(category=category)            
-            serializer = self.serializer_class(tweets, many=True) 
-            if serializer.is_valid:
-                return send_response({'status': SUCCESS, 'data': serializer.data})
-            return send_response({'status': BAD_REQUEST})
-        except Exception as err:
-            return send_response({'status': FAIL})
+    def get(self, request, *args, **kwargs):
+        category = request.query_params.get('category')
+        if category:
+            category_obj = Category.objects(_id=category).first()
+            if not category_obj:
+                return send_response({'status': INVALID_PARAMETERS, 'message':'Category not found'})
+            else:
+                self.queryset = self.queryset(category=category)
+        return super().get(request, *args, **kwargs)
 
 
 class SpamCountView(generics.ListCreateAPIView):
