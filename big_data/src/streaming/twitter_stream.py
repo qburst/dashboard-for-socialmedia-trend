@@ -30,8 +30,14 @@ def sendData(c_socket):
     auth.set_access_token(stream_source_config.access_token, stream_source_config.access_secret)
 
     twitter_stream = Stream(auth, TweetsListener(c_socket))
-    twitter_stream.filter(track=['COVID19,coronavirus,Corona,CoronaVirusUpdate,coronavirusindia'])
-
+    covidtags = ['COVID19,coronavirus,Corona,CoronaVirusUpdate,coronavirusindia,IndiaFightsCorona,CoronavirusLockdown,Covid19India,StayAtHomeOrder']
+    try:
+        twitter_stream.filter(track=covidtags)
+    except KeyboardInterrupt as e:
+        print("Stopping excecution")
+    except BaseException as e:
+        print("Error occurred: %s" % str(e))
+        sendData(c_socket)
 
 if __name__ == "__main__":
     sys.path.append(path.join(path.dirname(__file__), '..'))
