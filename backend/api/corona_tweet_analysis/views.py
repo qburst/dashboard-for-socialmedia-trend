@@ -34,6 +34,7 @@ class TwitterDataView(generics.ListAPIView):
 
 
 class SpamCountView(generics.ListCreateAPIView):
+    http_method_names = ['put']
     queryset = TwitterData.objects.all()
     serializer_class = TwitterDataSerializer
     authentication_classes = (TokenAuthentication,)
@@ -51,14 +52,16 @@ class SpamCountView(generics.ListCreateAPIView):
             # Handling spam tweets 
             spam_users = tweet.spam_users
             spam_count = tweet.spam_count
-            if request.user.email not in spam_users:
+            is_spam = False
+            if request.user.email in spam_users:
+                return send_response({'status': BAD_REQUEST, 'data': 'You have already mark this as spam'})
+            else:
                 spam_users.append(request.user.email)
-                spam_count = tweet.spam_count + 1
-            
-            if len(spam_users) > 10 or request.user.is_superuser:
-                tweet.update(spam_count=spam_count, is_spam=True, spam_users=spam_users)
-                return send_response({'status': SUCCESS, 'data': 'Spam count updated'})
-            return send_response({'status': BAD_REQUEST, 'data': 'You have already mark this as spam'})
+                spam_count = tweet.spam_count + 1            
+                if len(spam_users) > 10 or request.user.is_superuser:
+                    is_spam = True
+                tweet.update(spam_count=spam_count, is_spam=is_spam, spam_users=spam_users)
+                return send_response({'status': SUCCESS, 'data': 'Spam count updated'})            
         except Exception as err:
             return send_response({'status': FAIL})
 
