@@ -25,7 +25,7 @@ class BlogOverview extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.reducer.overAllData !== this.props.reducer.overAllData) {
       //Perform some operation here
-      const { total_cases, total_deaths, new_cases } = this.props.reducer.overAllData.find((item) => item.name === 'World');;
+      const { total_cases, total_deaths, new_cases } = this.props.reducer.overAllData;
       this.setState({
         overAllData: [{ label: "Corona Virus Cases", value: total_cases, className: "bg-warning text-white text-center" },
         { label: "Death", value: total_deaths, className: "bg-danger text-white text-center" },
@@ -46,7 +46,7 @@ class BlogOverview extends React.Component {
         {/* Small Stats Blocks */}
         <Row>
           {this.state.overAllData.map((stats, idx) => (
-            <Col className="col-lg mb-4" key={idx} {...stats.attrs}>
+            <Col className="col-lg mb-4" sm="12" key={idx} {...stats.attrs}>
               <SmallStats
                 id={`small-stats-${idx}`}
                 variation="1"

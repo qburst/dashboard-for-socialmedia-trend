@@ -119,7 +119,7 @@ class Pagination extends React.Component {
         }
 
         return (
-            <ul className="pagination">
+            <ul className="pagination" style={{display: 'inline-block'}}>
                 <li className={pager.currentPage === 1 ? 'disabled' : ''}>
                     <a onClick={() => {this.setPage(1);this.getData(1)}}>First</a>
                 </li>

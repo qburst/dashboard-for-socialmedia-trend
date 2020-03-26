@@ -16,11 +16,13 @@ const MainNavbar = ({ layout, stickyTop }) => {
 
   return (
     <div className={classes}>
-      <Container className="p-0">
-        <Navbar type="light" className="align-items-stretch flex-md-nowrap p-0">
-          <div className="fa-3x w-100" >COVID-19 TWITTER DATA</div>
-          <NavbarNav />
-          <NavbarToggle />
+      <Container className="p-10">
+        <Navbar type="light" className="align-items-stretch flex-md-nowrap p-0 ">
+        <NavbarToggle />
+          <div className="fa-1x text-center page-header" style={{margin: '0',width: "50%",paddingTop: '1.3rem', border: '0'}} >
+            <span className="page-title" style={{padding: '0 6%',fontSize: '1.5em'}}>COVID-19 TWITTER DATA</span>
+            </div>
+          <NavbarNav style={{position: 'absolute'}}/>
         </Navbar>
       </Container>
     </div>

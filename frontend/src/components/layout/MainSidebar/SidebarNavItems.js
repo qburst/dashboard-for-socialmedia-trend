@@ -14,7 +14,6 @@ class SidebarNavItems extends React.Component {
     return (
       <div className="nav-wrapper">
         <Nav className="nav--no-borders flex-column">
-        {console.log(this.props.items, 'before entering')}
           {this.props.items && this.props.items.map((item, idx) => (
             <SidebarNavItem key={idx} item={item._id} />
           ))}

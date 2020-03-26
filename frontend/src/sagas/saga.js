@@ -6,11 +6,11 @@ import { FETCH_CATEGORIES_SUCCESS, FETCH_DATA_LOADING, FETCH_OVERALL_DATA ,FETCH
 function* fetchOverAllData(){
   const response = yield call(
     fetch,
-    `http://3.7.29.98:8001/api/report`, 
+    `http://3.7.29.98:8001/api/report/world`, 
   );
     const result = yield call([response, response.json])
     console.log(result,'result')
-    yield put({ type: FETCH_OVERALL_DATA_SUCCESS, data:result.results[0].data });
+    yield put({ type: FETCH_OVERALL_DATA_SUCCESS, data:result.data });
 }
 
 function* fetchTweetData(action){
