@@ -25,7 +25,7 @@ class SidebarNavItem extends React.Component {
               this.props.item === 'DASHBOARD'?
               '<i class="material-icons">dashboard</i>':
               '<i class="material-icons">chevron_right</i>' }}
-          /><span>{this.props.item}</span>
+          /><span>{this.props.item.replace(/_/g, " ")}</span>
         </div>
       </NavItem>
     )
@@ -42,7 +42,6 @@ SidebarNavItem.propTypes = {
   item: PropTypes.string
 };
 export const mapStateToProps = (state) => {
-  console.log(state, 'state')
   return {
     category: state.category
   }
@@ -52,7 +51,6 @@ export const mapStateToProps = (state) => {
 export const mapDispatchToProps = (dispatch) => {
   return {
     fetchTweetsCategoryWise: (category,page) => {
-      console.log('fetchTweetsCategoryWise')
       dispatch({
         type: FETCH_TWEET_DATA_CATEGORY_WISE,
         category,
@@ -60,7 +58,6 @@ export const mapDispatchToProps = (dispatch) => {
       })
     },
     fetchTweets: (page) => {
-      console.log('fetchTweets')
       dispatch({
         type: FETCH_TWEET_DATA,
         page

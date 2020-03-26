@@ -14,7 +14,6 @@ navItems: [{_id : 'DASHBOARD'}]
 };
 
 const reducer = (state = initialState, action) => {
-console.log(action.data,'val')
   switch (action.type) {
     case TOGGLE_SIDEBAR:
       return{ 

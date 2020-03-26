@@ -82,21 +82,22 @@ class Discussions extends React.Component {
           <div className="blog-comments__content" style={{overflow: 'auto'}}>
             {/* Content :: Title */}
             <div className="blog-comments__meta text-mutes">
-              <a className="text-secondary" href={tweet.url}>
+              <a href={tweet.url}>
                 {tweet.url}
               </a>{" "}
-              <div style={{display: "inline",position:"absolute", right: "25px"}}>Posted on{" "}
+              <div>Posted on{" "}
               {/* <a className="text-secondary" href={discussion.post.url}>
                 {discussion.post.title}
               </a> */}
-              <span className="text-mutes">- {new Date(tweet.created_at).toLocaleDateString()}</span></div>
+              <span className="text-mutes">- {new Date(tweet.created_at).toLocaleDateString()}
+                {" "}{new Date(tweet.created_at).toLocaleTimeString()}</span></div>
             </div>
 
             {/* Content :: Body */}
             <p className="m-0 my-1 mb-2 text-muted"  onClick={() =>this.toggleExpand(idx)}>{tweet.text}</p>
 
             {/* Content :: Actions */}
-            <div className="blog-comments__actions">
+            {/* <div className="blog-comments__actions">
               <ButtonGroup size="sm">
                 <Button theme="white" onClick={()=>this.reportSpam(tweet.id)}>
                   <span className="text-danger">
@@ -105,7 +106,7 @@ class Discussions extends React.Component {
                   Report Spam
                 </Button>
               </ButtonGroup>
-            </div>
+            </div> */}
           </div>
         </div>
       ))}
@@ -139,7 +140,6 @@ Discussions.defaultProps = {
 }
 
 export const mapStateToProps = (state)=>{
-  console.log(state,'state')
   return{
     isSpamReportedSuccess: state.isSpamReportedSuccess,
     tweets: state.tweetData.results,
@@ -151,17 +151,14 @@ export const mapStateToProps = (state)=>{
 export const mapDispatchToProps = (dispatch)=>{
   return{
       reportSpam:(id)=>{
-        console.log('dis')
         dispatch({
           type:REPORT_SPAM,
           id})
       },
       fetchTweets:(page)=>{
-          console.log('fetchTweets')
       dispatch({type:FETCH_TWEET_DATA,page })
       },
       fetchTweetsCategoryWise: (category,page) => {
-        console.log('fetchTweetsCategoryWise')
         dispatch({
           type: FETCH_TWEET_DATA_CATEGORY_WISE,
           category,
