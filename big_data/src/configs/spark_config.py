@@ -1,10 +1,12 @@
-
-from pyspark import SparkContext
-from pyspark.streaming import StreamingContext
+from pyspark.sql import SparkSession
 
 from settings import default
 
-sc = SparkContext("local[2]", "Twitter Demo")
-ssc = StreamingContext(sc, 10)  # 10 is the batch interval in seconds
+
+spark = SparkSession.builder \
+    .appName("Twitter Demo") \
+    .master("local[2]") \
+    .getOrCreate()
+
 IP = "localhost"
 Port = 5555

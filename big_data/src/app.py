@@ -1,36 +1,42 @@
 import time
 import sys
-from datetime import datetime
 from json import loads
 from os import path
-from mongoengine import DynamicDocument, StringField, connect, DateTimeField
+from mongoengine import connect
 
+from database_models.mongo_models import TwitterData, Category
 from configs import spark_config
 from utils.constants import KEYWORDS, MANDATORY_HASHTAGS, \
     CATEGORIES, COUNTRIES, DB_NAME, INFECTED_KEYWORDS, RECOVERED_KEYWORDS, \
-    DEATH_KEYWORDS
-
-
-class TwitterData(DynamicDocument):
-    text = StringField(required=True, max_length=200)
-    created_at = DateTimeField(default=datetime.utcnow())
-    meta = {'allow_inheritance': True}
+    DEATH_KEYWORDS, TRAVEL_HISTORY_KEYWORDS, VACCINE_KEYWORDS, CURE_KEYWORDS, USERNAME, \
+    PASSWORD, HOST
 
 def saveMongo(data):
-    data = loads(data)
-    text = data.get('text', '--NA--')
-
-    if not text.startswith("RT @") and filterKeyword(text) and "retweeted_status" not in data.keys():
+    data = loads(data.asDict()['value'])
+    text = data.get("text", '--NA--')
+    print("Processing data from user:"+data.get('user',{}).get('name', '--NA--'))
+    if not text.startswith("RT @") and filterKeyword(text) and "retweeted_status" not in data.keys() and text != '--NA--':
         hashtags = data.get('entities', {}).get('hashtags', [])
         if filterHash(hashtags):
-            connect(DB_NAME)
+            db_client = connect(
+                db=DB_NAME
+                # host='mongodb+srv://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + DB_NAME + '?retryWrites=true&w=majority'
+            )
+            categories = getCategory(text)
+            cat_objs = Category.objects.in_bulk(categories)
+            for cat_name in list(set(categories) - set(cat_objs)):
+                category = Category(_id = cat_name)
+                category.save()
+
+            
             tweet = TwitterData(text=text)
-            tweet.hashtags = hashtags
+            tweet.hashtags = [hashtag["text"] for hashtag in hashtags]
             tweet.user = data.get('user')
             tweet.country = getCountry(text)
-            tweet.category = getCategory(text)
+            tweet.category = categories
+            tweet.url = "https://twitter.com/user/status/" + data.get("id_str")
             tweet.save()
-
+            db_client.close()
 
 def filterHash(hashtags):
     for hashtag in hashtags:
@@ -47,27 +53,23 @@ def filterKeyword(text):
 
 
 def getCountry(text):
+    countries = []
     for country in COUNTRIES:
         if country in text.lower():
-            return country
-    return "--NA--"
+            countries.append(country)
+    if len(countries) == 0:
+        countries.append("--NA--")
+    return countries
 
 
 def getCategory(text):
     category = []
-    for keyword in INFECTED_KEYWORDS:
-        if keyword in text.lower():
-            category.append("INFECTED")
-            break
-    for keyword in DEATH_KEYWORDS:
-        if keyword in text.lower():
-            category.append("DEATH")
-            break
-
-    for keyword in RECOVERED_KEYWORDS:
-        if keyword in text.lower():
-            category.append("RECOVERED")
-            break
+    category += processCategory(INFECTED_KEYWORDS, text, "INFECTED")
+    category += processCategory(DEATH_KEYWORDS, text, "DEATH")
+    category += processCategory(RECOVERED_KEYWORDS, text, "RECOVERED")
+    category += processCategory(TRAVEL_HISTORY_KEYWORDS, text, "TRAVEL_HISTORY")
+    category += processCategory(VACCINE_KEYWORDS, text, "VACCINE")
+    category += processCategory(CURE_KEYWORDS, text, "CURE")
 
     if len(category) == 0:
         category.append("--NA--")
@@ -75,12 +77,23 @@ def getCategory(text):
     return category
 
 
+def processCategory(keywords, text, category):
+    for keyword in keywords:
+        if keyword in text.lower():
+            return [category]
+    return []
+
+
 if __name__ == "__main__":
     sys.path.append(path.join(path.dirname(__file__), '..'))
-    ssc = spark_config.ssc
-    lines = ssc.socketTextStream(spark_config.IP, spark_config.Port)
+    df = spark_config.spark \
+            .readStream \
+            .format("socket") \
+            .option("host", spark_config.IP) \
+            .option("port", spark_config.Port) \
+            .load()
+    transform = df.writeStream\
+            .foreach(saveMongo)\
+            .start()
 
-    lines.foreachRDD(lambda rdd: rdd.filter(saveMongo).coalesce(1).saveAsTextFile("./tweets/%f" % time.time()))
-
-    ssc.start()
-    ssc.awaitTermination()
+    transform.awaitTermination()

@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# removing unwanted files
+tweets/
+.idea/
+big_data/*.zip
+big_data/src/configs/stream_source_config.py
