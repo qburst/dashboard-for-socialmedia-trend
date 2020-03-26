@@ -32,6 +32,6 @@ class Data(EmbeddedDocument):
 
 
 class CoronaReport(DynamicDocument):
-    created_at = DateTimeField()
+    created_at = fields.DateTimeField(default=datetime.datetime.now)
     data = fields.ListField(fields.EmbeddedDocumentField(Data), default=list)
     meta = {'allow_inheritance': True}
