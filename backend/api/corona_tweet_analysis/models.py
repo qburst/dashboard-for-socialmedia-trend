@@ -7,13 +7,13 @@ from mongoengine import fields, DynamicDocument, EmbeddedDocument, StringField, 
 
 class Category(DynamicDocument):
     _id = fields.StringField(primary_key=True)
-    created_at = fields.DateTimeField(default=datetime.datetime.now())
+    created_at = fields.DateTimeField(default=datetime.datetime.now)
 
 
 class TwitterData(DynamicDocument):
     text = fields.StringField(required=True)
     country = fields.ListField(fields.StringField(),default=list)
-    created_at = fields.DateTimeField(default=datetime.datetime.now())
+    created_at = fields.DateTimeField(default=datetime.datetime.now)
     category = fields.ListField(fields.StringField(), default=list)
     hashtags = fields.ListField(fields.StringField(), default=list)
     spam_count = fields.IntField(default=0)
