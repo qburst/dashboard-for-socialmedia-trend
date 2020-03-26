@@ -34,6 +34,7 @@ class TwitterDataView(generics.ListAPIView):
 
 
 class SpamCountView(generics.ListCreateAPIView):
+    http_method_names = ['put']
     queryset = TwitterData.objects.all()
     serializer_class = TwitterDataSerializer
     authentication_classes = (TokenAuthentication,)
