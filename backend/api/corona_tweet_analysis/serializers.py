@@ -12,8 +12,3 @@ class CategorySerializer(serializers.DocumentSerializer):
     class Meta:
         model = Category
         fields = '__all__'
-
-class CoronaReportSerializer(serializers.DocumentSerializer):
-    class Meta:
-        model = CoronaReport
-        fields = '__all__'
