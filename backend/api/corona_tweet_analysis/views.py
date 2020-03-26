@@ -9,7 +9,7 @@ from corona_tweet_analysis import serializers
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import permissions, generics
 from rest_framework.response import Response
-from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer, CoronaReportSerializer
+from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
