@@ -1,4 +1,5 @@
 import mongoengine
+from json import loads
 from django.shortcuts import render
 from corona_tweet_analysis.utils.base_view import BaseViewManager
 from corona_tweet_analysis.utils.responses import send_response
@@ -7,15 +8,51 @@ from corona_tweet_analysis.models import TwitterData, Category, CoronaReport
 from corona_tweet_analysis import serializers
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import permissions, generics
+from rest_framework.response import Response
 from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer, CoronaReportSerializer
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+class CoronaWorldReportView(generics.ListAPIView):
+    http_method_names = ['get']
+
+    def get(self, request, *args, **kwargs):
+        corona_report = CoronaReport.objects.order_by('-created_at').first()
+        data = loads(corona_report.to_json())
+        world = {}
+        for country in data['data']:
+            if country['name'] == "World":
+                world = country
+        return Response({
+            'status': SUCCESS,
+            'data': world,
+            'created_at': corona_report.created_at
+        })
+
+
 class CoronaReportView(generics.ListAPIView):
-    queryset = CoronaReport.objects.order_by('-created_at').limit(1)
-    serializer_class = CoronaReportSerializer
+    http_method_names = ['get']
+
+    def get(self, request, *args, **kwargs):
+        country = request.query_params.get('country')
+        if not country:
+            return send_response({'status': INVALID_PARAMETERS, 'message':'Country not sent'})
+        corona_report = CoronaReport.objects.order_by('-created_at').first()
+        data = loads(corona_report.to_json())
+        created_at = data['created_at']
+        data = {}
+        for country in data['data']:
+            if country['name'] == country:
+                data = country
+            else:
+                return send_response({'status': INVALID_PARAMETERS, 'message':'Country not found'})
+        return Response({
+            'status': SUCCESS,
+            'data': data,
+            'created_at': corona_report.created_at
+        })
 
 
 class TwitterDataView(generics.ListAPIView):
