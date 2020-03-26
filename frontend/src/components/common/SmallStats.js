@@ -51,7 +51,10 @@ class SmallStats extends React.Component {
 
     return (
       <Card small className={cardClasses}>
-        <div className={iconClasses}><i className="icon fa fa-users fa-3x"></i><span className={labelClasses}>{label}</span></div>
+        <div className={iconClasses}>
+          <i className="icon fa fa-users fa-3x" style={{position: 'absolute',left: '20px',top: '10px'}}></i>
+          <span className={labelClasses}>{label}</span>
+        </div>
         <CardBody className={cardBodyClasses}>
           <div className={innerWrapperClasses}>
             <div className={dataFieldClasses}>

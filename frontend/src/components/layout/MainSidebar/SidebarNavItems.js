@@ -27,7 +27,6 @@ class SidebarNavItems extends React.Component {
 
 
 export const mapStateToProps = (state) => {
-  console.log(state.navItems, 'navItems')
   return {
     items: state.navItems
   }
@@ -35,7 +34,6 @@ export const mapStateToProps = (state) => {
 export const mapDispatchToProps = (dispatch) => {
   return {
     getCategories: () => {
-      console.log('dis')
       dispatch({ type: FETCH_CATEGORIES })
     },
   }

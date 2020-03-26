@@ -9,7 +9,6 @@ function* fetchOverAllData(){
     `http://3.7.29.98:8001/api/report/world`, 
   );
     const result = yield call([response, response.json])
-    console.log(result,'result')
     yield put({ type: FETCH_OVERALL_DATA_SUCCESS, data:result.data });
 }
 
@@ -20,7 +19,6 @@ function* fetchTweetData(action){
     `http://3.7.29.98:8001/api/tweets/?page=`+action.page
   );
     const result = yield call([response, response.json])
-    console.log(result,'result')
     yield put({ type: FETCH_TWEET_DATA_SUCCESS, data:result });
 }
 function* fetchTweetDataByCategory(action){
@@ -30,7 +28,6 @@ function* fetchTweetDataByCategory(action){
     `http://3.7.29.98:8001/api/tweets/?category=`+action.category+`;page=`+action.page
   );
     const result = yield call([response, response.json])
-    console.log(result,'result')
     yield put({ type: FETCH_TWEET_DATA_SUCCESS, data:result });
 }
 
@@ -40,7 +37,6 @@ function* fetchCategories(){
     `http://3.7.29.98:8001/api/categories/ `
   );
     const result = yield call([response, response.json])
-    console.log(result,'result')
     yield put({ type: FETCH_CATEGORIES_SUCCESS, data:result.results });
 }
 
@@ -49,10 +45,9 @@ function* reportTweetAsSpam(action){
   const response = yield call(
     fetch,
     `http://3.7.29.98:8001/api/add_spam_count/?tweet_id=`+ action.id,
-    { method: "PUT",headers: { "Authorization": "Token 1fa9dcf9959318aa9c2c03c58e1a81c277c66395" }}
+    { method: "PUT",headers: { "Authorization": "Token " }}
   );
     const result = yield call([response, response.json])
-    console.log(result,'result')
     if(result.status==="success"){
       yield put({ type: REPORT_SPAM_SUCCESS, data:result })
     }

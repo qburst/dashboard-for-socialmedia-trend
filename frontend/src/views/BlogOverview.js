@@ -27,7 +27,7 @@ class BlogOverview extends React.Component {
       //Perform some operation here
       const { total_cases, total_deaths, new_cases } = this.props.reducer.overAllData;
       this.setState({
-        overAllData: [{ label: "Corona Virus Cases", value: total_cases, className: "bg-warning text-white text-center" },
+        overAllData: [{ label: "Total Cases", value: total_cases, className: "bg-warning text-white text-center" },
         { label: "Death", value: total_deaths, className: "bg-danger text-white text-center" },
         { label: "New Cases", value: new_cases, className: "bg-secondary text-white text-center" },
         ]
@@ -86,7 +86,6 @@ class BlogOverview extends React.Component {
   };
 }
 export const mapStateToProps = (state) => {
-  console.log(state, 'state')
   return {
     reducer: state
   }
@@ -96,7 +95,6 @@ export const mapStateToProps = (state) => {
 export const mapDispatchToProps = (dispatch) => {
   return {
     getData: () => {
-      console.log('dis')
       dispatch({ type: FETCH_COUNTRYWISE_DATA })
       dispatch({ type: FETCH_OVERALL_DATA })
     }
