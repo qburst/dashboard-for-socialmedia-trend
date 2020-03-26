@@ -3,7 +3,7 @@ import mongoengine
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from mongoengine import fields, DynamicDocument, EmbeddedDocument, StringField, DateTimeField, IntField
-
+from djongo import models
 
 class Category(DynamicDocument):
     _id = fields.StringField(primary_key=True)
@@ -35,3 +35,20 @@ class CoronaReport(DynamicDocument):
     created_at = fields.DateTimeField(default=datetime.datetime.now)
     data = fields.ListField(fields.EmbeddedDocumentField(Data), default=list)
     meta = {'allow_inheritance': True}
+
+
+class CategorySQL(models.Model):
+    category = models.TextField(unique=True)
+    keywords = models.ArrayField(models.CharField(max_length=100), default=list)
+    approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_or_modified_by = models.TextField()
+    approved_by = models.TextField()
+
+
+class Hashtag(models.Model):
+    hashtag = models.TextField(unique=True)
+    approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_or_modified_by = models.TextField()
+    approved_by = models.TextField()
