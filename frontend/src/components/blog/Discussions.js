@@ -31,6 +31,7 @@ class Discussions extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if(prevProps.tweets!==this.props.tweets){
+      window.scrollTo(0, 0);
       this.setState({tweets: this.props.tweets});
     }
   };
@@ -47,10 +48,10 @@ class Discussions extends React.Component {
   }
   reportSpam(id){
     this.props.reportSpam(id);
-    if(!this.props.spinner && this.props.isSpamReportSuccess){
+    if(!this.props.spinner && this.props.isSpamReportedSuccess){
       NotificationManager.success('Spam count is updated', 'Reported Spam Successfully');
     }
-    else if(!this.props.spinner && !this.props.isSpamReportSuccess){
+    else if(!this.props.spinner && !this.props.isSpamReportedSuccess){
       NotificationManager.error('You have already mark this as spam', 'Reported Spam Error');
     }
     const removedList = this.state.pageOfItems.filter((item) => item.id !== id);
@@ -78,7 +79,7 @@ class Discussions extends React.Component {
           </div> */}
 
           {/* Content */}
-          <div className="blog-comments__content">
+          <div className="blog-comments__content" style={{overflow: 'auto'}}>
             {/* Content :: Title */}
             <div className="blog-comments__meta text-mutes">
               <a className="text-secondary" href={tweet.url}>
@@ -140,10 +141,10 @@ Discussions.defaultProps = {
 export const mapStateToProps = (state)=>{
   console.log(state,'state')
   return{
-    isSpamCountUpdated: state.isSpamCountUpdated,
+    isSpamReportedSuccess: state.isSpamReportedSuccess,
     tweets: state.tweetData.results,
     category: state.category,
-    spamMessage: state.spamMessage,
+    spinner: state.spinner,
     tweetCount: state.tweetData.count
   }
 }

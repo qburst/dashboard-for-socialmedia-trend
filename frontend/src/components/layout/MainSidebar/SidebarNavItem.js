@@ -17,7 +17,7 @@ class SidebarNavItem extends React.Component {
   }
   render() {
     return (
-      <NavItem>
+      <NavItem active={this.props.category === this.props.item}>
         <div className="nav-link"  onClick={()=>{this.fetchTweetsCategoryWise(this.props.item)}}>
           <div
             className="d-inline-block item-icon-wrapper"
@@ -44,7 +44,7 @@ SidebarNavItem.propTypes = {
 export const mapStateToProps = (state) => {
   console.log(state, 'state')
   return {
-    reducer: state
+    category: state.category
   }
 }
 

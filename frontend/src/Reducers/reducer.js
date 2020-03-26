@@ -6,7 +6,7 @@ countryWiseData:[],
 overAllData:{},
 spinner:false,
 tweetData:[],
-IsSpamReportedSuccess: false,
+isSpamReportedSuccess: false,
 countryCount:undefined,
 menuVisible: false,
 category: 'DASHBOARD',
@@ -40,13 +40,13 @@ console.log(action.data,'val')
     case REPORT_SPAM_SUCCESS:
       return{
         ...state,
-        IsSpamReportedSuccess : true,
+        isSpamReportedSuccess : true,
         spinner: false
       }
       case REPORT_SPAM_FAILED:
         return{
           ...state,
-          IsSpamReportedSuccess : false,
+          isSpamReportedSuccess : false,
           spinner: false
         }
       case REPORT_SPAM:

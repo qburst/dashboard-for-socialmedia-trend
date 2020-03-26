@@ -1,10 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import shortid from "shortid";
 import { Card, CardBody } from "shards-react";
 
-import Chart from "../../utils/chart";
 
 class SmallStats extends React.Component {
 
