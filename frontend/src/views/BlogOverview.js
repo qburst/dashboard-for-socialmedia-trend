@@ -57,7 +57,7 @@ class BlogOverview extends React.Component {
             </Col>
           ))}
         </Row>
-          <div>{this.props.reducer.category.replace(/_/g, " ")}</div>
+          <div style={{marginBottom: "10px"}}>{this.props.reducer.category.replace(/_/g, " ")}</div>
         <Row>
           {/* Top Referrals
       <Col lg="3" md="12" sm="12" className="mb-4">
