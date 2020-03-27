@@ -9,7 +9,7 @@ function* fetchOverAllData(){
     `http://3.7.29.98:8001/api/report/world`, 
   );
     const result = yield call([response, response.json])
-    yield put({ type: FETCH_OVERALL_DATA_SUCCESS, data:result.data });
+    yield put({ type: FETCH_OVERALL_DATA_SUCCESS, data:result });
 }
 
 function* fetchTweetData(action){

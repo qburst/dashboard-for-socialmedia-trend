@@ -82,10 +82,7 @@ class Discussions extends React.Component {
           <div className="blog-comments__content" style={{overflow: 'auto'}}>
             {/* Content :: Title */}
             <div className="blog-comments__meta text-mutes">
-              <a href={tweet.url}>
-                {tweet.url}
-              </a>{" "}
-              <div>Posted on{" "}
+              <div style={{position:"absolute", right: "25px"}}>Posted on{" "}
               {/* <a className="text-secondary" href={discussion.post.url}>
                 {discussion.post.title}
               </a> */}
@@ -94,19 +91,24 @@ class Discussions extends React.Component {
             </div>
 
             {/* Content :: Body */}
-            <p className="m-0 my-1 mb-2 text-muted"  onClick={() =>this.toggleExpand(idx)}>{tweet.text}</p>
+            <p className="mt-4 my-1 mb-2 text-muted"  onClick={() =>this.toggleExpand(idx)}>{tweet.text}</p>
 
             {/* Content :: Actions */}
-            {/* <div className="blog-comments__actions">
+            <div className="blog-comments__actions">
               <ButtonGroup size="sm">
-                <Button theme="white" onClick={()=>this.reportSpam(tweet.id)}>
+                {/* <Button theme="white" onClick={()=>this.reportSpam(tweet.id)}>
                   <span className="text-danger">
                     <i className="material-icons">clear</i>
                   </span>{" "}
                   Report Spam
+                </Button> */}
+                <Button theme="white" href={tweet.url}>
+                  <span className="text-danger">
+                  </span>{" "}
+                  Go to
                 </Button>
               </ButtonGroup>
-            </div> */}
+            </div>
           </div>
         </div>
       ))}
