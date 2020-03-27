@@ -10,7 +10,8 @@ isSpamReportedSuccess: false,
 countryCount:undefined,
 menuVisible: false,
 category: 'DASHBOARD',
-navItems: [{_id : 'DASHBOARD'}]
+navItems: [{_id : 'DASHBOARD'}],
+createdDate: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -56,7 +57,8 @@ const reducer = (state = initialState, action) => {
       case FETCH_OVERALL_DATA_SUCCESS:
       return{
         ...state,
-        overAllData : action.data
+        overAllData : action.data.data,
+        createdDate : action.data.created_at
       }
       case FETCH_CATEGORIES_SUCCESS:
         state.navItems.push(...action.data);

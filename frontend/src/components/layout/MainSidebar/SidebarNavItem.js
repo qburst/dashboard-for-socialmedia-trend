@@ -3,10 +3,14 @@ import PropTypes from "prop-types";
 import { NavItem } from "shards-react";
 import {  FETCH_TWEET_DATA_CATEGORY_WISE, FETCH_TWEET_DATA, SET_CATEGORY } from "../../../Actions/Actions";
 import { connect } from 'react-redux';
-
+import { Dispatcher, Constants } from "../../../flux";
 
 class SidebarNavItem extends React.Component {
- 
+  handleToggleSidebar() {
+    Dispatcher.dispatch({
+      actionType: Constants.TOGGLE_SIDEBAR
+    });
+  }
   fetchTweetsCategoryWise(item) {
     this.props.setCategory(item);
     if(item === 'DASHBOARD'){
@@ -14,6 +18,7 @@ class SidebarNavItem extends React.Component {
     } else{
       this.props.fetchTweetsCategoryWise(item,1);
     }
+    this.handleToggleSidebar();
   }
   render() {
     return (

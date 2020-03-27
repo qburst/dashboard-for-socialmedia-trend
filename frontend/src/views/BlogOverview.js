@@ -40,9 +40,9 @@ class BlogOverview extends React.Component {
       <Container fluid className="main-content-container px-4">
         {/* Page Header */}
         <Row noGutters className="page-header py-4">
-          <PageTitle subtitle={this.props.reducer.category} className="text-sm-left mb-3" />
+          <div>Aggregated dashboard for seeing twitter data for helping everyone fighting COVID-19. The counts shown are sourced from
+    ECDC and was updated on {this.props.reducer.createdDate && new Date(this.props.reducer.createdDate).toLocaleDateString()}</div>
         </Row>
-
         {/* Small Stats Blocks */}
         <Row>
           {this.state.overAllData.map((stats, idx) => (
@@ -57,7 +57,7 @@ class BlogOverview extends React.Component {
             </Col>
           ))}
         </Row>
-
+          <div>{this.props.reducer.category.replace(/_/g, " ")}</div>
         <Row>
           {/* Top Referrals
       <Col lg="3" md="12" sm="12" className="mb-4">
