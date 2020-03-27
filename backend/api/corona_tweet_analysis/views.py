@@ -103,7 +103,7 @@ class HashtagsView(generics.ListCreateAPIView):
         if hashtag_id:
             hashtag_obj = Hashtag.objects.filter(id=hashtag_id)
             if not hashtag_obj:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag not found'})
+                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag id not found'})
             else:
                 self.queryset = hashtag_obj
         return super().get(request, *args, **kwargs)
@@ -113,7 +113,7 @@ class HashtagsView(generics.ListCreateAPIView):
             if request.user.is_authenticated:
                 hashtag_str = request.data.get("hashtag")
                 if not hashtag_str:
-                    return send_response({'status': BAD_REQUEST, 'message': 'Hashtag is required'})
+                    return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag is required'})
                 hashtag_obj = Hashtag.objects.filter(hashtag=hashtag_str).first()
                 if hashtag_obj:
                     return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag already exists'})
@@ -135,7 +135,7 @@ class HashtagsView(generics.ListCreateAPIView):
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag id is required'})
             hashtag_obj = Hashtag.objects.filter(id=hashtag_id)
             if not hashtag_obj:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag not found'})
+                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag id not found'})
             approved = request.data.get("approved")
             if approved:
                 if not self.checkSuperUser(request):
@@ -143,7 +143,7 @@ class HashtagsView(generics.ListCreateAPIView):
                         {'status': BAD_REQUEST, 'message': 'User is not a superuser user to approve/disapprove'})
             hashtag_text = request.data.get("hashtag")
             if not hashtag_text:
-                return send_response({'status': BAD_REQUEST, 'message': 'Hashtag is required'})
+                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag is required'})
             hashtag_obj2 = Hashtag.objects.filter(hashtag=hashtag_text).first()
             if hashtag_obj2:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag already exists'})
@@ -178,9 +178,9 @@ class CategorySqlView(generics.ListCreateAPIView):
                 category_str = request.data.get("category")
                 keywords_str = request.data.get("keywords")
                 if not category_str:
-                    return send_response({'status': BAD_REQUEST, 'message': 'Category name  is required'})
+                    return send_response({'status': INVALID_PARAMETERS, 'message': 'Category name  is required'})
                 if not keywords_str:
-                    return send_response({'status': BAD_REQUEST, 'message': 'keywords are required'})
+                    return send_response({'status': INVALID_PARAMETERS, 'message': 'keywords are required'})
                 category_obj = CategorySQL.objects.filter(category=category_str)
                 if category_obj:
                     return send_response({'status': INVALID_PARAMETERS, 'message': 'Category already exists'})
@@ -198,7 +198,7 @@ class CategorySqlView(generics.ListCreateAPIView):
         if category_id:
             category_obj = CategorySQL.objects.filter(id=category_id)
             if not category_obj:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag not found'})
+                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag id not found'})
             else:
                 self.queryset = category_obj
         return super().get(request, *args, **kwargs)
@@ -220,10 +220,10 @@ class CategorySqlView(generics.ListCreateAPIView):
                         {'status': BAD_REQUEST, 'message': 'User is not a superuser user to approve/disapprove'})
             category_text = request.data.get("category")
             if not category_text:
-                return send_response({'status': BAD_REQUEST, 'message': 'Category is required'})
+                return send_response({'status': INVALID_PARAMETERS, 'message': 'Category is required'})
             keywords = request.data.get("keywords")
             if not category_text:
-                return send_response({'status': BAD_REQUEST, 'message': 'Keywords are required'})
+                return send_response({'status': INVALID_PARAMETERS, 'message': 'Keywords are required'})
             category_obj2 = CategorySQL.objects.filter(category=category_text).first()
             if category_obj2:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Category already exists'})
