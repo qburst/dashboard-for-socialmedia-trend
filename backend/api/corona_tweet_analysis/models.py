@@ -1,8 +1,5 @@
 import datetime
-import mongoengine
-from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
-from mongoengine import fields, DynamicDocument, EmbeddedDocument, StringField, DateTimeField, IntField
+from mongoengine import fields, DynamicDocument, EmbeddedDocument
 from djongo import models
 
 class Category(DynamicDocument):
@@ -39,7 +36,7 @@ class CoronaReport(DynamicDocument):
 
 class CategorySQL(models.Model):
     category = models.TextField(unique=True)
-    keywords = models.ArrayField(models.CharField(max_length=100), default=list)
+    keywords = models.TextField()
     approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     created_or_modified_by = models.TextField()
