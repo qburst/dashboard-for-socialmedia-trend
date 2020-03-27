@@ -144,9 +144,6 @@ class HashtagsView(generics.ListCreateAPIView):
             hashtag_text = request.data.get("hashtag")
             if not hashtag_text:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag is required'})
-            hashtag_obj2 = Hashtag.objects.filter(hashtag=hashtag_text).first()
-            if hashtag_obj2:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag already exists'})
             if approved and self.checkSuperUser(request):
                 if approved == 'true':
                     approved = True
@@ -181,7 +178,7 @@ class CategorySqlView(generics.ListCreateAPIView):
                     return send_response({'status': INVALID_PARAMETERS, 'message': 'Category name  is required'})
                 if not keywords_str:
                     return send_response({'status': INVALID_PARAMETERS, 'message': 'keywords are required'})
-                category_obj = CategorySQL.objects.filter(category=category_str)
+                category_obj = CategorySQL.objects.filter(category=category_str).first()
                 if category_obj:
                     return send_response({'status': INVALID_PARAMETERS, 'message': 'Category already exists'})
                 created_user = request.user
@@ -210,7 +207,7 @@ class CategorySqlView(generics.ListCreateAPIView):
             category_id = request.query_params.get('category_id')
             if not category_id:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Category id is required'})
-            category_obj = CategorySQL.objects.filter(id=category_id)
+            category_obj = CategorySQL.objects.filter(id=category_id).first()
             if not category_obj:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Category not found'})
             approved = request.data.get("approved")
@@ -224,9 +221,6 @@ class CategorySqlView(generics.ListCreateAPIView):
             keywords = request.data.get("keywords")
             if not category_text:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Keywords are required'})
-            category_obj2 = CategorySQL.objects.filter(category=category_text).first()
-            if category_obj2:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Category already exists'})
             if approved and self.checkSuperUser(request):
                 if approved == 'true':
                     approved = True
