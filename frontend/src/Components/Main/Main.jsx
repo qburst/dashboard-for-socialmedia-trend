@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './Main.css';
-import Tweets from '../../Components/Tweets/Tweets';
+import Tweets from '../Tweets/Tweets';
 import Loader from 'react-loader-spinner';
-import SmallBoard from '../../Components/SmallBoard/SmallBoard';
+import SmallBoard from '../SmallBoard/SmallBoard';
 import "react-loader-spinner/dist/loader/css/CradleLoader.css";
 
 export default class Menu extends Component {
