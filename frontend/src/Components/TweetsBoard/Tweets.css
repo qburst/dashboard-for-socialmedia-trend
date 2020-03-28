@@ -1,0 +1,49 @@
+.twitter_tweets__content{
+    width: 100%
+}
+
+.tweet_data{
+    margin-bottom: 7%;
+}
+.twitter_tweets {
+    text-align: initial;
+}
+.twitter_tweets__meta {
+    color: rgb(44, 43, 43);
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+.pagination {
+    align-self: center;
+}
+.btn-group>.btn:not(:first-child) {
+    margin-left: 0.5rem;
+}
+.twitter_tweets__content .btn-group>.btn:not(:last-child){
+    border-top-right-radius: .2rem;
+    border-bottom-right-radius: .2rem;
+}
+.twitter_tweets__content .btn-group>.btn:not(:first-child){
+    border-top-left-radius: .2rem;
+    border-bottom-left-radius: .2rem;
+}
+.btn-group-sm>.btn{
+    font-size: 0.75rem;
+    width: 7rem;
+}
+.material-icons{
+    vertical-align: sub;
+    font-size: 1rem;
+}
+.expand-icon{
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    cursor: pointer;
+}
+.refresh-btn{
+    position: absolute;
+    right: 35px;
+    top: 20px;
+    cursor: pointer;
+}

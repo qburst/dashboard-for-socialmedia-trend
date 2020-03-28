@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Main.css';
-import Tweets from '../Tweets/Tweets';
+import Tweets from '../TweetsBoard/Tweets';
 import Loader from 'react-loader-spinner';
 import SmallBoard from '../SmallBoard/SmallBoard';
 import "react-loader-spinner/dist/loader/css/CradleLoader.css";
