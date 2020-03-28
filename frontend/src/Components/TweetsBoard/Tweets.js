@@ -17,6 +17,7 @@ class Tweets extends Component {
             activePage: 1,
             mobileView: false,
             showTweet: true,
+            reportingSpam: false
         };
 
         this.fetchDataFromAPI = this.fetchDataFromAPI.bind(this);
@@ -29,9 +30,23 @@ class Tweets extends Component {
             window.scrollTo(0, 0);
             this.setState({ tweets: this.props.tweets });
         }
+        if (prevProps.isSpamReportedSuccess !== this.props.isSpamReportedSuccess && this.state.reportingSpam
+            && !this.props.spinner) {
+            this.showNotification();
+        }
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
     };
+
+    showNotification() {
+        if (this.props.isSpamReportedSuccess) {
+            NotificationManager.success('Spam count is updated', 'Reported Spam Successfully');
+        }
+        else if (!this.props.isSpamReportedSuccess) {
+            NotificationManager.error('You have already mark this as spam', 'Reported Spam Error');
+        }
+        this.setState({ reportingSpam: false });
+    }
 
     resize() {
         let currentMobileView = (window.innerWidth <= 760);
@@ -49,13 +64,8 @@ class Tweets extends Component {
         }
     }
     reportSpam(id) {
+        this.setState({ reportingSpam: true });
         this.props.reportSpam(id);
-        if (!this.props.spinner && this.props.isSpamReportedSuccess) {
-            NotificationManager.success('Spam count is updated', 'Reported Spam Successfully');
-        }
-        else if (!this.props.spinner && !this.props.isSpamReportedSuccess) {
-            NotificationManager.error('You have already mark this as spam', 'Reported Spam Error');
-        }
         const removedList = this.state.tweets.filter((item) => item.id !== id);
         this.setState({ tweets: removedList });
     }
