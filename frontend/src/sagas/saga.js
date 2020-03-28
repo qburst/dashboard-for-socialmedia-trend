@@ -7,10 +7,18 @@ import {
   SEND_REGISTRATION_DATA_FAILURE, ON_USER_LOGIN, FETCH_CATEGORIES, FETCH_TWEET_DATA,
   SEND_LOGIN_DATA_SUCCESS, SEND_LOGIN_DATA_FAILURE, ON_LOGOUT, ON_LOGOUT_SUCCESS, ON_LOGOUT_FAILURE
 } from '../Actions/Actions';
+import {baseURL} from './baseURL';
 
+const getURL = (apiEndPoint) => {
+  if(apiEndPoint.includes('users')){
+    return baseURL + apiEndPoint;
+  } else {
+    return baseURL + 'api/' + apiEndPoint;
+  }
+}
 
-const triggerOverAllDataApi = (action) => {
-  let url = "http://3.7.29.98:8001/api/report/world"
+const triggerOverAllDataApi = () => {
+  let url = getURL("report/world");
   return Axios.post(url)
     .then(response => response.data)
 }
@@ -21,7 +29,7 @@ function* fetchOverAllData() {
 }
 
 const triggerRegistrationApi = (action) => {
-  let url = "http://3.7.29.98:8001/users/profile/"
+  let url = getURL("users/profile/");
   return Axios.post(url, {
     name: action.data.userName,
     email: action.data.emailId,
@@ -43,7 +51,7 @@ function* sendRegistrationData(type, action) {
 }
 
 const triggerLoginApi = (action) => {
-  let url = "http://3.7.29.98:8001/users/login/"
+  let url = getURL("users/login/");
   return Axios.post(url, {
     username: action.userName,
     password: action.password
@@ -71,7 +79,7 @@ function* sendLoginData(action) {
 }
 
 const logout = () => {
-  let url = "http://3.7.29.98:8001/users/logout/"
+  let url = getURL("users/logout/");
   let token = sessionStorage.getItem('Token')
   return Axios.get(url, { headers: { "Authorization": `Token ${token}` } })
     .then(response => response.data)
@@ -92,7 +100,7 @@ function* userLogout(action) {
 }
 
 const getTweetDataAPI = (action) => {
-  let url = `http://3.7.29.98:8001/api/tweets/?page=` + action.page
+  let url = getURL("tweets/?page=") + action.page
   return Axios.get(url)
     .then(response => response.data)
 }
@@ -103,7 +111,7 @@ function* fetchTweetData(action) {
 }
 
 const getTweetDataByCategoryAPI = (action) => {
-  let url = `http://3.7.29.98:8001/api/tweets/?category=` + action.category + `;page=` + action.page
+  let url = getURL("tweets/?category=") + action.category + ";page=" + action.page
   return Axios.get(url)
     .then(response => response.data)
 }
@@ -114,7 +122,7 @@ function* fetchTweetDataByCategory(action) {
 }
 
 const getCategoryAPI = () => {
-  let url = `http://3.7.29.98:8001/api/categories/ `
+  let url = getURL("categories/");
   return Axios.get(url)
     .then(response => response.data)
 }
@@ -124,7 +132,7 @@ function* fetchCategories() {
 }
 
 const getSpamReportAPI = (action) => {
-  let url = `http://3.7.29.98:8001/api/add_spam_count/?tweet_id=` + action.id
+  let url = getURL("add_spam_count/?tweet_id=") + action.id;
   let token = sessionStorage.getItem('Token')
   return Axios.put(url, {}, { headers: { "Authorization": `Token ${token}` } })
     .then(response => response.data)
