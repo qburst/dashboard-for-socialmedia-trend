@@ -5,7 +5,7 @@ export default class Footer extends Component {
         return (
             <div>
                 <footer class="main-footer">
-                    <strong>Copyright &copy; 2020 <a href="">Qburst</a> </strong>
+                    <strong>Copyright &copy; 2020 <a href="">QBurst</a> </strong>
                     All rights reserved.
                 </footer>
             </div>

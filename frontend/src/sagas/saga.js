@@ -65,14 +65,16 @@ function* sendLoginData(action) {
   try {
     const response = yield call(triggerLoginApi, action);
     if (response.token) {
-      sessionStorage.setItem('Token', response.token)
-      sessionStorage.setItem('Username', response.name)
+      sessionStorage.setItem('Token', response.token);
+      sessionStorage.setItem('Username', response.name);
+      sessionStorage.setItem('isLoggedIn', true);
       action.history.push('/dashboard');
     }
     yield put({ type: SEND_LOGIN_DATA_SUCCESS, data: action.history })
   }
   catch (error) {
     let errorMsg;
+    sessionStorage.setItem('isLoggedIn', false);
     error.response && error.response.status === 404 ? errorMsg = 'Kindly Try After Sometime' : errorMsg = error.response && error.response.data.non_field_errors[0]
     yield put({ type: SEND_LOGIN_DATA_FAILURE, errorData: errorMsg });
   }
@@ -90,6 +92,8 @@ function* userLogout(action) {
     const res = yield call(logout)
     if (res === 'Logged Out Successfully') {
       sessionStorage.removeItem('Token');
+      sessionStorage.removeItem('Username');
+      sessionStorage.removeItem('isLoggedIn');
       action.history.push('/');
     }
     yield put({ type: ON_LOGOUT_SUCCESS, data: action })

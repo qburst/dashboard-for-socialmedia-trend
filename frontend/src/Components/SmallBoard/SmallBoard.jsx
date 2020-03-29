@@ -1,6 +1,4 @@
 import React from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers } from '@fortawesome/fontawesome-free-solid';
 import Icon from '@material-ui/core/Icon';
 import './SmallBoard.css';
 
@@ -13,14 +11,13 @@ export default class SmallBoard extends React.Component {
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col mt-0">
+                            <div class="col mt-0 label">
                                 <h5 class="card-title">{label}</h5>
                             </div>
 
                             <div class="col-auto">
                                 <div class="avatar">
-                                    <div class="avatar-title rounded-circle bg-primary-dark">
-                                        <FontAwesomeIcon icon={faUsers} />		
+                                    <div class="avatar-title rounded-circle bg-primary-dark">		
                                         {showValue && <Icon class="material-icons expand-board-icon" onClick={()=>handleClick(label)}>expand_less</Icon>}
                                         {!showValue && <Icon class="material-icons expand-board-icon" onClick={()=>handleClick(label)}>expand_more</Icon>}													
                                     </div>

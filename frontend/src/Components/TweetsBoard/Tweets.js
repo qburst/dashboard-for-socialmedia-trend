@@ -17,7 +17,8 @@ class Tweets extends Component {
             activePage: 1,
             mobileView: false,
             showTweet: true,
-            reportingSpam: false
+            reportingSpam: false,
+            isLoggedIn: sessionStorage.getItem('isLoggedIn')
         };
 
         this.fetchDataFromAPI = this.fetchDataFromAPI.bind(this);
@@ -27,7 +28,6 @@ class Tweets extends Component {
             this.setState({ activePage: 1 });
         }
         if (prevProps.tweets !== this.props.tweets) {
-            window.scrollTo(0, 0);
             this.setState({ tweets: this.props.tweets });
         }
         if (prevProps.isSpamReportedSuccess !== this.props.isSpamReportedSuccess && this.state.reportingSpam
@@ -56,6 +56,7 @@ class Tweets extends Component {
     }
 
     fetchDataFromAPI(pageNumber) {
+        window.scrollTo(0, window.innerHeight/2);
         this.setState({ activePage: pageNumber });
         if (this.props.category) {
             this.props.fetchTweetsCategoryWise(this.props.category, pageNumber);
@@ -90,21 +91,23 @@ class Tweets extends Component {
                         <div class="twitter_tweets d-flex">
                             <div class="twitter_tweets__content">
                                 <div class="twitter_tweets__meta text-mutes">
-                                    <span class="badge" style={{ float: "right" }}>Posted on
-                                    <span class="text-mutes">- {new Date(tweet.created_at).toLocaleDateString()}
-                                            {" "}{new Date(tweet.created_at).toLocaleTimeString()}</span>
+                                    <span class="badge" style={{ float: "left" }}>Posted on{" "}
+                                    <span class="text-mutes"> - {new Date(tweet.created_at).toLocaleDateString()}</span>
+                                    </span>
+                                    <span class="badge" style={{ float: "right" }}>
+                                    <span class="text-mutes">{new Date(tweet.created_at).toLocaleTimeString()}</span>
                                     </span>
                                 </div>
                                 <p class="m-0 my-1 mb-2 text-muted">{tweet.text}</p>
                                 <div class="blog-comments__actions">
                                     <div class="btn-group-sm btn-group">
-                                        <button type="button" onClick={() => this.reportSpam(tweet.id)} class="btn btn-danger">
+                                        <button type="button" hidden={!this.state.isLoggedIn} onClick={() => this.reportSpam(tweet.id)} class="btn btn-danger">
                                             <span class="text-white"><Icon class="material-icons">clear</Icon></span>
                                             Report Spam
                                         </button>
                                         <button type="button" onClick={event => window.location.href = tweet.url} class="btn btn-primary">
                                             <span class="text-white"><Icon class="material-icons">link</Icon></span>
-                                            Twitter Link
+                                            Go To
                                         </button>
                                     </div>
                                 </div>

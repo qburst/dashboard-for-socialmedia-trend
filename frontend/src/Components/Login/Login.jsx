@@ -30,7 +30,7 @@ class Login extends Component {
 
         if(!userName){
             formIsValid = false
-            errors['userName'] = 'UserName Cannot be empty';
+            errors['userName'] = 'Username Cannot be empty';
         }
 
         if(!password){
@@ -45,6 +45,10 @@ class Login extends Component {
         formIsValid && this.props.onUserLogin(userName, password, history);
     }
 
+    onSkipLogin=()=>{
+        this.props.history.push('/dashboard');
+    }
+
 
     render() {
         let className;
@@ -54,6 +58,7 @@ class Login extends Component {
         return (
             <div class={`login ${this.className} `} >
                 <div className="login_wrapper">
+                <button type="button" class="btn btn-Default btn-sm skip_btn" onClick={ this.onSkipLogin }>Skip Login</button>                
                 <div class="header_login">
                     Login
                 </div>
