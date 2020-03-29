@@ -39,3 +39,5 @@ export const FETCH_CATEGORIES = 'fetchCategories';
 export const FETCH_CATEGORIES_SUCCESS = 'fetchCategoriesSuccess';
 export const SET_CATEGORY= 'setCategory';
 
+export const SKIP_LOGIN = 'skipLogin';
+

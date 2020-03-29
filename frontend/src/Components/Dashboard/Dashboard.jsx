@@ -13,19 +13,22 @@ class Dashboard extends Component {
     constructor(props) {
         super();
         this.state = {
-            modalShow: false
+            modalShow: false,
+            isLoggedIn: sessionStorage.getItem('isLoggedIn')
         }
         this.onLogout = this.onLogout.bind(this);
         this.showAbout = this.showAbout.bind(this);
     }
 
     componentDidMount() {
-        if (sessionStorage.getItem('Token')) {
-            this.props.history.push('/dashboard')
-        }
-        else {
-            this.props.history.push('/')
-        }
+        // if (sessionStorage.getItem('Token')) {
+        //     this.props.history.push('/dashboard')
+        // }
+        // else if (){
+        // }
+        // else {
+        //     this.props.history.push('/')
+        // }
         this.props.getData();
         window.addEventListener('popstate', function (event) {
             window.history.pushState(null, document.title, window.location.href);
@@ -33,6 +36,10 @@ class Dashboard extends Component {
     }
     onLogout = () => {
         this.props.logout(this.props.history)
+    }
+
+    showLogin=()=>{
+        this.props.history.push('/');
     }
 
     showAbout (){
@@ -54,6 +61,8 @@ class Dashboard extends Component {
                         onLogout={this.onLogout}
                         spinner={this.props.reducer.spinner}
                         createdDate={this.props.reducer.createdDate}
+                        isLoggedIn = { this.state.isLoggedIn }
+                        showLogin = { this.showLogin }
                     />
                     <MyVerticallyCenteredModal
                         show={this.state.modalShow}
@@ -61,7 +70,7 @@ class Dashboard extends Component {
                         header="About"
                         bodyHeader="COVID-19 Twitter Data"
                         body="We analyze social media data, then categorize and display in web platform for people fighting
-                        corona. Currently our platform process twitter data and aggregate that to several categories and aggregate that to several categories and using a
+                        corona. Currently our platform process twitter data and aggregate that to several categories and using a
                          web platform to show the data to the entire world."
                     />
                 </div>

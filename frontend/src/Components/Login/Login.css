@@ -11,6 +11,9 @@
     color:white;
     outline:none;
 }
+.login_page_signup-btn:hover, .submit_login:hover, .skip_btn:hover{
+    color: white;
+}
 
 @media (max-width: 576px){
 .login {
@@ -88,6 +91,7 @@ input::placeholder {
     outline: none;
 }
 
+
 .inputError{
     color: red;
     font-size: 11px;
@@ -108,7 +112,7 @@ button[type="submit"]:disabled{
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
-    padding: 15% 10% 10% 10%;
+    padding: 8% 10% 10% 10%;
   
     box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
@@ -117,4 +121,13 @@ button[type="submit"]:disabled{
     -ms-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
   }
 
-  
+  .skip_btn{
+    background-color: #28354e;
+    color: white;
+    outline: none;
+    position: relative;
+    left: 45%;
+    bottom: 20px;
+
+  }
+

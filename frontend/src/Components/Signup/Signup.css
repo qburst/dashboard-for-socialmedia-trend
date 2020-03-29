@@ -107,3 +107,7 @@ input::placeholder {
     outline: none;
 }
 
+
+.signup_page_login-btn:hover, .submit_signup:hover {
+    color: white;
+}

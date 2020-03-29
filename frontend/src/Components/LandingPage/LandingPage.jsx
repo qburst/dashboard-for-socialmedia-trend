@@ -12,9 +12,9 @@ class LandingPage extends Component {
     }
 
     componentDidMount(){
-        if(sessionStorage.getItem('Token')){
-            sessionStorage.removeItem('Token');
-        }
+        sessionStorage.removeItem('Token');
+        sessionStorage.removeItem('Username');
+        sessionStorage.removeItem('isLoggedIn');
     }
 
     displayLogin=()=>{

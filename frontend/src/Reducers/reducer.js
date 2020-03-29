@@ -11,7 +11,6 @@ export const initialState = {
   overAllData: {},
   countryCount: undefined,
   spinner: false,
-  isLoggedIn: false,
   userName: '',
   password: '',
   registrationSuccess: false,
@@ -56,7 +55,6 @@ export default function reducer(state = initialState, action) {
     case SEND_LOGIN_DATA_SUCCESS:
       return {
         ...state,
-        isLoggedIn: true,
         loginFailure: false,
         spinner: false
       }
@@ -70,7 +68,6 @@ export default function reducer(state = initialState, action) {
         ...state,
         userName: '',
         password: '',
-        isLoggedIn: false,
         spinner: false
       }
     case ON_LOGOUT_FAILURE:

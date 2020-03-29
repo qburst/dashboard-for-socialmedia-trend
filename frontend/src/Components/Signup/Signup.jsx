@@ -39,11 +39,11 @@ export default class Signup extends Component {
 
         if(!userName){
             formIsValid = false;
-            errors["userName"] = "UserName Cannot be empty";
+            errors["userName"] = "Username Cannot be empty";
          }
         if(!emailId){
             formIsValid = false;
-            errors["emailId"] = "EmailId Cannot be empty";
+            errors["emailId"] = "Email Id Cannot be empty";
          }
          if(!password){
             formIsValid = false;

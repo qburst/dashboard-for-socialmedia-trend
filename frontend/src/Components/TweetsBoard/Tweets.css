@@ -32,7 +32,7 @@
     width: 7rem;
 }
 .material-icons{
-    vertical-align: sub;
+    vertical-align: bottom;
     font-size: 1rem;
 }
 .expand-icon{
@@ -46,4 +46,7 @@
     right: 35px;
     top: 20px;
     cursor: pointer;
+}
+.badge{
+    padding: 0rem;
 }

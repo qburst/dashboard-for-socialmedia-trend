@@ -10,9 +10,10 @@ export default class Menu extends Component {
 		super(props);
 		this.state = {
 			overAllData: [{ label: "Total Cases", value: 0, className: "text-primary", showValue: true },
-			{ label: "Death Cases", value: 0, className: "text-danger", showValue: true },
-			{ label: "New Cases", value: 0, className: "text-warning", showValue: true }],
-			showSmallBoard: true
+			{ label: "New Cases", value: 0, className: "text-warning", showValue: true },
+			{ label: "Deceased Cases", value: 0, className: "text-danger", showValue: true }],
+			showSmallBoard: true,
+			isLoggedIn: sessionStorage.getItem('isLoggedIn')
 		}
 		this.handleClick = this.handleClick.bind(this);
 	};
@@ -22,8 +23,8 @@ export default class Menu extends Component {
 			const { total_cases, total_deaths, new_cases } = this.props.overAllData;
 			this.setState({
 				overAllData: [{ label: "Total Cases", value: total_cases, className: "text-primary", showValue: true },
-				{ label: "Death Cases", value: total_deaths, className: "text-danger", showValue: true },
 				{ label: "New Cases", value: new_cases, className: "text-warning", showValue: true },
+				{ label: "Deceased Cases", value: total_deaths, className: "text-danger", showValue: true },
 				]
 			})
 		}
@@ -35,6 +36,10 @@ export default class Menu extends Component {
 
 	logout = () => {
 		this.props.onLogout();
+	}
+	
+	showLogin=()=>{
+		this.props.showLogin();
 	}
 
 	handleClick(label) {
@@ -52,8 +57,8 @@ export default class Menu extends Component {
 						aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
-					<button className="btn btn-light logout" type="submit" disabled={this.props.spinner} onClick={this.logout}>
-						Logout
+					<button className="btn btn-light logout" type="submit" disabled={this.props.spinner} onClick={this.state.isLoggedIn ? this.logout : this.showLogin}>
+					{this.state.isLoggedIn ? 'Logout' : 'Login' }
               		</button>
 				</nav>
 				<main className="content">
