@@ -1,20 +1,7 @@
 # Social Data Analysis Platform
 Currently crunching twitter data and transforming that to several categories and using a web platform to show the data to the world. 
 
-# Finding Solutions to Fight Corona Problems:
-
-* Too much data coming in twitter stream
-* Categorizing the data:
-    * Corona Positive Tweets(Recovery cases, New Policy to avoid Corona, Trials Success) vs Negative Tweets(New Corona Case Reported, More patients dead, Spread to new area)
-    * Corona Supply Request(We need to identify supply shortages in area)
-    * Corona Notice(Major announcements)
-* Country based categorisation:
-
-    * Will have further drilled down with following:
-        * Death
-        * Recovery
-        * New Case
-        * Reoccurrence
+It's inspired by COVID-19, but can be used for any trending topic's dashboard
 
 
 ## Implementation Plan:
@@ -27,8 +14,8 @@ Visualization of the Data on DB using a web platform
 * Will visualize statistics in the later phase into a dashboard like this
 
 # Web Platform Technologies considered:
-* Django/Flask
-* Angular based frontend and backend using DRF
+* Django based API Implementation.
+* React based frontend.
 
 ## Block Diagram
 
