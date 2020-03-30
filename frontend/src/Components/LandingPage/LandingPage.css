@@ -1,0 +1,52 @@
+    /* .header{
+        width: 45%;
+        margin: 3% auto 0 auto;
+        border-radius: 5px;
+        box-shadow: 1px 0px 8px #aba5a5fa;
+    } */
+
+
+    
+    .landingpage {
+        width: 100%;  
+        min-height: 100vh;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        background: #f2f2f2;  
+      }
+    
+      .landingpage:before {
+        width: 100%;
+        height: 264px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: #28354e;
+        content: " ";
+        z-index: 0;
+    }
+    
+    .LandingPage_header{
+        z-index: 1;
+        position: relative;
+        margin-bottom: 1rem;
+        bottom: 194px;
+        left: 115px;
+    }
+    
+    @media (max-width: 576px){
+        .LandingPage_header{
+        position: inherit;
+        margin: 0;
+    }
+    .landingpage { 
+        min-height: 85vh;
+    }
+    }

@@ -1,0 +1,133 @@
+.login{ 
+    margin: 9% auto 0 auto;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.login_page_signup-btn{
+    margin-top: 38px;
+    width: 100%;
+    background-color: black;
+    color:white;
+    outline:none;
+}
+.login_page_signup-btn:hover, .submit_login:hover, .skip_btn:hover{
+    color: white;
+}
+
+@media (max-width: 576px){
+.login {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+}
+.header_login {
+    margin: 0 auto;
+    width: 50%;
+    padding: 3% 0;
+    font-weight: bold;
+    box-shadow: 0 9px 7px -8px black;
+}
+.failure{
+    box-shadow: 1px 0px 15px red;
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+}
+@keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+
+.loginFailure{
+    color: red;
+    padding-top: 5%;
+    font-weight: bold;
+}
+
+.username, .password{
+    width: 94%;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    margin-top: 5%;
+    border-bottom: 1px solid #00000036;
+    outline:none;
+}
+
+input::placeholder {
+    font-size: small;
+    font-family: initial;
+}
+
+.Container_input{
+    padding: 10%;
+}
+
+.submit_login{
+    border: none;
+    padding: 6px;
+    background-color: #0a0a0a;
+    border-radius: 7px;
+    width: 50%;
+    border-radius: 6px;
+    color: white;
+    margin-bottom: 5%;
+    outline: none;
+}
+
+
+.inputError{
+    color: red;
+    font-size: 11px;
+    text-align: start;
+    padding-left: 7px;
+}
+
+button[type="submit"]:disabled{
+    cursor: wait;
+    background-color: #131212c7;
+}
+
+
+
+
+  .login_wrapper {
+    width: 390px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 8% 10% 10% 10%;
+  
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    -o-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+    -ms-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+  }
+
+  .skip_btn{
+    background-color: #28354e;
+    color: white;
+    outline: none;
+    position: relative;
+    left: 45%;
+    bottom: 20px;
+
+  }
+
