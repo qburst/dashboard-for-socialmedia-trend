@@ -68,7 +68,7 @@ function* sendLoginData(action) {
       sessionStorage.setItem('Token', response.token);
       sessionStorage.setItem('Username', response.name);
       sessionStorage.setItem('isLoggedIn', true);
-      action.history.push('/dashboard');
+      action.history.push('/');
     }
     yield put({ type: SEND_LOGIN_DATA_SUCCESS, data: action.history })
   }
