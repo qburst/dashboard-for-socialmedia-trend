@@ -1,4 +1,4 @@
-# Data Analysis Platform
+# Social Data Analysis Platform
 Currently crunching twitter data and transforming that to several categories and using a web platform to show the data to the world. 
 
 # Finding Solutions to Fight Corona Problems:
