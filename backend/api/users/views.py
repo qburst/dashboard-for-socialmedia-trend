@@ -35,7 +35,7 @@ class UserLoginApiView(ObtainAuthToken):
         user = serializer.validated_data['user']
         login(request, user)
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        return Response({'token': token.key, 'name': user.name})
 
 
 class LogoutView(views.APIView):

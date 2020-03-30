@@ -1,31 +1,25 @@
-import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React, { Component } from "react";
+import "./App.css";
+import { BrowserRouter as Router, Switch} from 'react-router-dom';
+import Route from 'react-router-dom/Route';
+import Dashboard from './Components/Dashboard/Dashboard';
+import LandingPage from './Components/LandingPage/LandingPage'
 
-import routes from "./routes";
-import withTracker from "./withTracker";
+class App extends Component {
+  render() {
+    return (
+      <Router>
+        <div className="App">
+          <Switch>
+            <Route path="/" exact component = { LandingPage }/>
+            <Route path="/dashboard" exact component = { Dashboard }/>
+            <Route path="*" exact component = { LandingPage }/>
+          </Switch>
+        </div>
+      </Router>
+    );
+  }
+}
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./shards-dashboard/styles/shards-dashboards.1.1.0.min.css";
 
-export default () => (
-  <Router basename={process.env.REACT_APP_BASENAME || ""}>
-    <div>
-      {routes.map((route, index) => {
-        return (
-          <Route
-            key={index}
-            path={route.path}
-            exact={route.exact}
-            component={withTracker(props => {
-              return (
-                <route.layout {...props}>
-                  <route.component {...props} />
-                </route.layout>
-              );
-            })}
-          />
-        );
-      })}
-    </div>
-  </Router>
-);
+export default App;

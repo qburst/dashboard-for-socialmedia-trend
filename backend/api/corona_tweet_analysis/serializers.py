@@ -8,15 +8,9 @@ class TwitterDataSerializer(serializers.DocumentSerializer):
         model = TwitterData
         fields = '__all__'
 
-
 class CategorySerializer(serializers.DocumentSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
-
-class CoronaReportSerializer(serializers.DocumentSerializer):
-    class Meta:
-        model = CoronaReport
         fields = '__all__'
 
 class HashtagSerializer(rest_serializers.ModelSerializer):
