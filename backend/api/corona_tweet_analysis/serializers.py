@@ -8,7 +8,6 @@ class TwitterDataSerializer(serializers.DocumentSerializer):
         model = TwitterData
         fields = '__all__'
 
-
 class CategorySerializer(serializers.DocumentSerializer):
     class Meta:
         model = Category
