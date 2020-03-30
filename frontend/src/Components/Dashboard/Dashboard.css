@@ -16,3 +16,7 @@
     width: 100%;
     position: relative;
 }
+.btn-success, .btn-dark{
+    margin-right: 5px;
+    outline: none;
+}

@@ -46,7 +46,7 @@ class Login extends Component {
     }
 
     onSkipLogin=()=>{
-        this.props.history.push('/dashboard');
+        this.props.history.push('/');
     }
 
 
