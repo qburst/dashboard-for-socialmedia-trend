@@ -60,3 +60,7 @@
 .user-avatar{
     max-width: 2.5rem;
 }
+
+.about, .contact, .dashboard {
+    text-decoration: underline;
+}

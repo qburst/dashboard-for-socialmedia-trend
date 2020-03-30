@@ -34,6 +34,9 @@ class Sidebar extends Component {
     }
   }
   
+  showContact = ()=>{
+    this.props.showContact();
+  }
 
   render() {
     return (
@@ -48,16 +51,19 @@ class Sidebar extends Component {
         </div>
         <div className="sidebar-content">
           <div className="sidebar-user" onClick={()=>{this.showAbout()}}>
-            <div className="font-weight-bold">About</div>
+            <div className="font-weight-bold about">About</div>
+          </div>
+          <div className="sidebar-user" onClick={()=>{this.showContact()}}>
+            <div className="font-weight-bold contact">Contact Us</div>
           </div>
           <div className="sidebar-user" onClick={ ()=> this.fetchTweetsCategoryWise()}>
-            <div className="font-weight-bold">Dashboard</div>
+            <div className="font-weight-bold dashboard">Dashboard</div>
           </div>
           <ul className="sidebar-nav">
             {this.props.items && this.props.items.map((item, idx) => (
             <li className={"sidebar-item "  + (this.props.category === item._id ? 'active' : '')} key={idx}  onClick={ ()=> this.fetchTweetsCategoryWise(item._id) }>
               <a href="#dashboards" data-toggle="collapse" className="sidebar-link" aria-expanded="true">
-                <i className="align-middle mr-2 fas fa-fw fa-home"></i> <span className="align-middle">{item._id.replace(/_/g, " ")}</span>
+                 <span className="align-middle">{item._id.replace(/_/g, " ")}</span>
               </a>
             </li>))}
           </ul>

@@ -36,6 +36,9 @@ export default class Menu extends Component {
 
 	logout = () => {
 		this.props.onLogout();
+		this.setState({
+			isLoggedIn:false
+		})
 	}
 	
 	showLogin=()=>{
