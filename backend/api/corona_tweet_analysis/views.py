@@ -99,6 +99,8 @@ class HashtagsView(generics.ListCreateAPIView):
     serializer_class = HashtagSerializer
 
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
         hashtag_id = request.query_params.get('hashtag_id')
         if hashtag_id:
             hashtag_obj = Hashtag.objects.filter(id=hashtag_id)
@@ -191,6 +193,8 @@ class CategorySqlView(generics.ListCreateAPIView):
             return send_response({'status': FAIL})
 
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
         category_id = request.query_params.get('category_id')
         if category_id:
             category_obj = CategorySQL.objects.filter(id=category_id)
