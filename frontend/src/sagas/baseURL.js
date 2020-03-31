@@ -1,1 +1,1 @@
-export const baseURL = 'http://3.7.29.98:8001/';
+export const baseURL = 'https://api.covid-dashboard.qburst.build/';
