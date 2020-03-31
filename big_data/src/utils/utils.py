@@ -1,7 +1,6 @@
 from pymongo import MongoClient
 from utils import constants
 
-
 client = MongoClient('localhost', 27017)
 db = client[constants.DB_NAME]
 
@@ -17,3 +16,11 @@ def getCategories():
     categories_list = [category for category in categories.find({"approved": True},
                                                                 {'_id': 0, 'category': 1, 'keywords': 1})]
     return categories_list
+
+
+def getAllKeywords():
+    categories = db.corona_tweet_analysis_categorysql
+    keywords = []
+    for category in categories.find({"approved": True}, {'_id': 0, 'category': 1, 'keywords': 1}):
+        keywords += category["keywords"].split(',')
+    return keywords
