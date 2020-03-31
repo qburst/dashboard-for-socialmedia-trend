@@ -4,12 +4,13 @@ from django.shortcuts import render
 from corona_tweet_analysis.utils.base_view import BaseViewManager
 from corona_tweet_analysis.utils.responses import send_response
 from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST, UNAUTHORIZED
-from corona_tweet_analysis.models import TwitterData, Category, CoronaReport
+from corona_tweet_analysis.models import TwitterData, Category, CoronaReport, UserHashtag
 from corona_tweet_analysis import serializers
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import permissions, generics
 from rest_framework.response import Response
-from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer
+from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer, UserHashtagSerializer
+from rest_framework import filters
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
@@ -130,3 +131,11 @@ class StatisticsView(generics.ListCreateAPIView):
             return send_response({'status': SUCCESS, 'data': statistics_dict})
         except Exception as err:
             return send_response({'status': FAIL})
+
+
+class UserHashtagView(generics.ListCreateAPIView):
+    queryset = UserHashtag.objects.all()
+    serializer_class = UserHashtagSerializer
+    http_method_names = ['get']
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('hashtag',)
