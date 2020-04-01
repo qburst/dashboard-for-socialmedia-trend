@@ -6,10 +6,9 @@ from mongoengine import connect
 
 from database_models.mongo_models import TwitterData, Category
 from configs import spark_config
-from utils.constants import KEYWORDS, MANDATORY_HASHTAGS, \
-    CATEGORIES, COUNTRIES, DB_NAME, INFECTED_KEYWORDS, RECOVERED_KEYWORDS, \
-    DEATH_KEYWORDS, TRAVEL_HISTORY_KEYWORDS, VACCINE_KEYWORDS, CURE_KEYWORDS, USERNAME, \
-    PASSWORD, HOST
+from utils.constants import COUNTRIES, DB_NAME, USERNAME, PASSWORD, HOST
+from utils.utils import getMandatoryHashtags, getCategories, getAllKeywords
+
 
 def saveMongo(data):
     data = loads(data.asDict()['value'])
@@ -38,15 +37,16 @@ def saveMongo(data):
             tweet.save()
             db_client.close()
 
+
 def filterHash(hashtags):
     for hashtag in hashtags:
-        if hashtag.get("text") in MANDATORY_HASHTAGS:
+        if hashtag.get("text") in getMandatoryHashtags():
             return True
     return False
 
 
 def filterKeyword(text):
-    for keyword in KEYWORDS:
+    for keyword in getAllKeywords():
         if keyword in text.lower():
             return True
     return False
@@ -63,18 +63,15 @@ def getCountry(text):
 
 
 def getCategory(text):
-    category = []
-    category += processCategory(INFECTED_KEYWORDS, text, "INFECTED")
-    category += processCategory(DEATH_KEYWORDS, text, "DEATH")
-    category += processCategory(RECOVERED_KEYWORDS, text, "RECOVERED")
-    category += processCategory(TRAVEL_HISTORY_KEYWORDS, text, "TRAVEL_HISTORY")
-    category += processCategory(VACCINE_KEYWORDS, text, "VACCINE")
-    category += processCategory(CURE_KEYWORDS, text, "CURE")
+    category_list = []
+    categories = getCategories()
+    for category in categories:
+        category_list += processCategory(category['keywords'].split(','), text, category["category"])
 
-    if len(category) == 0:
-        category.append("--NA--")
+    if len(category_list) == 0:
+        category_list.append("--NA--")
 
-    return category
+    return category_list
 
 
 def processCategory(keywords, text, category):
