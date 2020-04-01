@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "jinojossy93",
+      "name": "Jino Jossy",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/13327976?v=4",
+      "profile": "https://jino.work",
+      "contributions": [
+        "platform"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "dashboard-for-socialmedia-trend",
+  "projectOwner": "qburst",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
