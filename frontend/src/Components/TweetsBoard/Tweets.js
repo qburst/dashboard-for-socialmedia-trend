@@ -92,7 +92,11 @@ class Tweets extends Component {
                             <div class="twitter_tweets__content">
                                 <div class="twitter_tweets__meta text-mutes">
                                     <span class="badge" style={{ float: "left" }}>Posted on{" "}
-                                    <span class="text-mutes"> - {new Date(tweet.created_at).toLocaleDateString()}</span>
+                                        <span class="text-mutes"> - {new Intl.DateTimeFormat("en-GB", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "2-digit"
+                                        }).format(new Date(tweet.created_at))}</span>
                                     </span>
                                     <span class="badge" style={{ float: "right" }}>
                                     <span class="text-mutes">{new Date(tweet.created_at).toLocaleTimeString()}</span>
