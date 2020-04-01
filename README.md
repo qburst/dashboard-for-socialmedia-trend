@@ -34,6 +34,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://jino.work"><img src="https://avatars1.githubusercontent.com/u/13327976?v=4" width="100px;" alt=""/><br /><sub><b>Jino Jossy</b></sub></a><br /><a href="#platform-jinojossy93" title="Packaging/porting to new platform">📦</a></td>
+    <td align="center"><a href="https://github.com/joannjacob"><img src="https://avatars3.githubusercontent.com/u/38246378?v=4" width="100px;" alt=""/><br /><sub><b>joannjacob</b></sub></a><br /><a href="https://github.com/qburst/dashboard-for-socialmedia-trend/commits?author=joannjacob" title="Code">💻</a></td>
   </tr>
 </table>
 
