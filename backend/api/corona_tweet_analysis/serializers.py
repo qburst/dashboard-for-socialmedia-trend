@@ -1,5 +1,5 @@
 from rest_framework_mongoengine import serializers
-from corona_tweet_analysis.models import TwitterData, Category, CoronaReport, CategorySQL, Hashtag
+from corona_tweet_analysis.models import TwitterData, Category, CoronaReport, Hashtag
 from rest_framework import serializers as rest_serializers
 
 
@@ -8,18 +8,13 @@ class TwitterDataSerializer(serializers.DocumentSerializer):
         model = TwitterData
         fields = '__all__'
 
-class CategorySerializer(serializers.DocumentSerializer):
-    class Meta:
-        model = Category
-        fields = '__all__'
-
 
 class HashtagSerializer(rest_serializers.ModelSerializer):
     class Meta:
         model = Hashtag
         fields = '__all__'
 
-class CategorySqlSerializer(rest_serializers.ModelSerializer):
+class CategorySerializer(rest_serializers.ModelSerializer):
     class Meta:
-        model = CategorySQL
+        model = Category
         fields = '__all__'

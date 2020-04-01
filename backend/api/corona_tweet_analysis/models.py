@@ -2,10 +2,6 @@ import datetime
 from mongoengine import fields, DynamicDocument, EmbeddedDocument
 from djongo import models
 
-class Category(DynamicDocument):
-    _id = fields.StringField(primary_key=True)
-    created_at = fields.DateTimeField(default=datetime.datetime.now)
-
 
 class TwitterData(DynamicDocument):
     text = fields.StringField(required=True)
@@ -34,7 +30,7 @@ class CoronaReport(DynamicDocument):
     meta = {'allow_inheritance': True}
 
 
-class CategorySQL(models.Model):
+class Category(models.Model):
     category = models.TextField(unique=True)
     keywords = models.TextField()
     approved = models.BooleanField(default=False)

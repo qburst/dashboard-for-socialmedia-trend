@@ -1,16 +1,11 @@
 from json import loads
 from corona_tweet_analysis.utils.responses import send_response
 from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST, UNAUTHORIZED
-from corona_tweet_analysis.models import TwitterData, Category, CoronaReport, CategorySQL, Hashtag
+from corona_tweet_analysis.models import TwitterData, Category, CoronaReport, Hashtag
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import permissions, generics
-from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer,\
-    HashtagSerializer, CategorySqlSerializer
+from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer,HashtagSerializer
 from rest_framework.response import Response
-
-class CategoryView(generics.ListAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
 
 
 class CoronaWorldReportView(generics.ListAPIView):
@@ -203,9 +198,9 @@ class HashtagsView(generics.ListCreateAPIView):
         return False
 
 
-class CategorySqlView(generics.ListCreateAPIView):
-    queryset = CategorySQL.objects.all()
-    serializer_class = CategorySqlSerializer
+class CategoryView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
     def post(self, request, *args, **kwargs):
         try:
@@ -216,12 +211,12 @@ class CategorySqlView(generics.ListCreateAPIView):
                     return send_response({'status': INVALID_PARAMETERS, 'message': 'Category name  is required'})
                 if not keywords_str:
                     return send_response({'status': INVALID_PARAMETERS, 'message': 'keywords are required'})
-                category_obj = CategorySQL.objects.filter(category=category_str).first()
+                category_obj = Category.objects.filter(category=category_str).first()
                 if category_obj:
                     return send_response({'status': INVALID_PARAMETERS, 'message': 'Category already exists'})
                 created_user = request.user
-                categorySql = CategorySQL(category=category_str, keywords=keywords_str, created_or_modified_by=created_user)
-                categorySql.save()
+                category = Category(category=category_str, keywords=keywords_str, created_or_modified_by=created_user)
+                category.save()
             else:
                 return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
             return send_response({'status': SUCCESS, 'message': 'Category ' + category_str + " created"})
@@ -233,7 +228,7 @@ class CategorySqlView(generics.ListCreateAPIView):
             return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
         category_id = request.query_params.get('category_id')
         if category_id:
-            category_obj = CategorySQL.objects.filter(id=category_id)
+            category_obj = Category.objects.filter(id=category_id)
             if not category_obj:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag id not found'})
             else:
@@ -247,7 +242,7 @@ class CategorySqlView(generics.ListCreateAPIView):
             category_id = request.query_params.get('category_id')
             if not category_id:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Category id is required'})
-            category_obj = CategorySQL.objects.filter(id=category_id).first()
+            category_obj = Category.objects.filter(id=category_id).first()
             if not category_obj:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Category not found'})
             approved = request.data.get("approved")
@@ -267,11 +262,11 @@ class CategorySqlView(generics.ListCreateAPIView):
                 else:
                     approved = False
                 print(request.user)
-                CategorySQL.objects.filter(id=category_id).update(category=category_text, keywords=keywords, approved=approved, approved_by=str(request.user))
+                Category.objects.filter(id=category_id).update(category=category_text, keywords=keywords, approved=approved, approved_by=str(request.user))
             else:
                 if not self.checkSuperUser(request) and category_obj.values('created_or_modified_by')[0].get('created_or_modified_by') != request.user:
                     return send_response({'status': BAD_REQUEST, 'message': 'User is not admin or owner of Category'})
-                CategorySQL.objects.filter(id=category_id).update(hashtag=category_text, keywords=keywords)
+                Category.objects.filter(id=category_id).update(hashtag=category_text, keywords=keywords)
             return send_response({'status': SUCCESS, 'message': 'Category updated successfully'})
 
         except Exception as err:
