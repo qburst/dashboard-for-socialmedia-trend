@@ -151,8 +151,13 @@ class HashtagsView(generics.ListCreateAPIView):
                 if hashtag_obj:
                     return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag already exists'})
                 created_user = request.user
-                hashtag = Hashtag(hashtag=hashtag_str, created_or_modified_by=created_user)
-                hashtag.save()
+                if self.checkSuperUser(request) and request.data.get("approved") == 'true':
+                    hashtag = Hashtag(hashtag=hashtag_str, created_or_modified_by=created_user,
+                                      approved=True, approved_by=str(request.user))
+                    hashtag.save()
+                else:
+                    hashtag = Hashtag(hashtag=hashtag_str, created_or_modified_by=created_user)
+                    hashtag.save()
             else:
                 return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
             return send_response({'status': SUCCESS, 'message': 'Hashtag ' + hashtag_str + " created"})
@@ -205,6 +210,7 @@ class CategoryView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         try:
             if request.user.is_authenticated:
+
                 category_str = request.data.get("category")
                 keywords_str = request.data.get("keywords")
                 if not category_str:
@@ -215,8 +221,13 @@ class CategoryView(generics.ListCreateAPIView):
                 if category_obj:
                     return send_response({'status': INVALID_PARAMETERS, 'message': 'Category already exists'})
                 created_user = request.user
-                category = Category(category=category_str, keywords=keywords_str, created_or_modified_by=created_user)
-                category.save()
+                if self.checkSuperUser(request) and request.data.get("approved") == 'true':
+                    category = Category(category=category_str, keywords=keywords_str, created_or_modified_by=created_user,
+                                      approved=True, approved_by=str(request.user))
+                    category.save()
+                else:
+                    category = Category(category=category_str, keywords=keywords_str, created_or_modified_by=created_user)
+                    category.save()
             else:
                 return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
             return send_response({'status': SUCCESS, 'message': 'Category ' + category_str + " created"})
@@ -224,8 +235,8 @@ class CategoryView(generics.ListCreateAPIView):
             return send_response({'status': FAIL})
 
     def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
+        # if not request.user.is_authenticated:
+        #     return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
         category_id = request.query_params.get('category_id')
         if category_id:
             category_obj = Category.objects.filter(id=category_id)
@@ -261,7 +272,6 @@ class CategoryView(generics.ListCreateAPIView):
                     approved = True
                 else:
                     approved = False
-                print(request.user)
                 Category.objects.filter(id=category_id).update(category=category_text, keywords=keywords, approved=approved, approved_by=str(request.user))
             else:
                 if not self.checkSuperUser(request) and category_obj.values('created_or_modified_by')[0].get('created_or_modified_by') != request.user:

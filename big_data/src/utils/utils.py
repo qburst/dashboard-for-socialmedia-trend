@@ -12,14 +12,14 @@ def getMandatoryHashtags():
 
 
 def getCategories():
-    categories = db.corona_tweet_analysis_categorysql
+    categories = db.corona_tweet_analysis_category
     categories_list = [category for category in categories.find({"approved": True},
                                                                 {'_id': 0, 'category': 1, 'keywords': 1})]
     return categories_list
 
 
 def getAllKeywords():
-    categories = db.corona_tweet_analysis_categorysql
+    categories = db.corona_tweet_analysis_category
     keywords = []
     for category in categories.find({"approved": True}, {'_id': 0, 'category': 1, 'keywords': 1}):
         keywords += category["keywords"].split(',')
