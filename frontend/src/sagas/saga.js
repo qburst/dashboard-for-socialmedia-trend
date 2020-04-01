@@ -18,8 +18,8 @@ const getURL = (apiEndPoint) => {
 }
 
 const triggerOverAllDataApi = () => {
-  let url = getURL("report/world");
-  return Axios.post(url)
+  let url = getURL("report/world/");
+  return Axios.get(url)
     .then(response => response.data)
 }
 

@@ -21,6 +21,7 @@ export default class MyVerticallyCenteredModal extends Component {
                     <h4>{this.props.bodyHeader}</h4>
                     <p>
                         {this.props.body}
+                        {this.props.link && <a href={this.props.link}>{this.props.link}</a>}.
                     </p>
                 </Modal.Body>
                 <Modal.Footer>

@@ -91,7 +91,11 @@ export default class Menu extends Component {
 						</div>
 						<div className="row description">
 							Aggregated dashboard for seeing twitter data for helping everyone fighting COVID-19. The counts shown are sourced from
-    						ECDC and was updated on {this.props.createdDate && new Date(this.props.createdDate).toLocaleDateString()}.
+    						ECDC and was updated on {this.props.createdDate && new Intl.DateTimeFormat("en-GB", {
+							year: "numeric",
+							month: "short",
+							day: "2-digit"
+						}).format(new Date(this.props.createdDate))}.
 						</div>
 						{this.props.spinner && <div class="row">
 							<div className='spinnerClass'>
