@@ -11,7 +11,7 @@ It's inspired by COVID-19, but can be used for any trending topic's dashboard
 Visualization of the Data on DB using a web platform
 * Implement a user login based platform where users could request for additional twitter tags from which we need to pull data.
 * Generate statistics based on the above data.
-* Will visualize statistics in the later phase into a dashboard like this
+* Will visualize statistics in the later phase.
 
 # Web Platform Technologies considered:
 * Django based API Implementation.
