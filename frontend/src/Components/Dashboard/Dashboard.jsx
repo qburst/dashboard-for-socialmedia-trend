@@ -77,9 +77,10 @@ class Dashboard extends Component {
                         onHide={() => this.setState({showAboutModal: false})}
                         header="About"
                         bodyHeader="COVID-19 Twitter Data"
-                        body="We analyze social media data, then categorize and display in web platform for people fighting
-                        corona. Currently our platform process twitter data and aggregate that to several categories and using a
-                         web platform to show data to the entire world."
+                        body={<div>We analyze social media data, then categorize and display in web platform for people fighting
+                            corona. Currently our platform process twitter data and aggregate that to several categories and using a
+                             web platform to show data to the entire world.This was done as an open source project by QBurst. You can provide your contributions 
+                             <a href="https://github.com/qburst/dashboard-for-socialmedia-trend.git"> here</a>.</div>}
                     />
                     <MyVerticallyCenteredModal
                         show={this.state.showContactModal}
