@@ -106,11 +106,11 @@ class Tweets extends Component {
                                 <div class="blog-comments__actions">
                                     <div class="btn-group-sm btn-group">
                                         <button type="button" hidden={!this.state.isLoggedIn} onClick={() => this.reportSpam(tweet.id)} class="btn btn-danger">
-                                            <span class="text-white"><Icon class="material-icons">clear</Icon></span>
+                                            <span class="text-white"><i class="fa fa-times-circle icons"></i></span>
                                             Report Spam
                                         </button>
-                                        <button type="button" onClick={event => window.location.href = tweet.url} class="btn btn-primary">
-                                            <span class="text-white"><Icon class="material-icons">link</Icon></span>
+                                        <button type="button" onClick={event => window.open(tweet.url,'_blank')} target="_blank" class="btn btn-primary">
+                                            <span class="text-white"><i class="fa fa-twitter icons"></i></span>
                                             Go To
                                         </button>
                                     </div>

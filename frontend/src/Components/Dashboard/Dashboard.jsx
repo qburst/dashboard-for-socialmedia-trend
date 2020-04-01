@@ -87,8 +87,8 @@ class Dashboard extends Component {
                         onHide={() => this.setState({showContactModal: false})}
                         header="Contact Us"
                         bodyHeader="We are open for your feedback"
-                        body={  <div>  <a href="https://api.whatsapp.com/send?phone=919746785785" class="btn btn-success"><i class="fa fa-whatsapp"></i> WhatsApp</a>
-                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jinoj@qburst.com" class="btn btn-dark"><i class="fa fa-envelope" aria-hidden="true"></i> Mail Us</a></div> }
+                        body={  <div>  <a href="https://api.whatsapp.com/send?phone=919746785785" target="_blank" class="btn btn-success"><i class="fa fa-whatsapp"></i> WhatsApp</a>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jinoj@qburst.com" target="_blank" class="btn btn-dark"><i class="fa fa-envelope" aria-hidden="true"></i> Mail Us</a></div> }
                     />
                 </div>
                 <NotificationContainer/>
