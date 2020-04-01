@@ -6,6 +6,15 @@
   "commit": false,
   "contributors": [
     {
+      "login": "jinojossy93",
+      "name": "Jino Jossy",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/13327976?v=4",
+      "profile": "https://jino.work",
+      "contributions": [
+        "platform"
+      ]
+    },
+    {
       "login": "joannjacob",
       "name": "joannjacob",
       "avatar_url": "https://avatars3.githubusercontent.com/u/38246378?v=4",
