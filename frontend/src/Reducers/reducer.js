@@ -22,7 +22,7 @@ export const initialState = {
   errorMessageLogin: undefined,
   toggleSideBar: false,
   tweetData: [],
-  isSpamReportedSuccess: false,
+  isSpamReportedSuccess: null,
   category: undefined,
   navItems: [],
   createdDate: null
@@ -56,7 +56,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         loginFailure: false,
-        spinner: false
+        spinner: false,
       }
     case ON_LOGOUT:
       return {
@@ -68,7 +68,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         userName: '',
         password: '',
-        spinner: false
+        spinner: false,
       }
     case ON_LOGOUT_FAILURE:
       return {
@@ -150,7 +150,8 @@ export default function reducer(state = initialState, action) {
     case REPORT_SPAM:
       return {
         ...state,
-        spamMessage: null,
+        isSpamReportedSuccess: null,
+        spinner: true,
       }
     case FETCH_CATEGORIES_SUCCESS:
       return {

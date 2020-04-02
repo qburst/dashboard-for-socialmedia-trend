@@ -45,6 +45,13 @@ export default class Menu extends Component {
 		this.props.showLogin();
 	}
 
+	setIsLoggedIn=()=>{
+		this.props.setIsLoggedIn();
+		this.setState({
+			isLoggedIn:sessionStorage.getItem('isLoggedIn')
+		})
+	}
+
 	handleClick(label) {
 		var selectedValue = this.state.overAllData.find((item) => item.label === label);
 		selectedValue.showValue = !selectedValue.showValue;
@@ -60,9 +67,9 @@ export default class Menu extends Component {
 						aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
-					<button className="btn btn-light logout" type="submit" disabled={this.props.spinner} onClick={this.state.isLoggedIn ? this.logout : this.showLogin}>
+					{this.state.isLoggedIn && <button className="btn btn-light logout" type="submit" disabled={this.props.spinner} onClick={this.state.isLoggedIn ? this.logout : this.showLogin}>
 					{this.state.isLoggedIn ? 'Logout' : 'Login' }
-              		</button>
+              		</button>}
 				</nav>
 				<main className="content">
 					<div className="container-fluid">
@@ -104,7 +111,7 @@ export default class Menu extends Component {
 						</div>
 						}
 						<div className='row'>
-							<Tweets />
+							<Tweets setIsLoggedIn={this.setIsLoggedIn} isLoggedIn={this.state.isLoggedIn}/>
 						</div>
 					</div>
 				</main>

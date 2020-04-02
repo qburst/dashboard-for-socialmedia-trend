@@ -8,8 +8,17 @@ class Sidebar extends Component {
 
   constructor(props) {
     super(props)
-    this.props.getCategories()
+    this.props.getCategories();
+    this.state = {
+      userName: sessionStorage.getItem("Username")
+    }
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.isLoggedIn !== this.props.isLoggedIn){
+			this.setState({userName: sessionStorage.getItem("Username")});
+		}
+	};
 
   toggleSideBar=()=>{
     this.props.toggleSideBarFunc();
@@ -47,7 +56,7 @@ class Sidebar extends Component {
             src={require("../../Images/avatar.png")}
             alt="User Avatar"
           />
-          <span className="text-white">{sessionStorage.getItem("Username")}</span>
+          {this.props.isLoggedIn && <span className="text-white">{this.state.userName}</span>}
         </div>
         <div className="sidebar-content">
           <div className="sidebar-user" onClick={()=>{this.showAbout()}}>
