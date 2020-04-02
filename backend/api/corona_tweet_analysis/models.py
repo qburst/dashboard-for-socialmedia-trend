@@ -35,7 +35,8 @@ class Category(models.Model):
     keywords = models.TextField()
     approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_or_modified_by = models.TextField()
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.TextField()
     approved_by = models.TextField()
 
 
@@ -43,5 +44,6 @@ class Hashtag(models.Model):
     hashtag = models.TextField(unique=True)
     approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_or_modified_by = models.TextField()
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.TextField()
     approved_by = models.TextField()

@@ -3,9 +3,11 @@ from corona_tweet_analysis.utils.responses import send_response
 from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST, UNAUTHORIZED
 from corona_tweet_analysis.models import TwitterData, Category, CoronaReport, Hashtag
 from rest_framework.authentication import TokenAuthentication
-from rest_framework import permissions, generics
-from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer,HashtagSerializer
+from rest_framework import permissions, generics, viewsets
+from corona_tweet_analysis.serializers import TwitterDataSerializer,HashtagSerializerAdmin, \
+    HashtagSerializerUser, CategorySerializerAdmin, CategorySerializerUser
 from rest_framework.response import Response
+from .permissions import UpdateOwnObject
 
 
 class CoronaWorldReportView(generics.ListAPIView):
@@ -125,164 +127,41 @@ class StatisticsView(generics.ListCreateAPIView):
             return send_response({'status': FAIL})
 
 
-class HashtagsView(generics.ListCreateAPIView):
+class HashtagsViewset(viewsets.ModelViewSet):
     queryset = Hashtag.objects.all()
-    serializer_class = HashtagSerializer
+    permission_classes = [permissions.IsAuthenticated, ]
+    authentication_classes = (TokenAuthentication,)
+    http_method_names = ['get', 'put', 'post']
 
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
-        hashtag_id = request.query_params.get('hashtag_id')
-        if hashtag_id:
-            hashtag_obj = Hashtag.objects.filter(id=hashtag_id)
-            if not hashtag_obj:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag id not found'})
-            else:
-                self.queryset = hashtag_obj
-        return super().get(request, *args, **kwargs)
+    def get_serializer_class(self):
+        if self.request.user.is_superuser:
+            return HashtagSerializerAdmin
+        return HashtagSerializerUser
 
-    def post(self, request, *args, **kwargs):
-        try:
-            if request.user.is_authenticated:
-                hashtag_str = request.data.get("hashtag")
-                if not hashtag_str:
-                    return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag is required'})
-                hashtag_obj = Hashtag.objects.filter(hashtag=hashtag_str).first()
-                if hashtag_obj:
-                    return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag already exists'})
-                created_user = request.user
-                if self.checkSuperUser(request) and request.data.get("approved") == 'true':
-                    hashtag = Hashtag(hashtag=hashtag_str, created_or_modified_by=created_user,
-                                      approved=True, approved_by=str(request.user))
-                    hashtag.save()
-                else:
-                    hashtag = Hashtag(hashtag=hashtag_str, created_or_modified_by=created_user)
-                    hashtag.save()
-            else:
-                return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
-            return send_response({'status': SUCCESS, 'message': 'Hashtag ' + hashtag_str + " created"})
-        except Exception as err:
-            return send_response({'status': FAIL})
+    def get_permissions(self):
+        if not self.request.user.is_superuser and self.request.method == 'PUT':
+            self.permission_classes = [permissions.IsAuthenticated, UpdateOwnObject]
+        else:
+            self.permission_classes = [permissions.IsAuthenticated, ]
 
-    def put(self, request, *args, **kwargs):
-        try:
-            if not request.user.is_authenticated:
-                return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
-            hashtag_id = request.query_params.get('hashtag_id')
-            if not hashtag_id:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag id is required'})
-            hashtag_obj = Hashtag.objects.filter(id=hashtag_id)
-            if not hashtag_obj:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag id not found'})
-            approved = request.data.get("approved")
-            if approved:
-                if not self.checkSuperUser(request):
-                    return send_response(
-                        {'status': BAD_REQUEST, 'message': 'User is not a superuser user to approve/disapprove'})
-            hashtag_text = request.data.get("hashtag")
-            if not hashtag_text:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag is required'})
-            if approved and self.checkSuperUser(request):
-                if approved == 'true':
-                    approved = True
-                else:
-                    approved = False
-                Hashtag.objects.filter(id=hashtag_id).update(hashtag=hashtag_text, approved=approved, approved_by=str(request.user))
-            else:
-                if not self.checkSuperUser(request) and hashtag_obj.values('created_or_modified_by')[0].get('created_or_modified_by') != request.user:
-                    return send_response({'status': BAD_REQUEST, 'message': 'User is not admin or owner of hashtag'})
-                Hashtag.objects.filter(id=hashtag_id).update(hashtag=hashtag_text)
-            return send_response({'status': SUCCESS, 'message': 'Hashtag updated successfully'})
-
-        except Exception as err:
-            return send_response({'status': FAIL})
-
-    def checkSuperUser(self,request):
-        if request.user.is_superuser:
-            return True
-        return False
+        return super(HashtagsViewset, self).get_permissions()
 
 
-class CategoryView(generics.ListCreateAPIView):
+class CategoryViewset(viewsets.ModelViewSet):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated, ]
+    authentication_classes = (TokenAuthentication,)
+    http_method_names = ['get', 'put', 'post']
 
-    def post(self, request, *args, **kwargs):
-        try:
-            if request.user.is_authenticated:
+    def get_serializer_class(self):
+        if self.request.user.is_superuser:
+            return CategorySerializerAdmin
+        return CategorySerializerUser
 
-                category_str = request.data.get("category")
-                keywords_str = request.data.get("keywords")
-                if not category_str:
-                    return send_response({'status': INVALID_PARAMETERS, 'message': 'Category name  is required'})
-                if not keywords_str:
-                    return send_response({'status': INVALID_PARAMETERS, 'message': 'keywords are required'})
-                category_obj = Category.objects.filter(category=category_str).first()
-                if category_obj:
-                    return send_response({'status': INVALID_PARAMETERS, 'message': 'Category already exists'})
-                created_user = request.user
-                if self.checkSuperUser(request) and request.data.get("approved") == 'true':
-                    category = Category(category=category_str, keywords=keywords_str, created_or_modified_by=created_user,
-                                      approved=True, approved_by=str(request.user))
-                    category.save()
-                else:
-                    category = Category(category=category_str, keywords=keywords_str, created_or_modified_by=created_user)
-                    category.save()
-            else:
-                return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
-            return send_response({'status': SUCCESS, 'message': 'Category ' + category_str + " created"})
-        except Exception as err:
-            return send_response({'status': FAIL})
+    def get_permissions(self):
+        if not self.request.user.is_superuser and self.request.method == 'PUT':
+            self.permission_classes = [permissions.IsAuthenticated, UpdateOwnObject]
+        else:
+            self.permission_classes = [permissions.IsAuthenticated, ]
 
-    def get(self, request, *args, **kwargs):
-        # if not request.user.is_authenticated:
-        #     return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
-        category_id = request.query_params.get('category_id')
-        if category_id:
-            category_obj = Category.objects.filter(id=category_id)
-            if not category_obj:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Hashtag id not found'})
-            else:
-                self.queryset = category_obj
-        return super().get(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        try:
-            if not request.user.is_authenticated:
-                return send_response({'status': BAD_REQUEST, 'message': 'User is not logged in'})
-            category_id = request.query_params.get('category_id')
-            if not category_id:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Category id is required'})
-            category_obj = Category.objects.filter(id=category_id).first()
-            if not category_obj:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Category not found'})
-            approved = request.data.get("approved")
-            if approved:
-                if not self.checkSuperUser(request):
-                    return send_response(
-                        {'status': BAD_REQUEST, 'message': 'User is not a superuser user to approve/disapprove'})
-            category_text = request.data.get("category")
-            if not category_text:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Category is required'})
-            keywords = request.data.get("keywords")
-            if not category_text:
-                return send_response({'status': INVALID_PARAMETERS, 'message': 'Keywords are required'})
-            if approved and self.checkSuperUser(request):
-                if approved == 'true':
-                    approved = True
-                else:
-                    approved = False
-                Category.objects.filter(id=category_id).update(category=category_text, keywords=keywords, approved=approved, approved_by=str(request.user))
-            else:
-                if not self.checkSuperUser(request) and category_obj.values('created_or_modified_by')[0].get('created_or_modified_by') != request.user:
-                    return send_response({'status': BAD_REQUEST, 'message': 'User is not admin or owner of Category'})
-                Category.objects.filter(id=category_id).update(hashtag=category_text, keywords=keywords)
-            return send_response({'status': SUCCESS, 'message': 'Category updated successfully'})
-
-        except Exception as err:
-            return send_response({'status': FAIL})
-
-    def checkSuperUser(self,request):
-        if request.user.is_superuser:
-            return True
-        return False
+        return super(CategoryViewset, self).get_permissions()
