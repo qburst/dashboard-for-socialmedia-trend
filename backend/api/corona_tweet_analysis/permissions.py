@@ -8,4 +8,6 @@ class UpdateOwnObject(permissions.BasePermission):
             return True
 
         else:
+            if obj.approved:
+                return False
             return obj.created_by == str(request.user)
