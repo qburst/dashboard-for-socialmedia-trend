@@ -42,12 +42,12 @@ class Login extends Component {
             errors:errors
         })
 
-        formIsValid && this.props.onUserLogin(userName, password, history);
+        formIsValid && this.props.onUserLogin(userName, password, history, this.props.isLoginModal, this.props.hideLoginModal);
     }
 
-    onSkipLogin=()=>{
-        this.props.history.push('/');
-    }
+    // onSkipLogin=()=>{
+    //     this.props.history.push('/');
+    // }
 
 
     render() {
@@ -58,7 +58,7 @@ class Login extends Component {
         return (
             <div class={`login ${this.className} `} >
                 <div className="login_wrapper">
-                <button type="button" class="btn btn-Default btn-sm skip_btn" onClick={ this.onSkipLogin }>Skip Login</button>                
+                {/* <button type="button" class="btn btn-Default btn-sm skip_btn" onClick={ this.onSkipLogin }>Skip Login</button>                 */}
                 <div class="header_login">
                     Login
                 </div>

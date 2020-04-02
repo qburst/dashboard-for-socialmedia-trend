@@ -46,6 +46,8 @@ class LandingPage extends Component {
                         setUsername = { this.props.setUsername }
                         setPassword = { this.props.setPassword }
                         onUserLogin = { this.props.onUserLogin }
+                        hideLoginModal = {this.props.hideLoginModal}
+                        isLoginModal = {this.props.isLoginModal}
                         spinner = { reducer.spinner }
                         displaySignup = { this.displaySignup }
                     />
@@ -90,8 +92,8 @@ export const mapDispatchToProps = (dispatch)=>{
         setPassword:(password)=>{
             dispatch({type:SET_PASSWORD, data:password})
         },
-        onUserLogin:(userName, password, history)=>{
-            dispatch({type:ON_USER_LOGIN, userName, password, history})
+        onUserLogin:(userName, password, history, isLoginModal, hideLoginModal)=>{
+            dispatch({type:ON_USER_LOGIN, userName, password, history,isLoginModal,hideLoginModal})
         }
     }
         
