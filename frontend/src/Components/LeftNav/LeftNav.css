@@ -38,7 +38,6 @@
     position: relative;
     text-decoration: none;
     cursor: pointer;
-    text-align: initial;
 }
 
 .sidebar-user:hover,.sidebar-link, a.sidebar-link:hover {
@@ -62,5 +61,11 @@
 }
 
 .about, .contact, .dashboard {
+    text-decoration: underline;
+}
+.links{
+    display: block;
+    padding: .65rem .75rem;
+    text-align: initial;
     text-decoration: underline;
 }

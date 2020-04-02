@@ -66,6 +66,10 @@ class Sidebar extends Component {
                  <span className="align-middle">{item._id.replace(/_/g, " ")}</span>
               </a>
             </li>))}
+            <li className="sidebar-item"><a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports" target="_blank" className="links">WHO</a></li>
+            <li className="sidebar-item"><a href="https://www.mygov.in/covid-19/" target="_blank" className="links">COVID-19 India</a></li>
+            <li className="sidebar-item"><a href="https://ourworldindata.org/coronavirus-source-data" target="_blank" className="links">ECDC</a></li>
+            <li className="sidebar-item"><a href="https://www.covidvisualizer.com/" target="_blank" className="links">COVID Visualizer</a></li>
           </ul>
         </div>
       </nav>

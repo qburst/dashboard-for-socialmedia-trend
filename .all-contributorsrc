@@ -1,0 +1,51 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Bhavyalakshmi95",
+      "name": "Bhavyalakshmi95",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/62279569?v=4",
+      "profile": "https://github.com/Bhavyalakshmi95",
+      "contributions": [
+        "design"
+      ]
+    },
+    {
+      "login": "joannjacob",
+      "name": "joannjacob",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/38246378?v=4",
+      "profile": "https://github.com/joannjacob",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "chandan-urs",
+      "name": "chandan-urs",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/43086966?v=4",
+      "profile": "https://github.com/chandan-urs",
+      "contributions": [
+        "code"
+      ]
+     },
+    {
+      "login": "jinojossy93",
+      "name": "Jino Jossy",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/13327976?v=4",
+      "profile": "https://jino.work",
+      "contributions": [
+        "platform"
+      ]
+    },
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "dashboard-for-socialmedia-trend",
+  "projectOwner": "qburst",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
