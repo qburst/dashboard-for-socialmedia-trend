@@ -17,6 +17,10 @@ Visualization of the Data on DB using a web platform
 * Django based API Implementation.
 * React based frontend.
 
+## Contribution Guidelines
+
+Check out [here](https://github.com/qburst/dashboard-for-socialmedia-trend/blob/master/CONTRIBUTING.md) for our contribution guidelines.
+
 ## Block Diagram
 
 ![Block Diagram](backend/api/static/images/blockdiagram.jpg)
