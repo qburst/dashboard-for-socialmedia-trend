@@ -77,17 +77,18 @@ class Dashboard extends Component {
                         onHide={() => this.setState({showAboutModal: false})}
                         header="About"
                         bodyHeader="COVID-19 Twitter Data"
-                        body="We analyze social media data, then categorize and display in web platform for people fighting
-                        corona. Currently our platform process twitter data and aggregate that to several categories and using a
-                         web platform to show data to the entire world."
+                        body={<div>We analyze social media data, then categorize and display in web platform for people fighting
+                            corona. Currently our platform process twitter data and aggregate that to several categories and using a
+                             web platform to show data to the entire world.This was done as an open source project by QBurst. You can provide your contributions 
+                             <a href="https://github.com/qburst/dashboard-for-socialmedia-trend.git"> here</a>.</div>}
                     />
                     <MyVerticallyCenteredModal
                         show={this.state.showContactModal}
                         onHide={() => this.setState({showContactModal: false})}
                         header="Contact Us"
                         bodyHeader="We are open for your feedback"
-                        body={  <div>  <a href="https://api.whatsapp.com/send?phone=919746785785" class="btn btn-success"><i class="fa fa-whatsapp"></i> WhatsApp</a>
-                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jinoj@qburst.com" class="btn btn-dark"><i class="fa fa-envelope" aria-hidden="true"></i> Mail Us</a></div> }
+                        body={  <div>  <a href="https://api.whatsapp.com/send?phone=919746785785" target="_blank" class="btn btn-success"><i class="fa fa-whatsapp"></i> WhatsApp</a>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jinoj@qburst.com" target="_blank" class="btn btn-dark"><i class="fa fa-envelope" aria-hidden="true"></i> Mail Us</a></div> }
                     />
                 </div>
                 <NotificationContainer/>

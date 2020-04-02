@@ -92,7 +92,11 @@ class Tweets extends Component {
                             <div class="twitter_tweets__content">
                                 <div class="twitter_tweets__meta text-mutes">
                                     <span class="badge" style={{ float: "left" }}>Posted on{" "}
-                                    <span class="text-mutes"> - {new Date(tweet.created_at).toLocaleDateString()}</span>
+                                        <span class="text-mutes"> - {new Intl.DateTimeFormat("en-GB", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "2-digit"
+                                        }).format(new Date(tweet.created_at))}</span>
                                     </span>
                                     <span class="badge" style={{ float: "right" }}>
                                     <span class="text-mutes">{new Date(tweet.created_at).toLocaleTimeString()}</span>
@@ -102,11 +106,11 @@ class Tweets extends Component {
                                 <div class="blog-comments__actions">
                                     <div class="btn-group-sm btn-group">
                                         <button type="button" hidden={!this.state.isLoggedIn} onClick={() => this.reportSpam(tweet.id)} class="btn btn-danger">
-                                            <span class="text-white"><Icon class="material-icons">clear</Icon></span>
+                                            <span class="text-white"><i class="fa fa-times-circle icons"></i></span>
                                             Report Spam
                                         </button>
-                                        <button type="button" onClick={event => window.location.href = tweet.url} class="btn btn-primary">
-                                            <span class="text-white"><Icon class="material-icons">link</Icon></span>
+                                        <button type="button" onClick={event => window.open(tweet.url,'_blank')} target="_blank" class="btn btn-primary">
+                                            <span class="text-white"><i class="fa fa-twitter icons"></i></span>
                                             Go To
                                         </button>
                                     </div>
