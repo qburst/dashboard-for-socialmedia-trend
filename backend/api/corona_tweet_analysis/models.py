@@ -25,10 +25,10 @@ class TwitterData(DynamicDocument):
 
 class Data(EmbeddedDocument):
     name = fields.StringField(required=True)
-    new_cases = fields.StringField(required=True)
-    new_deaths = fields.StringField(required=True)
-    total_cases = fields.StringField(required=True)
-    total_deaths = fields.StringField(required=True)
+    new_cases = fields.IntField(required=True)
+    new_deaths = fields.IntField(required=True)
+    total_cases = fields.IntField(required=True)
+    total_deaths = fields.IntField(required=True)
 
 
 class CoronaReport(DynamicDocument):
