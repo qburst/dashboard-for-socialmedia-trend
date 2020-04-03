@@ -17,11 +17,11 @@ export default class MyVerticallyCenteredModal extends Component {
                         {this.props.header}
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className={this.props.bodyClass}>
                     <h4>{this.props.bodyHeader}</h4>
-                    <p>
+                    <div>
                         {this.props.body}
-                    </p>
+                    </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.props.onHide}>Close</Button>

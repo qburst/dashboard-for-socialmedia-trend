@@ -37,7 +37,8 @@ class Dashboard extends Component {
         });
     }
     onLogout = () => {
-        this.props.logout(this.props.history)
+        this.props.logout(this.props.history);
+        this.setState({isLoggedIn: false});
     }
 
     showLogin=()=>{
@@ -52,6 +53,12 @@ class Dashboard extends Component {
         this.setState({showContactModal: !this.state.showContactModal});
     }
 
+    setIsLoggedIn=()=>{
+		this.setState({
+			isLoggedIn:sessionStorage.getItem('isLoggedIn')
+		})
+	}
+
     render() {
         return (
             <div className='Dashboard'>
@@ -61,6 +68,7 @@ class Dashboard extends Component {
                         toggleSideBarFunc={this.props.toggleSideBar}
                         onLogout={this.onLogout}
                         showAbout={this.showAbout}
+                        isLoggedIn = { this.state.isLoggedIn }
                         showContact = {this.showContact}
                     />
                     <Main
@@ -69,8 +77,8 @@ class Dashboard extends Component {
                         onLogout={this.onLogout}
                         spinner={this.props.reducer.spinner}
                         createdDate={this.props.reducer.createdDate}
-                        isLoggedIn = { this.state.isLoggedIn }
                         showLogin = { this.showLogin }
+                        setIsLoggedIn = {this.setIsLoggedIn}
                     />
                     <MyVerticallyCenteredModal
                         show={this.state.showAboutModal}
