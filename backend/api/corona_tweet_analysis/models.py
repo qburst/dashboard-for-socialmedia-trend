@@ -1,13 +1,6 @@
 import datetime
-import mongoengine
-from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
-from mongoengine import fields, DynamicDocument, EmbeddedDocument, StringField, DateTimeField, IntField
-
-
-class Category(DynamicDocument):
-    _id = fields.StringField(primary_key=True)
-    created_at = fields.DateTimeField(default=datetime.datetime.now)
+from mongoengine import fields, DynamicDocument, EmbeddedDocument
+from djongo import models
 
 
 class TwitterData(DynamicDocument):
@@ -35,3 +28,22 @@ class CoronaReport(DynamicDocument):
     created_at = fields.DateTimeField(default=datetime.datetime.now)
     data = fields.ListField(fields.EmbeddedDocumentField(Data), default=list)
     meta = {'allow_inheritance': True}
+
+
+class Category(models.Model):
+    category = models.TextField(unique=True)
+    keywords = models.TextField()
+    approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.TextField()
+    approved_by = models.TextField()
+
+
+class Hashtag(models.Model):
+    hashtag = models.TextField(unique=True)
+    approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.TextField()
+    approved_by = models.TextField()
