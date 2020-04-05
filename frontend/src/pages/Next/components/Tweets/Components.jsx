@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import Paper from '@material-ui/core/Paper';
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
 
 import {
   REPORT_SPAM,
   FETCH_TWEET_DATA,
   FETCH_TWEET_DATA_CATEGORY_WISE,
   SET_CATEGORY,
-  FETCH_CATEGORIES
+  FETCH_CATEGORIES,
 } from "../../../../Actions/Actions";
 import Filters from "../../../../Components/Filters";
 import Tweet from "../../../../Components/Tweet";
@@ -16,7 +17,7 @@ import Tweet from "../../../../Components/Tweet";
 const useStyles = makeStyles({
   root: {
     // padding: "10px",
-  }
+  },
 });
 
 function Tweets({
@@ -24,7 +25,7 @@ function Tweets({
   tweets,
   getCategories,
   fetchTweets,
-  fetchTweetsCategoryWise
+  fetchTweetsCategoryWise,
 }) {
   console.log(tweets);
   const classes = useStyles();
@@ -50,7 +51,7 @@ function Tweets({
   }, [category, setPage, fetchTweets, fetchTweetsCategoryWise]);
 
   return (
-    <Paper className={classes.root} elevation={3}>
+    <Paper className={classes.root} elevation={2}>
       <Filters
         categories={items}
         setCategory={setCategory}
@@ -62,51 +63,54 @@ function Tweets({
         disabled={false}
         onFilterChange={console.log}
       />
-      <div style={{ display: "flex", flexWrap: "wrap", padding: '10px' }}>
-        {tweets ? tweets.map(item => <Tweet key={item.id} {...item} />) : null}
+      <div style={{ display: "flex", flexWrap: "wrap", padding: "10px" }}>
+        {tweets
+          ? tweets.map((item) => <Tweet key={item.id} {...item} />)
+          : null}
       </div>
+      <Button className={classes.hashLinks}>Load more</Button>
     </Paper>
   );
 }
 
-export const mapStateToProps = state => {
+export const mapStateToProps = (state) => {
   return {
     isSpamReportedSuccess: state.isSpamReportedSuccess,
     tweets: state.tweetData.results,
     category: state.category,
     spinner: state.spinner,
     tweetCount: state.tweetData.count,
-    items: state.navItems
+    items: state.navItems,
   };
 };
 
-export const mapDispatchToProps = dispatch => {
+export const mapDispatchToProps = (dispatch) => {
   return {
-    reportSpam: id => {
+    reportSpam: (id) => {
       dispatch({
         type: REPORT_SPAM,
-        id
+        id,
       });
     },
     getCategories: () => {
       dispatch({ type: FETCH_CATEGORIES });
     },
-    fetchTweets: page => {
+    fetchTweets: (page) => {
       dispatch({ type: FETCH_TWEET_DATA, page });
     },
     fetchTweetsCategoryWise: (category, page) => {
       dispatch({
         type: FETCH_TWEET_DATA_CATEGORY_WISE,
         category,
-        page
+        page,
       });
     },
-    setCategory: category => {
+    setCategory: (category) => {
       dispatch({
         type: SET_CATEGORY,
-        category
+        category,
       });
-    }
+    },
   };
 };
 

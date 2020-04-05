@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     // padding: theme.spacing(3)
   },
   tweetsContainer: {
-    marginTop: '-150px',
+    marginTop: '-180px',
     position: 'relative',
   }
 }));
