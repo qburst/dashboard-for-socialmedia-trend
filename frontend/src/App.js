@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Switch} from 'react-router-dom';
-import Route from 'react-router-dom/Route';
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Dashboard from './Components/Dashboard/Dashboard';
 import LandingPage from './Components/LandingPage/LandingPage'
 import Next from './pages/Next'

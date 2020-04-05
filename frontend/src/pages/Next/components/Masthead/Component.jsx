@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => {
       flexGrow: 1,
       padding: "30px 0 200px 0",
       maxWidth: "initial",
-      backgroundImage: "linear-gradient(132deg, #48bb78 0%, #4299e1 100%)",
+      backgroundImage: "linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%)",
       clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 5vw), 0 100%)",
     },
     toolbar: theme.mixins.toolbar,
@@ -88,7 +88,7 @@ export default function Masthead({
           <Grid item xs={4}>
             <Paper
               className={`${classes.paper} ${classes.stats}`}
-              elevation="1"
+              elevation={1}
             >
               <Typography component="h4" variant="h4">
                 {format(total_cases)}
@@ -99,7 +99,7 @@ export default function Masthead({
           <Grid item xs={4}>
             <Paper
               className={`${classes.paper} ${classes.stats}`}
-              elevation="1"
+              elevation={1}
             >
               <Typography component="h4" variant="h4">
                 {format(new_cases)}
@@ -110,7 +110,7 @@ export default function Masthead({
           <Grid item xs={4}>
             <Paper
               className={`${classes.paper} ${classes.stats}`}
-              elevation="1"
+              elevation={1}
             >
               <Typography component="h4" variant="h4">
                 {format(total_deaths)}

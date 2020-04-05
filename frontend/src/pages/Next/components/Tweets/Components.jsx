@@ -15,7 +15,7 @@ import Tweet from "../../../../Components/Tweet";
 
 const useStyles = makeStyles({
   root: {
-    padding: "10px",
+    // padding: "10px",
   }
 });
 
@@ -60,6 +60,7 @@ function Tweets({
         onSearch={console.log}
         setSearch={() => {}}
         disabled={false}
+        onFilterChange={console.log}
       />
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {tweets && tweets.map(item => <Tweet key={item.id} {...item} />)}

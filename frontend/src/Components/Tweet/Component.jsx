@@ -26,7 +26,6 @@ const useStyles = makeStyles({
 
 export default ({ id, text, created_at, hashtags, url }) => {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
 
   return (
     <div style={{ flex: "0 1 33.33%", padding: "10px", textAlign: 'left', display: 'flex' }}>
