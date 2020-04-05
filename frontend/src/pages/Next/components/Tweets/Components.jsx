@@ -62,8 +62,8 @@ function Tweets({
         disabled={false}
         onFilterChange={console.log}
       />
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {tweets && tweets.map(item => <Tweet key={item.id} {...item} />)}
+      <div style={{ display: "flex", flexWrap: "wrap", padding: '10px' }}>
+        {tweets ? tweets.map(item => <Tweet key={item.id} {...item} />) : null}
       </div>
     </Paper>
   );
