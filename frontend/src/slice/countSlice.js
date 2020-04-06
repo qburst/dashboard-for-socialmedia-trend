@@ -10,7 +10,7 @@ const initialState = {
 
 const count = createSlice({
   name: "counts",
-  count,
+  initialState,
   reducers: {
     getCountStart(state) {
       state.loading = true;

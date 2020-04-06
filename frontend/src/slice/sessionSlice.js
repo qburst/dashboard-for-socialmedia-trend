@@ -3,85 +3,105 @@ import { createSlice } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import { showToaster } from "../toasterSlice";
 
+const savedName = localStorage.getItem("session.name");
+const savedToken = localStorage.getItem("session.token");
 const initialState = {
-  data: [],
+  data: {
+    name: savedName || "",
+    token: savedToken || "",
+  },
   loading: false,
   error: null,
 };
 
-const tweets = createSlice({
-  name: "tweets",
+const session = createSlice({
+  name: "session",
   initialState,
   reducers: {
-    getTweetsStart(state) {
+    getSessionStart(state) {
       state.loading = true;
       state.error = null;
     },
-    getTweetsSuccess(state, action) {
-      const { data } = action.payload;
+    getLoginSuccess(state, action) {
+      const { name, token } = action.payload;
 
-      state.data = [...state.data, ...data];
+      state.name = name;
+      state.token = token;
+      localStorage.setItem("session.name", name);
+      localStorage.setItem("session.token", token);
+    },
+    getLogoutSuccess(state) {
+      state.name = "";
+      state.token = "";
+      localStorage.removeItem("session.name");
+      localStorage.removeItem("session.token");
+    },
+    getSignupSuccess(state) {
       state.loading = false;
       state.error = null;
     },
-    getTweetsFailure(state, action) {
+    getSessionFailure(state, action) {
       state.loading = false;
       state.error = action.payload;
-    },
-    reportTweetSuccess(state, action) {
-      const index = state.data.find((item) => item.id === action.payload.id);
-
-      if (index > -1) state.data.splice(index, 1);
-      state.loading = false;
-      state.error = null;
     },
   },
 });
 
 export const {
-  getTweetsStart,
-  getTweetsSuccess,
-  getTweetsFailure,
-  reportTweetSuccess,
-} = tweets.actions;
-export default tweets.reducer;
+  getSessionStart,
+  getLoginSuccess,
+  getLogoutSuccess,
+  getSignupSuccess,
+  getSessionFailure,
+} = session.actions;
+export default session.reducer;
 
-export const fetchTweets = ({ page, category, country, hashtag }) => async (
-  dispatch
-) => {
+export const login = ({ username, password }) => async (dispatch) => {
   try {
-    dispatch(getTweetsStart());
-    const params = { page };
+    dispatch(getSessionStart());
 
-    if (category) params.category = category;
-    if (country) params.country = country;
-    if (hashtag) params.hashtag = hashtag;
-
-    const response = await api.get("/tweets", {
-      params,
+    const response = await api.post("/users/login", {
+      username,
+      password,
     });
 
-    dispatch(getTweetsSuccess({ data: response.data }));
-    dispatch(showToaster({ message: "Tweets loaded successfully" }));
+    dispatch(getLoginSuccess({ ...response }));
+    dispatch(showToaster({ message: `Welcome ${response.name}!` }));
   } catch (err) {
-    dispatch(getTweetsFailure(err));
+    dispatch(getSessionFailure(err));
+    dispatch(showToaster({ message: `Unable to login. Please try again.` }));
   }
 };
 
-export const reportTweet = ({ tweet_id }) => async (dispatch) => {
-  try {
-    dispatch(getTweetsStart());
+export const logout = () => async (dispatch) => {
+  dispatch(getLogoutSuccess());
+  dispatch(showToaster({ message: "Logged out successfully" }));
 
-    await api.get("/add_spam_count", {
-      tweet_id,
+  try {
+    let token = localStorage.getItem("session.token");
+
+    await api.get("/users/logout", {
+      headers: { Authorization: `Token ${token}` },
+    });
+  } catch (err) {
+    // no op
+  }
+};
+
+export const signUp = ({ name, email, password }) => async (dispatch) => {
+  try {
+    dispatch(getSessionStart());
+
+    await api.post("/users/profile", {
+      name,
+      email,
+      password,
     });
 
-    dispatch(reportTweetSuccess({ id: tweet_id }));
-    dispatch(showToaster({ message: "Tweet reported successfully" }));
+    dispatch(getSignupSuccess());
+    dispatch(showToaster({ message: `Signup successfully!` }));
   } catch (err) {
-    dispatch(getTweetsFailure(err));
-    dispatch(
-      showToaster({ message: "Unable to report tweet. Please try again." })
-    );
+    dispatch(getSessionFailure(err));
+    dispatch(showToaster({ message: `Unable to signup. Please try again.` }));
   }
 };

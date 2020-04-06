@@ -28,7 +28,7 @@ const tweets = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    reportTweetSuccess(state, action) {
+    getReportTweetSuccess(state, action) {
       const index = state.data.find((item) => item.id === action.payload.id);
 
       if (index > -1) state.data.splice(index, 1);
@@ -42,7 +42,7 @@ export const {
   getTweetsStart,
   getTweetsSuccess,
   getTweetsFailure,
-  reportTweetSuccess,
+  getReportTweetSuccess,
 } = tweets.actions;
 export default tweets.reducer;
 
@@ -76,7 +76,7 @@ export const reportTweet = ({ tweet_id }) => async (dispatch) => {
       tweet_id,
     });
 
-    dispatch(reportTweetSuccess({ id: tweet_id }));
+    dispatch(getReportTweetSuccess({ id: tweet_id }));
     dispatch(showToaster({ message: "Tweet reported successfully" }));
   } catch (err) {
     dispatch(getTweetsFailure(err));
