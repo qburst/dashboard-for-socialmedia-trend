@@ -43,7 +43,7 @@ export const fetchCategories = () => async (
     const response = await api.get("/categories");
 
     dispatch(
-      getCategoriesSuccess({ data: response.result })
+      getCategoriesSuccess({ data: response.results })
     );
   } catch (err) {
     dispatch(getCategoriesFailure(err));

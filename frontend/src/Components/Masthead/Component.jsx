@@ -4,7 +4,11 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+import Skeleton from "@material-ui/lab/Skeleton";
 import moment from "moment";
+import { useSelector, useDispatch } from "react-redux";
+
+import { fetchCount } from "../../slice/countSlice";
 
 const useStyles = makeStyles((theme) => {
   console.log(theme);
@@ -40,17 +44,20 @@ const useStyles = makeStyles((theme) => {
     },
     stats: {
       backgroundImage: "linear-gradient(132deg,  #e53e3e 0%, #c53030 100%)",
-      whiteSpace: "no-wrap",
       color: theme.palette.grey["50"],
     },
   };
 });
 
-export default function Masthead({
-  data: { total_cases, total_deaths, new_cases },
-  date
-}) {
+export default function Masthead() {
   const classes = useStyles();
+
+  const dispatch = useDispatch();
+  const { data, loading } = useSelector((state) => state.count);
+
+  useEffect(() => {
+    dispatch(fetchCount());
+  }, [dispatch]);
 
   const getSpacing = () => {
     const width = window.innerWidth;
@@ -90,10 +97,20 @@ export default function Masthead({
               className={`${classes.paper} ${classes.stats}`}
               elevation={1}
             >
-              <Typography component="h4" variant="h4">
-                {format(total_cases)}
-              </Typography>
-              <Typography variant="subtitle1">Total cases</Typography>
+              {loading ? (
+                <>
+                  <Skeleton animation="wave" variant="text" />
+                  <Skeleton animation="wave" variant="text" />
+                  <Skeleton animation="wave" variant="text" />
+                </>
+              ) : (
+                <>
+                  <Typography component="h4" variant="h4">
+                    {format(data.total_cases)}
+                  </Typography>
+                  <Typography variant="subtitle1">Total cases</Typography>
+                </>
+              )}
             </Paper>
           </Grid>
           <Grid item xs={4}>
@@ -101,10 +118,20 @@ export default function Masthead({
               className={`${classes.paper} ${classes.stats}`}
               elevation={1}
             >
-              <Typography component="h4" variant="h4">
-                {format(new_cases)}
-              </Typography>
-              <Typography variant="subtitle1">New cases</Typography>
+              {loading ? (
+                <>
+                  <Skeleton animation="wave" variant="text" />
+                  <Skeleton animation="wave" variant="text" />
+                  <Skeleton animation="wave" variant="text" />
+                </>
+              ) : (
+                <>
+                  <Typography component="h4" variant="h4">
+                    {format(data.new_cases)}
+                  </Typography>
+                  <Typography variant="subtitle1">New cases</Typography>
+                </>
+              )}
             </Paper>
           </Grid>
           <Grid item xs={4}>
@@ -112,16 +139,28 @@ export default function Masthead({
               className={`${classes.paper} ${classes.stats}`}
               elevation={1}
             >
-              <Typography component="h4" variant="h4">
-                {format(total_deaths)}
-              </Typography>
-              <Typography variant="subtitle1">Deceased cases</Typography>
+              {loading ? (
+                <>
+                  <Skeleton animation="wave" variant="text" />
+                  <Skeleton animation="wave" variant="text" />
+                  <Skeleton animation="wave" variant="text" />
+                </>
+              ) : (
+                <>
+                  <Typography component="h4" variant="h4">
+                    {format(data.total_deaths)}
+                  </Typography>
+                  <Typography variant="subtitle1">Deceased cases</Typography>
+                </>
+              )}
             </Paper>
           </Grid>
         </Grid>
         <Typography
           className={classes.source}
-        >{`* Data from ECDC. Last updated on ${moment(date).format("MMMM Do, YYYY")}.`}</Typography>
+        >{`* Data from ECDC. Last updated on ${moment(data.date).format(
+          "MMMM Do, YYYY"
+        )}.`}</Typography>
       </Container>
       <Container maxWidth="md">
         <Typography component="h1" variant="h1" className={classes.call}>

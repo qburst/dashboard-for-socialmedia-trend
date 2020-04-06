@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import api from "../utils/api";
-import { showToaster } from "../toasterSlice";
+import { showToaster } from "./toasterSlice";
 
 const initialState = {
+  count: 0,
   data: [],
   loading: false,
   error: null,
@@ -13,14 +14,18 @@ const tweets = createSlice({
   name: "tweets",
   initialState,
   reducers: {
-    getTweetsStart(state) {
+    getTweetsStart(state, action) {
+      if (action.payload.replace) state.data = [];
+
       state.loading = true;
       state.error = null;
     },
     getTweetsSuccess(state, action) {
-      const { data } = action.payload;
+      const { data, count, replace } = action.payload;
 
-      state.data = [...state.data, ...data];
+      state.count = count;
+      state.data = replace ? data : [...state.data, ...data];
+      // state.data = [];
       state.loading = false;
       state.error = null;
     },
@@ -46,11 +51,15 @@ export const {
 } = tweets.actions;
 export default tweets.reducer;
 
-export const fetchTweets = ({ page, category, country, hashtag }) => async (
-  dispatch
-) => {
+export const fetchTweets = ({
+  page,
+  category,
+  country,
+  hashtag,
+} = {}) => async (dispatch) => {
   try {
-    dispatch(getTweetsStart());
+    dispatch(getTweetsStart({ replace: page === 1 }));
+
     const params = { page };
 
     if (category) params.category = category;
@@ -61,22 +70,30 @@ export const fetchTweets = ({ page, category, country, hashtag }) => async (
       params,
     });
 
-    dispatch(getTweetsSuccess({ data: response.data }));
+    dispatch(
+      getTweetsSuccess({
+        data: response.results,
+        count: response.count,
+        replace: page === 1,
+      })
+    );
     dispatch(showToaster({ message: "Tweets loaded successfully" }));
   } catch (err) {
     dispatch(getTweetsFailure(err));
   }
 };
 
-export const reportTweet = ({ tweet_id }) => async (dispatch) => {
+export const reportTweet = ({ id }) => async (dispatch) => {
   try {
-    dispatch(getTweetsStart());
+    dispatch(getTweetsStart({ replace: false }));
 
-    await api.get("/add_spam_count", {
-      tweet_id,
+    const token = localStorage.getItem('session.token');
+
+    await api.put(`/add_spam_count?tweet_id=${id}`, {
+      headers: { "Authorization": `Token ${token}` }
     });
 
-    dispatch(getReportTweetSuccess({ id: tweet_id }));
+    dispatch(getReportTweetSuccess({ id }));
     dispatch(showToaster({ message: "Tweet reported successfully" }));
   } catch (err) {
     dispatch(getTweetsFailure(err));

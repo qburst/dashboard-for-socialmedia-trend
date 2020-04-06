@@ -10,7 +10,8 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import ReportIcon from "@material-ui/icons/Report";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import { blue } from '@material-ui/core/colors';
+import { blue } from "@material-ui/core/colors";
+import Skeleton from "@material-ui/lab/Skeleton";
 import moment from "moment";
 
 const useStyles = makeStyles((theme) => {
@@ -32,15 +33,15 @@ const useStyles = makeStyles((theme) => {
       width: "100%",
       display: "flex",
       flexFlow: "column",
-      position: 'relative',
-      paddingBottom: '47px',
+      position: "relative",
+      paddingBottom: "47px",
     },
     title: {
       fontSize: 14,
       whiteSpace: "pre-wrap",
     },
     contentRoot: {
-      paddingTop: 0
+      paddingTop: 0,
     },
     content: {
       whiteSpace: "pre-wrap",
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => {
       display: "flex",
       justifyContent: "space-between",
       borderTop: `1px solid ${theme.palette.grey["300"]}`,
-      position: 'absolute',
+      position: "absolute",
       left: 0,
       right: 0,
       bottom: 0,
@@ -63,7 +64,16 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-export default ({ id, text, created_at, hashtags, url }) => {
+const Tweet = ({
+  id,
+  url,
+  text,
+  created_at,
+  hashtags,
+  onOpen,
+  onReport,
+  onHastagClick,
+}) => {
   const classes = useStyles();
 
   return (
@@ -91,6 +101,7 @@ export default ({ id, text, created_at, hashtags, url }) => {
                 size="small"
                 key={h}
                 className={classes.hashLinks}
+                onClick={() => onHastagClick({ id: h })}
               >{`#${h}`}</Button>
             ))}
           </Typography>
@@ -99,28 +110,74 @@ export default ({ id, text, created_at, hashtags, url }) => {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions}>
-          <IconButton size="small" aria-label="report tweet" onClick={() => {}}>
+          <IconButton
+            size="small"
+            aria-label="report tweet"
+            onClick={() => onReport(id)}
+          >
             <ReportIcon />
           </IconButton>
-          <IconButton size="small" aria-label="view tweet" onClick={() => {}}>
+          <IconButton
+            size="small"
+            aria-label="view tweet"
+            onClick={() => onOpen(url)}
+          >
             <ChevronRightIcon />
           </IconButton>
-          {/* <Button
-            size="small"
-            className={classes.button}
-            endIcon={<ReportIcon>report</ReportIcon>}
-          >
-            Report
-          </Button>
-          <Button
-            size="small"
-            className={classes.button}
-            endIcon={<ChevronRightIcon>chevron right</ChevronRightIcon>}
-          >
-            View
-          </Button> */}
         </CardActions>
       </Card>
     </div>
   );
 };
+
+export const TweetLoading = () => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.root}>
+      <Card variant="outlined" className={classes.card}>
+        <CardHeader
+          avatar={
+            <Skeleton
+              animation="wave"
+              variant="circle"
+              width={40}
+              height={40}
+            />
+          }
+          title={
+            <Skeleton
+              animation="wave"
+              height={10}
+              width="80%"
+              style={{ marginBottom: 6 }}
+            />
+          }
+          subheader={<Skeleton animation="wave" height={10} width="40%" />}
+        />
+        <CardContent className={classes.contentRoot}>
+          <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+          <Skeleton
+            animation="wave"
+            height={10}
+            width="80%"
+            style={{ marginBottom: 6 }}
+          />
+          <Skeleton
+            animation="wave"
+            height={10}
+            width="70%"
+            style={{ marginBottom: 6 }}
+          />
+          <Skeleton animation="wave" height={10} width="50%" />
+        </CardContent>
+        <CardActions className={classes.actions}>
+          <Skeleton animation="wave" variant="circle" width={24} height={24} />
+          <Skeleton animation="wave" variant="circle" width={24} height={24} />
+        </CardActions>
+      </Card>
+    </div>
+  );
+};
+
+export default Tweet;

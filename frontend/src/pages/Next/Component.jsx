@@ -1,81 +1,73 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
+import Fab from "@material-ui/core/Fab";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 
-import {
-  FETCH_OVERALL_DATA,
-  SIDEBAR_TOGGLE,
-  ON_LOGOUT
-} from "../../Actions/Actions";
-import Header from "./components/Header";
+import Header from "../../Components/Header";
 import Nav from "./components/Nav";
-import Masthead from "./components/Masthead";
-import Tweets from "./components/Tweets";
-import { Container } from "@material-ui/core";
+import Masthead from "../../Components/Masthead";
+import Tweets from "../../Components/Tweets";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
-  // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    // padding: theme.spacing(3)
   },
   tweetsContainer: {
-    marginTop: '-180px',
-    position: 'relative',
+    marginTop: "-180px",
+    position: "relative",
+  },
+  scrollToTop: {
+    position: 'fixed',
+    right: theme.spacing(5),
+    bottom: theme.spacing(5),
+    zIndex: theme.zIndex['2']
   }
 }));
 
-export const Next = ({ getData, container, reducer }) => {
+export const Next = () => {
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  useEffect(() => {
-    getData();
-  }, [getData]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-console.log(reducer.overAllData);
+
+  const onScrollTop = () => {
+    window.scroll({
+      top: 0, 
+      behavior: 'smooth'
+    });
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
       <Header onClick={handleDrawerToggle} />
       {/* <Nav open={mobileOpen} onClose={handleDrawerToggle} /> */}
       <main className={classes.content}>
-        <Masthead data={reducer.overAllData} date={reducer.createdDate} />
+        <Masthead />
         <Container maxWidth="lg" className={classes.tweetsContainer}>
-          <Tweets data={reducer.overAllData} />
+          <Tweets />
+          <Fab
+            size="small"
+            color="default"
+            aria-label="scroll to top"
+            className={classes.scrollToTop}
+            onClick={onScrollTop}
+          >
+            <ExpandLessIcon />
+          </Fab>
         </Container>
       </main>
     </div>
   );
 };
 
-export const mapStateToProps = state => {
-  return {
-    reducer: state
-  };
-};
-
-export const mapDispatchToProps = dispatch => {
-  return {
-    getData: () => {
-      dispatch({ type: FETCH_OVERALL_DATA });
-    },
-    logout: history => {
-      dispatch({ type: ON_LOGOUT, history: history });
-    },
-    toggleSideBar: () => {
-      dispatch({ type: SIDEBAR_TOGGLE });
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Next);
+export default Next;

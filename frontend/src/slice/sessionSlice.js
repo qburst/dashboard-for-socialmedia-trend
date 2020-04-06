@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import api from "../utils/api";
-import { showToaster } from "../toasterSlice";
+import { showToaster } from "./toasterSlice";
 
 const savedName = localStorage.getItem("session.name");
 const savedToken = localStorage.getItem("session.token");

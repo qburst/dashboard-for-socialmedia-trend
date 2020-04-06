@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import Dashboard from './Components/Dashboard/Dashboard';
-import LandingPage from './Components/LandingPage/LandingPage'
+// import Dashboard from './Components/Dashboard/Dashboard';
+// import LandingPage from './Components/LandingPage/LandingPage'
 import Next from './pages/Next'
 
 class App extends Component {
@@ -11,12 +11,12 @@ class App extends Component {
       <Router>
         <div className="App">
           <Switch>
-            <Route path="/" exact component = { Dashboard }/>
-            <Route path="/login" exact component = { LandingPage }/>
+            {/* <Route path="/" exact component = { Dashboard }/>
+            <Route path="/login" exact component = { LandingPage }/> */}
             <Route exact path="/next">
               <Next />
             </Route>
-            <Route path="*" exact component = { Dashboard }/>
+            {/* <Route path="*" exact component = { Dashboard }/> */}
           </Switch>
         </div>
       </Router>

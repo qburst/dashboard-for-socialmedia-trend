@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { makeStyles } from "@material-ui/core/styles";
@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 const Filters = ({
   categories,
   searchSuggestion,
+  searchSelected,
   searchLoading,
   onSearch,
   onFilterChange,
@@ -62,12 +63,10 @@ const Filters = ({
   const classes = useStyles();
 
   const [openAsyncAuto, setOpenAsyncAuto] = useState(false);
-  const [options, setOptions] = useState([]);
-  const loading = openAsyncAuto && options.length === 0;
 
   const [choosenCategory, setChoosenCategory] = useState(null);
   const [choosenCountry, setChoosenCountry] = useState(null);
-  const [choosenHash, setChoosenHash] = useState(null);
+  const [choosenHash, setChoosenHash] = useState(searchSelected || null);
   const [openModal, setOpenModal] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
@@ -174,7 +173,7 @@ const Filters = ({
             setChoosenCountry(value);
             onFilterChange([choosenCategory, value, choosenHash]);
           }}
-          disabled={disabled}
+          disabled={true}
         />
       </Grid>
     </>
@@ -182,7 +181,8 @@ const Filters = ({
   const hashFilter = (
     <>
       <Autocomplete
-        id="asynchronous-demo"
+        freeSolo
+        id="hastag-suggestion"
         style={{ minWidth: "300px" }}
         size="small"
         open={openAsyncAuto}
@@ -205,7 +205,7 @@ const Filters = ({
               ...params.InputProps,
               endAdornment: (
                 <React.Fragment>
-                  {loading ? (
+                  {searchLoading ? (
                     <CircularProgress color="inherit" size={20} />
                   ) : null}
                   {params.InputProps.endAdornment}
@@ -222,7 +222,7 @@ const Filters = ({
           setChoosenHash(value);
           onFilterChange([choosenCategory, choosenCountry, value]);
         }}
-        disabled={disabled}
+        disabled={true}
       />
     </>
   );

@@ -35,12 +35,11 @@ export const {
 } = count.actions;
 export default count.reducer;
 
-export const fetchCount = () => async (
-  dispatch
-) => {
+export const fetchCount = () => async (dispatch) => {
   try {
     dispatch(getCountStart());
-    const response = await api.get("/world");
+
+    const response = await api.get("report/world/");
 
     dispatch(
       getCountSuccess({ data: { ...response.data, date: response.created_at } })
