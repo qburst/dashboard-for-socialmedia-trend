@@ -11,12 +11,12 @@ class App extends Component {
       <Router>
         <div className="App">
           <Switch>
-            <Route path="/" exact component = { LandingPage }/>
-            <Route path="/dashboard" exact component = { Dashboard }/>
+            <Route path="/" exact component = { Dashboard }/>
+            <Route path="/login" exact component = { LandingPage }/>
             <Route exact path="/next">
               <Next />
             </Route>
-            <Route path="*" exact component = { LandingPage }/>
+            <Route path="*" exact component = { Dashboard }/>
           </Switch>
         </div>
       </Router>

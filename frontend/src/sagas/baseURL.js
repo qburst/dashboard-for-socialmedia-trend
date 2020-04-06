@@ -1,1 +1,1 @@
-export const baseURL = 'http://api.covid-dashboard.qburst.build/'; 
+export const baseURL = 'https://api.covid-dashboard.qburst.build/';

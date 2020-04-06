@@ -13,11 +13,13 @@ class Dashboard extends Component {
     constructor(props) {
         super();
         this.state = {
-            modalShow: false,
+            showAboutModal:false,
+            showContactModal: false,
             isLoggedIn: sessionStorage.getItem('isLoggedIn')
         }
         this.onLogout = this.onLogout.bind(this);
         this.showAbout = this.showAbout.bind(this);
+        this.showContact = this.showContact.bind(this);
     }
 
     componentDidMount() {
@@ -35,16 +37,28 @@ class Dashboard extends Component {
         });
     }
     onLogout = () => {
-        this.props.logout(this.props.history)
+        this.props.logout(this.props.history);
+        this.setState({isLoggedIn: false});
     }
 
     showLogin=()=>{
-        this.props.history.push('/');
+        this.props.history.push('/login');
     }
 
     showAbout (){
-        this.setState({modalShow: !this.state.modalShow});
+        this.setState({showAboutModal: !this.state.showAboutModal});
     }
+
+    showContact (){
+        this.setState({showContactModal: !this.state.showContactModal});
+    }
+
+    setIsLoggedIn=()=>{
+		this.setState({
+			isLoggedIn:sessionStorage.getItem('isLoggedIn')
+		})
+	}
+
     render() {
         return (
             <div className='Dashboard'>
@@ -54,6 +68,8 @@ class Dashboard extends Component {
                         toggleSideBarFunc={this.props.toggleSideBar}
                         onLogout={this.onLogout}
                         showAbout={this.showAbout}
+                        isLoggedIn = { this.state.isLoggedIn }
+                        showContact = {this.showContact}
                     />
                     <Main
                         overAllData={this.props.reducer.overAllData}
@@ -61,17 +77,26 @@ class Dashboard extends Component {
                         onLogout={this.onLogout}
                         spinner={this.props.reducer.spinner}
                         createdDate={this.props.reducer.createdDate}
-                        isLoggedIn = { this.state.isLoggedIn }
                         showLogin = { this.showLogin }
+                        setIsLoggedIn = {this.setIsLoggedIn}
                     />
                     <MyVerticallyCenteredModal
-                        show={this.state.modalShow}
-                        onHide={() => this.setState({modalShow: false})}
+                        show={this.state.showAboutModal}
+                        onHide={() => this.setState({showAboutModal: false})}
                         header="About"
                         bodyHeader="COVID-19 Twitter Data"
-                        body="We analyze social media data, then categorize and display in web platform for people fighting
-                        corona. Currently our platform process twitter data and aggregate that to several categories and using a
-                         web platform to show the data to the entire world."
+                        body={<div>We analyze social media data, then categorize and display in web platform for people fighting
+                            corona. Currently our platform process twitter data and aggregate that to several categories and using a
+                             web platform to show data to the entire world.This was done as an open source project by QBurst. You can provide your contributions 
+                             <a href="https://github.com/qburst/dashboard-for-socialmedia-trend.git"> here</a>.</div>}
+                    />
+                    <MyVerticallyCenteredModal
+                        show={this.state.showContactModal}
+                        onHide={() => this.setState({showContactModal: false})}
+                        header="Contact Us"
+                        bodyHeader="We are open for your feedback"
+                        body={  <div>  <a href="https://api.whatsapp.com/send?phone=919746785785" target="_blank" class="btn btn-success"><i class="fa fa-whatsapp"></i> WhatsApp</a>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jinoj@qburst.com" target="_blank" class="btn btn-dark"><i class="fa fa-envelope" aria-hidden="true"></i> Mail Us</a></div> }
                     />
                 </div>
                 <NotificationContainer/>

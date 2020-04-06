@@ -38,13 +38,20 @@
     position: relative;
     text-decoration: none;
     cursor: pointer;
-    text-align: initial;
+    padding-left: 3rem;
+    text-align: left;
 }
 
-.sidebar-user:hover,.sidebar-link, a.sidebar-link:hover {
+.sidebar-user:hover,.sidebar-link, a.sidebar-link:hover, .links:hover {
     background-color: #28354ee3;
     color: white;
     border-radius: 0;
+}
+.related-links:hover{
+    background-color: transparent;
+    color: #050505;
+    border-radius: 0;
+    cursor: auto;
 }
 .sidebar-user{
     border-bottom-left-radius: 9px;
@@ -59,4 +66,15 @@
 }
 .user-avatar{
     max-width: 2.5rem;
+}
+
+.about, .contact, .dashboard {
+    text-decoration: underline;
+}
+.links{
+    display: block;
+    padding: .65rem .75rem;
+    padding-left: 3rem;
+    text-align: left;
+    text-decoration: underline;
 }

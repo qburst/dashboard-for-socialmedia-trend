@@ -18,8 +18,8 @@ const getURL = (apiEndPoint) => {
 }
 
 const triggerOverAllDataApi = () => {
-  let url = getURL("report/world");
-  return Axios.post(url)
+  let url = getURL("report/world/");
+  return Axios.get(url)
     .then(response => response.data)
 }
 
@@ -68,7 +68,11 @@ function* sendLoginData(action) {
       sessionStorage.setItem('Token', response.token);
       sessionStorage.setItem('Username', response.name);
       sessionStorage.setItem('isLoggedIn', true);
-      action.history.push('/dashboard');
+      if(!action.isLoginModal){
+        action.history.push('/');
+      }else{
+        action.hideLoginModal();
+      }
     }
     yield put({ type: SEND_LOGIN_DATA_SUCCESS, data: action.history })
   }

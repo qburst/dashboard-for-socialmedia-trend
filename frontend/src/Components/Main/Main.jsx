@@ -36,10 +36,20 @@ export default class Menu extends Component {
 
 	logout = () => {
 		this.props.onLogout();
+		this.setState({
+			isLoggedIn:false
+		})
 	}
 	
 	showLogin=()=>{
 		this.props.showLogin();
+	}
+
+	setIsLoggedIn=()=>{
+		this.props.setIsLoggedIn();
+		this.setState({
+			isLoggedIn:sessionStorage.getItem('isLoggedIn')
+		})
 	}
 
 	handleClick(label) {
@@ -57,9 +67,9 @@ export default class Menu extends Component {
 						aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
-					<button className="btn btn-light logout" type="submit" disabled={this.props.spinner} onClick={this.state.isLoggedIn ? this.logout : this.showLogin}>
+					{this.state.isLoggedIn && <button className="btn btn-light logout" type="submit" disabled={this.props.spinner} onClick={this.state.isLoggedIn ? this.logout : this.showLogin}>
 					{this.state.isLoggedIn ? 'Logout' : 'Login' }
-              		</button>
+              		</button>}
 				</nav>
 				<main className="content">
 					<div className="container-fluid">
@@ -88,7 +98,11 @@ export default class Menu extends Component {
 						</div>
 						<div className="row description">
 							Aggregated dashboard for seeing twitter data for helping everyone fighting COVID-19. The counts shown are sourced from
-    						ECDC and was updated on {this.props.createdDate && new Date(this.props.createdDate).toLocaleDateString()}.
+    						ECDC and was updated on {this.props.createdDate && new Intl.DateTimeFormat("en-GB", {
+							year: "numeric",
+							month: "short",
+							day: "2-digit"
+						}).format(new Date(this.props.createdDate))}.
 						</div>
 						{this.props.spinner && <div class="row">
 							<div className='spinnerClass'>
@@ -97,7 +111,7 @@ export default class Menu extends Component {
 						</div>
 						}
 						<div className='row'>
-							<Tweets />
+							<Tweets setIsLoggedIn={this.setIsLoggedIn} isLoggedIn={this.state.isLoggedIn}/>
 						</div>
 					</div>
 				</main>
