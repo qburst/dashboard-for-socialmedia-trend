@@ -1,22 +1,25 @@
 import mongoengine
-from json import loads
+from json import loads, dumps
 from django.shortcuts import render
+from django.core.exceptions import PermissionDenied
 from corona_tweet_analysis.utils.base_view import BaseViewManager
 from corona_tweet_analysis.utils.responses import send_response
 from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST, UNAUTHORIZED
-from corona_tweet_analysis.models import TwitterData, Category, CoronaReport
+from corona_tweet_analysis.models import TwitterData, Category, CoronaReport, Data
 from corona_tweet_analysis import serializers
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import permissions, generics
 from rest_framework.response import Response
+from rest_framework.decorators import permission_classes
 from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer
+
 
 class CategoryView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-class CoronaWorldReportView(generics.ListAPIView):
-    http_method_names = ['get']
+class CoronaWorldReportView(generics.ListCreateAPIView):
+    http_method_names = ['get', 'put']
 
     def get(self, request, *args, **kwargs):
         corona_report = CoronaReport.objects.order_by('-created_at').first()
@@ -31,29 +34,103 @@ class CoronaWorldReportView(generics.ListAPIView):
             'created_at': corona_report.created_at
         })
 
+    def put(self, request, *args, **kwargs):
+        permission_classes = [permissions.IsAdminUser, permissions.IsAuthenticated]
+        if request.user.is_authenticated == False or request.user.is_superuser == False:
+            raise PermissionDenied
 
-class CoronaReportView(generics.ListAPIView):
-    http_method_names = ['get']
+        corona_report = CoronaReport.objects.order_by('-created_at').first()
+        new_cases = request.query_params.get('new_cases')
+        new_deaths = request.query_params.get('new_deaths')
+        total_deaths = request.query_params.get('total_deaths')
+        total_cases = request.query_params.get('total_cases')
+
+        if not (new_cases or new_deaths or total_deaths or total_cases):
+            return send_response({'status': SUCCESS, 'message':'No update values were given'})
+
+        report_data = loads(corona_report.to_json())
+        data_objects_list = []
+        for data in report_data['data']:
+            if data['name'] == 'World':                
+                data['new_cases'] =  int(new_cases) if new_cases else data['new_cases']
+                data['new_deaths'] = int(new_deaths) if new_deaths else data['new_deaths']
+                data['total_deaths'] = int(total_deaths) if total_deaths else data['total_deaths']
+                data['total_cases'] = int(total_cases) if total_cases else data['total_cases']
+                
+            data_obj = Data(name=data['name'], new_cases=data['new_cases'], new_deaths=data['new_deaths'], 
+                total_deaths=data['total_deaths'], total_cases=data['total_cases'])
+            data_objects_list.append(data_obj)
+
+            new_report = CoronaReport(data=data_objects_list)
+            new_report.save()
+        return send_response({'status': SUCCESS, 'message':'Corona Report updated'})        
+    
+class CoronaReportView(generics.ListCreateAPIView):
+    http_method_names = ['get', 'put']
 
     def get(self, request, *args, **kwargs):
         country = request.query_params.get('country')
         if not country:
             return send_response({'status': INVALID_PARAMETERS, 'message':'Country not sent'})
+
+        country_data_report = CoronaReport.objects(data__name=country).order_by('-created_at').first()
+        if not country_data_report:
+            return send_response({'status': INVALID_PARAMETERS, 'message':'Country not found'})
+
         corona_report = CoronaReport.objects.order_by('-created_at').first()
-        data = loads(corona_report.to_json())
-        created_at = data['created_at']
+        report_data = loads(corona_report.to_json())
+        created_at = report_data['created_at']
         data = {}
-        for country in data['data']:
-            if country['name'] == country:
-                data = country
-            else:
-                return send_response({'status': INVALID_PARAMETERS, 'message':'Country not found'})
+        for country_data in report_data['data']:
+            if country_data['name'] == country:
+                data = country_data
+            
         return Response({
             'status': SUCCESS,
             'data': data,
             'created_at': corona_report.created_at
         })
+    
+    def put(self, request, *args, **kwargs):
+        permission_classes = [permissions.IsAdminUser, permissions.IsAuthenticated]
+        if request.user.is_authenticated == False or request.user.is_superuser == False:
+            raise PermissionDenied
 
+        country = request.query_params.get('country')
+        if not country:
+            return send_response({'status': INVALID_PARAMETERS, 'message':'Country not sent'})
+
+        country_data_report = CoronaReport.objects(data__name=country).order_by('-created_at').first()
+        if not country_data_report:
+            return send_response({'status': INVALID_PARAMETERS, 'message':'Country not found'})
+
+
+        corona_report = CoronaReport.objects.order_by('-created_at').first()
+        new_cases = request.query_params.get('new_cases')
+        new_deaths = request.query_params.get('new_deaths')
+        total_deaths = request.query_params.get('total_deaths')
+        total_cases = request.query_params.get('total_cases')
+
+        if not (new_cases or new_deaths or total_deaths or total_cases):
+            return send_response({'status': SUCCESS, 'message':'No update values were given'})
+
+        report_data = loads(corona_report.to_json())
+        data_objects_list = []
+        for data in report_data['data']:
+            if data['name'] == country:                
+                data['new_cases'] =  int(new_cases) if new_cases else data['new_cases']
+                data['new_deaths'] = int(new_deaths) if new_deaths else data['new_deaths']
+                data['total_deaths'] = int(total_deaths) if total_deaths else data['total_deaths']
+                data['total_cases'] = int(total_cases) if total_cases else data['total_cases']
+                
+            data_obj = Data(name=data['name'], new_cases=data['new_cases'], new_deaths=data['new_deaths'], 
+                total_deaths=data['total_deaths'], total_cases=data['total_cases'])
+            data_objects_list.append(data_obj)
+
+            new_report = CoronaReport(data=data_objects_list)
+            new_report.save()
+        return send_response({'status': SUCCESS, 'message':'Corona Report updated'})        
+        
 
 class TwitterDataView(generics.ListAPIView):
     queryset = TwitterData.objects(is_spam__ne=True).order_by('-created_at', '-_id')
