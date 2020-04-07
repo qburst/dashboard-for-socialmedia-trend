@@ -99,7 +99,7 @@ const Filters = ({
     setChoosenCategory(null);
     setChoosenCountry(null);
     setChoosenHash(null);
-    onFilterChange();
+    onFilterChange([]);
     setTimeout(() => setOpenModal(false), 300);
   };
   const onRemove = (type) => () => {

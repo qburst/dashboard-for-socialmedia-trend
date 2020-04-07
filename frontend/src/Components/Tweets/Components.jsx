@@ -27,8 +27,21 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    display: "flex",
+    flexWrap: "wrap",
+    padding: "10px",
+    minHeight: "300px",
+  },
   moreTweets: {
     margin: theme.spacing(2),
+  },
+  noTweets: {
+    width: "100%",
+    marginTop: theme.spacing(6),
+    marginBottom: theme.spacing(6),
+    textAlign: "center",
+    color: theme.palette.grey["500"],
   },
 }));
 
@@ -45,7 +58,9 @@ export default function Tweets(props) {
   const dispatch = useDispatch();
   const { isSignedIn } = useSelector((state) => state.session);
   const { data: categories } = useSelector((state) => state.categories);
-  const { chosenTweet, data, count, loading } = useSelector((state) => state.tweets);
+  const { chosenTweet, data, count, loading } = useSelector(
+    (state) => state.tweets
+  );
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -106,7 +121,7 @@ export default function Tweets(props) {
 
   const onReportConfirm = () => {
     setOpenModal(false);
-    dispatch(reportTweet({ id: chosenTweet }));
+    dispatch(reportTweet({ id: chosenTweet.id }));
     dispatch(getReportTweetRemove());
   };
 
@@ -125,7 +140,7 @@ export default function Tweets(props) {
         onFilterChange={onFilterChange}
         disabled={false}
       />
-      <div style={{ display: "flex", flexWrap: "wrap", padding: "10px" }}>
+      <div className={classes.wrapper}>
         {data.length ? (
           <>
             {data.map((item) => (
@@ -142,7 +157,11 @@ export default function Tweets(props) {
         ) : loading ? (
           loadingFiller
         ) : (
-          <Typography component="h4" variant="h4" classNAme>
+          <Typography
+            component="span"
+            variant="body1"
+            className={classes.noTweets}
+          >
             No matching tweets available
           </Typography>
         )}

@@ -92,7 +92,7 @@ export const Next = () => {
           vertical: "bottom",
           horizontal: "left",
         }}
-        open={message.length}
+        open={Boolean(message.length)}
         autoHideDuration={3400}
         onClose={handleClose}
         message={message}

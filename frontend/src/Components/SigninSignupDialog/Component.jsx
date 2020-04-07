@@ -179,18 +179,13 @@ const SigninSignupDialog = () => {
         </IconButton>
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id="dialog-description">
-          {chosenTweet ? (
-            <Typography className={classes.message}>
-              You need to sign in order to report a tweet
-            </Typography>
-          ) : null}
+        <DialogContentText id="dialog-description" className={classes.message}>
+          {chosenTweet ? 'You need to sign in order to report a tweet' : 'You can report tweets as abusive with account'}
         </DialogContentText>
         <form onSubmit={onSubmit} className={classes.content}>
           {showSignup ? (
             <TextField
               autoFocus
-              id="outlined-basic"
               variant="outlined"
               label="Name"
               name="name"
@@ -203,7 +198,6 @@ const SigninSignupDialog = () => {
           ) : null}
           <TextField
             autoFocus
-            id="outlined-basic"
             variant="outlined"
             type="email"
             label="Email"
@@ -215,7 +209,6 @@ const SigninSignupDialog = () => {
             helperText={errors.email}
           />
           <TextField
-            id="outlined-basic"
             variant="outlined"
             type="password"
             label="Password"
@@ -228,7 +221,6 @@ const SigninSignupDialog = () => {
           />
           {showSignup ? (
             <TextField
-              id="outlined-basic"
               variant="outlined"
               type="password"
               label="Confirm password"

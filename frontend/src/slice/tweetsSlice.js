@@ -96,11 +96,15 @@ export const reportTweet = ({ id }) => async (dispatch) => {
   try {
     dispatch(getTweetsStart({ replace: false }));
 
-    const token = localStorage.getItem('session.token');
+    const token = localStorage.getItem("session.token");
 
-    await api.put(`/add_spam_count?tweet_id=${id}`, {
-      headers: { "Authorization": `Token ${token}` }
-    });
+    await api.put(
+      `/add_spam_count?tweet_id=${id}`,
+      {},
+      {
+        headers: { Authorization: `Token ${token}` },
+      }
+    );
 
     dispatch(getReportTweetSuccess({ id }));
     dispatch(showToaster({ message: "Tweet reported successfully" }));

@@ -104,7 +104,6 @@ export const logout = () => async (dispatch) => {
 export const signUp = ({ name, email, password }) => async (dispatch) => {
   try {
     dispatch(getSessionStart());
-    console.log("sigup", name);
 
     await api.post("users/profile/", {
       name,

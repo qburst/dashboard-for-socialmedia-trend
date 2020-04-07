@@ -10,44 +10,41 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { fetchCount } from "../../slice/countSlice";
 
-const useStyles = makeStyles((theme) => {
-  console.log(theme);
-  return {
-    root: {
-      flexGrow: 1,
-      padding: "30px 0 200px 0",
-      maxWidth: "initial",
-      backgroundImage: "linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%)",
-      clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 5vw), 0 100%)",
-    },
-    toolbar: theme.mixins.toolbar,
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: "center",
-    },
-    call: {
-      fontSize: "2.8rem",
-      fontWeight: 700,
-      letterSpacing: "-2px",
-      marginTop: theme.spacing(5),
-      marginBottom: theme.spacing(1),
-      color: theme.palette.grey["900"],
-    },
-    tagline: {
-      fontSize: "1.8rem",
-      color: theme.palette.grey["800"],
-    },
-    source: {
-      fontSize: "0.9rem",
-      marginTop: theme.spacing(1),
-      color: theme.palette.grey["300"],
-    },
-    stats: {
-      backgroundImage: "linear-gradient(132deg,  #e53e3e 0%, #c53030 100%)",
-      color: theme.palette.grey["50"],
-    },
-  };
-});
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    padding: "30px 0 200px 0",
+    maxWidth: "initial",
+    backgroundImage: "linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%)",
+    clipPath: "polygon(0 0, 100% 0, 100% calc(100% - 5vw), 0 100%)",
+  },
+  toolbar: theme.mixins.toolbar,
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+  },
+  call: {
+    fontSize: "2.8rem",
+    fontWeight: 700,
+    letterSpacing: "-2px",
+    marginTop: theme.spacing(5),
+    marginBottom: theme.spacing(1),
+    color: theme.palette.grey["900"],
+  },
+  tagline: {
+    fontSize: "1.8rem",
+    color: theme.palette.grey["800"],
+  },
+  source: {
+    fontSize: "0.9rem",
+    marginTop: theme.spacing(1),
+    color: theme.palette.grey["300"],
+  },
+  stats: {
+    backgroundImage: "linear-gradient(132deg,  #e53e3e 0%, #c53030 100%)",
+    color: theme.palette.grey["50"],
+  },
+}));
 
 export default function Masthead() {
   const classes = useStyles();

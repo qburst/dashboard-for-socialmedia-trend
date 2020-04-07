@@ -14,55 +14,52 @@ import { blue } from "@material-ui/core/colors";
 import Skeleton from "@material-ui/lab/Skeleton";
 import moment from "moment";
 
-const useStyles = makeStyles((theme) => {
-  console.log(theme);
-  return {
-    root: {
-      flex: "0 1 100%",
-      padding: "10px",
-      textAlign: "left",
-      display: "flex",
-      [theme.breakpoints.up("sm")]: {
-        flex: "0 1 50%",
-      },
-      [theme.breakpoints.up("md")]: {
-        flex: "0 1 33.33%",
-      },
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flex: "0 1 100%",
+    padding: "10px",
+    textAlign: "left",
+    display: "flex",
+    [theme.breakpoints.up("sm")]: {
+      flex: "0 1 50%",
     },
-    card: {
-      width: "100%",
-      display: "flex",
-      flexFlow: "column",
-      position: "relative",
-      paddingBottom: "47px",
+    [theme.breakpoints.up("md")]: {
+      flex: "0 1 33.33%",
     },
-    title: {
-      fontSize: 14,
-      whiteSpace: "pre-wrap",
-    },
-    contentRoot: {
-      paddingTop: 0,
-    },
-    content: {
-      whiteSpace: "pre-wrap",
-    },
-    hashLinks: {
-      color: "#007bff",
-    },
-    actions: {
-      display: "flex",
-      justifyContent: "space-between",
-      borderTop: `1px solid ${theme.palette.grey["300"]}`,
-      position: "absolute",
-      left: 0,
-      right: 0,
-      bottom: 0,
-    },
-    avatar: {
-      backgroundColor: blue[500],
-    },
-  };
-});
+  },
+  card: {
+    width: "100%",
+    display: "flex",
+    flexFlow: "column",
+    position: "relative",
+    paddingBottom: "47px",
+  },
+  title: {
+    fontSize: 14,
+    whiteSpace: "pre-wrap",
+  },
+  contentRoot: {
+    paddingTop: 0,
+  },
+  content: {
+    whiteSpace: "pre-wrap",
+  },
+  hashLinks: {
+    color: "#007bff",
+  },
+  actions: {
+    display: "flex",
+    justifyContent: "space-between",
+    borderTop: `1px solid ${theme.palette.grey["300"]}`,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  avatar: {
+    backgroundColor: blue[500],
+  },
+}));
 
 const Tweet = ({
   id,
