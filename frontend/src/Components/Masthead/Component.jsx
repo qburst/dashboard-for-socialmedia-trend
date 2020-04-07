@@ -30,15 +30,18 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(5),
     marginBottom: theme.spacing(1),
     color: theme.palette.grey["900"],
+    textAlign: "center",
   },
   tagline: {
     fontSize: "1.8rem",
     color: theme.palette.grey["800"],
+    textAlign: "center",
   },
   source: {
     fontSize: "0.9rem",
     marginTop: theme.spacing(1),
     color: theme.palette.grey["300"],
+    textAlign: "center",
   },
   stats: {
     backgroundImage: "linear-gradient(132deg,  #e53e3e 0%, #c53030 100%)",

@@ -27,6 +27,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    textAlign: "center",
+  },
   wrapper: {
     display: "flex",
     flexWrap: "wrap",

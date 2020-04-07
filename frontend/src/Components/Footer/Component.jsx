@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(5),
     paddingBottom: theme.spacing(5),
     borderTop: "1px solid rgba(0, 0, 0, 0.12)",
+    textAlign: "center"
   },
 }));
 
