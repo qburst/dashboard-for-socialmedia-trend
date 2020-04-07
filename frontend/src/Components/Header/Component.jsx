@@ -32,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onToggleDrawer: PropTypes.func.isRequired,
 };
-const Header = ({ onClick }) => {
+const Header = ({ onToggleDrawer }) => {
   const classes = useStyles();
 
   return (
@@ -45,9 +45,9 @@ const Header = ({ onClick }) => {
         </Typography>
         <IconButton
           color="inherit"
-          aria-label="open drawer"
+          aria-label="open drawer navigation"
           edge="start"
-          onClick={onClick}
+          onClick={onToggleDrawer(true)}
           className={classes.menuButton}
         >
           <MenuIcon />

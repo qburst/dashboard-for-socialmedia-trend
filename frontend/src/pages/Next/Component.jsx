@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { hideToaster } from "../../slice/toasterSlice";
 import Header from "../../Components/Header";
-import Nav from "./components/Nav";
+import Nav from "../../Components/Nav";
 import Masthead from "../../Components/Masthead";
 import Tweets from "../../Components/Tweets";
 import SigninSignupDialog from "../../Components/SigninSignupDialog";
@@ -39,13 +39,17 @@ const useStyles = makeStyles((theme) => ({
 
 export const Next = () => {
   const classes = useStyles();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
 
   const dispatch = useDispatch();
   const { message } = useSelector((state) => state.toaster);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+  const onToggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+
+    setShowDrawer(open);
   };
 
   const onScrollTop = () => {
@@ -55,7 +59,7 @@ export const Next = () => {
     });
   };
 
-  const handleClose = (event, reason) => {
+  const onToasterClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
@@ -66,8 +70,8 @@ export const Next = () => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Header onClick={handleDrawerToggle} />
-      {/* <Nav open={mobileOpen} onClose={handleDrawerToggle} /> */}
+      <Header onToggleDrawer={onToggleDrawer} />
+      <Nav open={showDrawer} onToggleDrawer={onToggleDrawer} />
       <main className={classes.content}>
         <Masthead />
         <Container maxWidth="lg" className={classes.tweetsContainer}>
@@ -94,14 +98,14 @@ export const Next = () => {
         }}
         open={Boolean(message.length)}
         autoHideDuration={3400}
-        onClose={handleClose}
+        onClose={onToasterClose}
         message={message}
         action={
           <IconButton
             size="small"
             aria-label="close"
             color="inherit"
-            onClick={handleClose}
+            onClick={onToasterClose}
           >
             <CloseIcon fontSize="small" />
           </IconButton>
