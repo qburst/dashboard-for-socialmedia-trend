@@ -13,7 +13,7 @@ export default class Menu extends Component {
 			{ label: "New Cases", value: 0, className: "text-warning", showValue: true },
 			{ label: "Deceased Cases", value: 0, className: "text-danger", showValue: true }],
 			showSmallBoard: true,
-			isLoggedIn: sessionStorage.getItem('isLoggedIn')
+			isSignedIn: sessionStorage.getItem('isLoggedIn')
 		}
 		this.handleClick = this.handleClick.bind(this);
 	};
@@ -37,7 +37,7 @@ export default class Menu extends Component {
 	logout = () => {
 		this.props.onLogout();
 		this.setState({
-			isLoggedIn:false
+			isSignedIn:false
 		})
 	}
 	
@@ -48,7 +48,7 @@ export default class Menu extends Component {
 	setIsLoggedIn=()=>{
 		this.props.setIsLoggedIn();
 		this.setState({
-			isLoggedIn:sessionStorage.getItem('isLoggedIn')
+			isSignedIn:sessionStorage.getItem('isLoggedIn')
 		})
 	}
 
@@ -67,8 +67,8 @@ export default class Menu extends Component {
 						aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
-					{this.state.isLoggedIn && <button className="btn btn-light logout" type="submit" disabled={this.props.spinner} onClick={this.state.isLoggedIn ? this.logout : this.showLogin}>
-					{this.state.isLoggedIn ? 'Logout' : 'Login' }
+					{this.state.isSignedIn && <button className="btn btn-light logout" type="submit" disabled={this.props.spinner} onClick={this.state.isSignedIn ? this.logout : this.showLogin}>
+					{this.state.isSignedIn ? 'Logout' : 'Login' }
               		</button>}
 				</nav>
 				<main className="content">
@@ -111,7 +111,7 @@ export default class Menu extends Component {
 						</div>
 						}
 						<div className='row'>
-							<Tweets setIsLoggedIn={this.setIsLoggedIn} isLoggedIn={this.state.isLoggedIn}/>
+							<Tweets setIsLoggedIn={this.setIsLoggedIn} isSignedIn={this.state.isSignedIn}/>
 						</div>
 					</div>
 				</main>

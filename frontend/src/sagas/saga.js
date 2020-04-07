@@ -49,7 +49,7 @@ function* sendRegistrationData(type, action) {
     yield put({ type: SEND_REGISTRATION_DATA_FAILURE, errorData: errorMsg });
   }
 }
-
+// Test@123$
 const triggerLoginApi = (action) => {
   let url = getURL("users/login/");
   return Axios.post(url, {

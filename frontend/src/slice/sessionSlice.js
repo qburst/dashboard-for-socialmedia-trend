@@ -8,10 +8,10 @@ const savedToken = localStorage.getItem("session.token");
 const initialState = {
   name: savedName || "",
   token: savedToken || "",
-  isLoggedIn: Boolean(savedToken),
+  isSignedIn: Boolean(savedToken),
+  isSignedUp: false,
   showLoginModal: false,
   loading: false,
-  error: null,
 };
 
 const session = createSlice({
@@ -26,32 +26,28 @@ const session = createSlice({
     },
     getSessionStart(state) {
       state.loading = true;
-      state.error = null;
+      state.isSignedUp = false;
     },
     getLoginSuccess(state, action) {
       const { name, token } = action.payload;
 
       state.name = name;
       state.token = token;
-      state.isLoggedIn = true;
+      state.isSignedIn = true;
       localStorage.setItem("session.name", name);
       localStorage.setItem("session.token", token);
     },
     getLogoutSuccess(state) {
       state.name = "";
       state.token = "";
-      state.isLoggedIn = false;
+      state.isSignedIn = false;
       localStorage.removeItem("session.name");
       localStorage.removeItem("session.token");
     },
     getSignupSuccess(state) {
       state.loading = false;
-      state.error = null;
-    },
-    getSessionFailure(state, action) {
-      state.loading = false;
-      state.error = action.payload;
-    },
+      state.isSignedUp = true;
+    }
   },
 });
 
@@ -62,30 +58,37 @@ export const {
   getLoginSuccess,
   getLogoutSuccess,
   getSignupSuccess,
-  getSessionFailure,
 } = session.actions;
 export default session.reducer;
 
-export const login = ({ username, password }) => async (dispatch) => {
+export const signIn = ({ username, password }) => async (dispatch) => {
   try {
     dispatch(getSessionStart());
 
-    const response = await api.post("/users/login", {
+    const response = await api.post("users/login/", {
       username,
       password,
     });
 
     dispatch(getLoginSuccess({ ...response }));
     dispatch(showToaster({ message: `Welcome ${response.name}!` }));
-  } catch (err) {
-    dispatch(getSessionFailure(err));
-    dispatch(showToaster({ message: `Unable to login. Please try again.` }));
+  } catch (error) {
+    const { response: { data = {} } } = error;
+    const { non_field_errors } = data;
+
+    dispatch(
+      showToaster({
+        message: non_field_errors
+          ? non_field_errors[0]
+          : "Unable to sign in. Please try again.",
+      })
+    );
   }
 };
 
 export const logout = () => async (dispatch) => {
   dispatch(getLogoutSuccess());
-  dispatch(showToaster({ message: "Logged out successfully" }));
+  dispatch(showToaster({ message: "Sign out successful" }));
 
   try {
     let token = localStorage.getItem("session.token");
@@ -93,7 +96,7 @@ export const logout = () => async (dispatch) => {
     await api.get("/users/logout", {
       headers: { Authorization: `Token ${token}` },
     });
-  } catch (err) {
+  } catch (error) {
     // no op
   }
 };
@@ -101,17 +104,25 @@ export const logout = () => async (dispatch) => {
 export const signUp = ({ name, email, password }) => async (dispatch) => {
   try {
     dispatch(getSessionStart());
+    console.log("sigup", name);
 
-    await api.post("/users/profile", {
+    await api.post("users/profile/", {
       name,
       email,
       password,
     });
 
     dispatch(getSignupSuccess());
-    dispatch(showToaster({ message: `Signup successfully!` }));
-  } catch (err) {
-    dispatch(getSessionFailure(err));
-    dispatch(showToaster({ message: `Unable to signup. Please try again.` }));
+    dispatch(showToaster({ message: `Sign up successful!` }));
+  } catch (error) {
+    const { response: { data = {} } } = error;
+    const { email, non_field_errors } = data;
+    const field = email || non_field_errors;
+
+    dispatch(
+      showToaster({
+        message: field ? field[0] : "Unable to sign up. Please try again.",
+      })
+    );
   }
 };

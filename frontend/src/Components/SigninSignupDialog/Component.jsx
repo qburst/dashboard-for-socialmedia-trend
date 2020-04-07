@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -15,8 +14,10 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getHideLoginModal } from "../../slice/sessionSlice";
+import { showToaster } from "../../slice/toasterSlice";
+import { getHideLoginModal, signIn, signUp } from "../../slice/sessionSlice";
 import { getReportTweetRemove } from "../../slice/tweetsSlice";
+import { useEffect } from "react";
 
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
@@ -66,7 +67,9 @@ const SigninSignupDialog = () => {
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   const dispatch = useDispatch();
-  const { showLoginModal } = useSelector((state) => state.session);
+  const { showLoginModal, isSignedIn, isSignedUp } = useSelector(
+    (state) => state.session
+  );
   const { chosenTweet } = useSelector((state) => state.tweets);
 
   const [showSignup, setShowSignup] = useState(false);
@@ -75,6 +78,20 @@ const SigninSignupDialog = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (showLoginModal && isSignedIn) {
+      dispatch(getHideLoginModal());
+    }
+
+    if (showLoginModal && isSignedUp) {
+      setShowSignup(false);
+      setPassword("");
+      setTimeout(() => {
+        dispatch(showToaster({ message: "Please sign in to continue" }));
+      }, 1000);
+    }
+  }, [showLoginModal, isSignedIn, isSignedUp, dispatch]);
 
   const onHide = () => {
     dispatch(getHideLoginModal());
@@ -107,7 +124,7 @@ const SigninSignupDialog = () => {
 
     const errors = {};
 
-    if (!name) {
+    if (showSignup && !name) {
       errors.name = "Please provide your name";
     }
 
@@ -131,7 +148,13 @@ const SigninSignupDialog = () => {
     setErrors(errors);
 
     if (Object.keys(errors).length) {
-      alert("fix errors");
+      dispatch(showToaster({ message: "Please fix the form errors" }));
+    } else {
+      if (showSignup) {
+        dispatch(signUp({ name, email, password }));
+      } else {
+        dispatch(signIn({ username: email, password }));
+      }
     }
   };
 
@@ -174,7 +197,7 @@ const SigninSignupDialog = () => {
               value={name}
               onChange={onChange}
               className={classes.textfield}
-              error={errors.name}
+              error={Boolean(errors.name)}
               helperText={errors.name}
             />
           ) : null}
@@ -188,7 +211,7 @@ const SigninSignupDialog = () => {
             value={email}
             onChange={onChange}
             className={classes.textfield}
-            error={errors.email}
+            error={Boolean(errors.email)}
             helperText={errors.email}
           />
           <TextField
@@ -200,7 +223,7 @@ const SigninSignupDialog = () => {
             value={password}
             onChange={onChange}
             className={classes.textfield}
-            error={errors.password}
+            error={Boolean(errors.password)}
             helperText={errors.password}
           />
           {showSignup ? (
@@ -213,7 +236,7 @@ const SigninSignupDialog = () => {
               value={confirmPassword}
               onChange={onChange}
               className={classes.textfield}
-              error={errors.confirmPassword}
+              error={Boolean(errors.confirmPassword)}
               helperText={errors.confirmPassword}
             />
           ) : null}

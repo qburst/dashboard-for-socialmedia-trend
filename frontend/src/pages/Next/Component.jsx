@@ -5,7 +5,12 @@ import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import { useSelector, useDispatch } from "react-redux";
 
+import { hideToaster } from "../../slice/toasterSlice";
 import Header from "../../Components/Header";
 import Nav from "./components/Nav";
 import Masthead from "../../Components/Masthead";
@@ -36,6 +41,9 @@ export const Next = () => {
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const dispatch = useDispatch();
+  const { message } = useSelector((state) => state.toaster);
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -45,6 +53,14 @@ export const Next = () => {
       top: 0,
       behavior: "smooth",
     });
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    dispatch(hideToaster());
   };
 
   return (
@@ -69,6 +85,28 @@ export const Next = () => {
       </main>
 
       <SigninSignupDialog />
+
+      <Snackbar
+      key={message || undefined}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={message.length}
+        autoHideDuration={3400}
+        onClose={handleClose}
+        message={message}
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
     </div>
   );
 };

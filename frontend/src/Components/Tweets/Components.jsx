@@ -43,7 +43,7 @@ export default function Tweets(props) {
   const [openModal, setOpenModal] = useState(false);
 
   const dispatch = useDispatch();
-  const { isLoggedIn } = useSelector((state) => state.session);
+  const { isSignedIn } = useSelector((state) => state.session);
   const { data: categories } = useSelector((state) => state.categories);
   const { chosenTweet, data, count, loading } = useSelector((state) => state.tweets);
 
@@ -56,10 +56,10 @@ export default function Tweets(props) {
 
   useEffect(() => {
     // after login, if there was a pending report tweet
-    if (isLoggedIn && chosenTweet && !openModal) {
+    if (isSignedIn && chosenTweet && !openModal) {
       setOpenModal(true);
     }
-  }, [isLoggedIn, chosenTweet, openModal, setOpenModal]);
+  }, [isSignedIn, chosenTweet, openModal, setOpenModal]);
 
   const onFilterChange = ([category, country, hashtag]) => {
     const fill = { page: 1 };
@@ -97,7 +97,7 @@ export default function Tweets(props) {
   const onReport = (tweet) => {
     dispatch(getReportTweetAdd({ chosenTweet: tweet }));
 
-    if (isLoggedIn) {
+    if (isSignedIn) {
       setOpenModal(true);
     } else {
       dispatch(getShowLoginModal());

@@ -22,7 +22,7 @@ class Tweets extends Component {
             reportingSpam: false,
             showLoginModal: false,
             showPopup: false,
-            isLoggedIn: sessionStorage.getItem('isLoggedIn')
+            isSignedIn: sessionStorage.getItem('isLoggedIn')
         };
 
         this.fetchDataFromAPI = this.fetchDataFromAPI.bind(this);
@@ -39,8 +39,8 @@ class Tweets extends Component {
             && !this.props.spinner) {
             this.showNotification();
         }
-        if(prevProps.isLoggedIn !== this.props.isLoggedIn){
-            this.setState({isLoggedIn: this.props.isLoggedIn});
+        if(prevProps.isSignedIn !== this.props.isSignedIn){
+            this.setState({isSignedIn: this.props.isSignedIn});
         }
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
@@ -73,7 +73,7 @@ class Tweets extends Component {
         }
     }
     reportSpam(id) {
-        if (this.state.isLoggedIn) {
+        if (this.state.isSignedIn) {
             this.setState({ reportingSpam: true });
             this.props.reportSpam(id);
             const removedList = this.state.tweets.filter((item) => item.id !== id);
@@ -83,7 +83,7 @@ class Tweets extends Component {
         }
     }
     hideLoginModal () {
-        this.setState({isLoggedIn: sessionStorage.getItem('isLoggedIn')});
+        this.setState({isSignedIn: sessionStorage.getItem('isLoggedIn')});
         this.setState({ showPopup: false});
         this.setState({showLoginModal: false})
         this.props.setIsLoggedIn();

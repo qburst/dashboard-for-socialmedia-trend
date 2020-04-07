@@ -15,7 +15,7 @@ class Sidebar extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.isLoggedIn !== this.props.isLoggedIn) {
+    if (prevProps.isSignedIn !== this.props.isSignedIn) {
       this.setState({ userName: sessionStorage.getItem("Username") });
     }
   };
@@ -57,7 +57,7 @@ class Sidebar extends Component {
             src={require("../../Images/avatar.png")}
             alt="User Avatar"
           />
-          {this.props.isLoggedIn && <span className="text-white">{this.state.userName}</span>}
+          {this.props.isSignedIn && <span className="text-white">{this.state.userName}</span>}
         </div>
         <div className="sidebar-content">
           <div className="sidebar-user" onClick={() => { this.showAbout() }}>

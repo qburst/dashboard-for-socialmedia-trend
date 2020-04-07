@@ -15,7 +15,7 @@ class Dashboard extends Component {
         this.state = {
             showAboutModal:false,
             showContactModal: false,
-            isLoggedIn: sessionStorage.getItem('isLoggedIn')
+            isSignedIn: sessionStorage.getItem('isLoggedIn')
         }
         this.onLogout = this.onLogout.bind(this);
         this.showAbout = this.showAbout.bind(this);
@@ -38,7 +38,7 @@ class Dashboard extends Component {
     }
     onLogout = () => {
         this.props.logout(this.props.history);
-        this.setState({isLoggedIn: false});
+        this.setState({isSignedIn: false});
     }
 
     showLogin=()=>{
@@ -55,7 +55,7 @@ class Dashboard extends Component {
 
     setIsLoggedIn=()=>{
 		this.setState({
-			isLoggedIn:sessionStorage.getItem('isLoggedIn')
+			isSignedIn:sessionStorage.getItem('isLoggedIn')
 		})
 	}
 
@@ -68,7 +68,7 @@ class Dashboard extends Component {
                         toggleSideBarFunc={this.props.toggleSideBar}
                         onLogout={this.onLogout}
                         showAbout={this.showAbout}
-                        isLoggedIn = { this.state.isLoggedIn }
+                        isSignedIn = { this.state.isSignedIn }
                         showContact = {this.showContact}
                     />
                     <Main
