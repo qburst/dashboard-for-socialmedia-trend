@@ -10,6 +10,7 @@ import Header from "../../Components/Header";
 import Nav from "./components/Nav";
 import Masthead from "../../Components/Masthead";
 import Tweets from "../../Components/Tweets";
+import SigninSignupDialog from "../../Components/SigninSignupDialog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
   },
   scrollToTop: {
-    position: 'fixed',
+    position: "fixed",
     right: theme.spacing(5),
     bottom: theme.spacing(5),
-    zIndex: theme.zIndex['2']
-  }
+    zIndex: theme.zIndex["2"],
+  },
 }));
 
 export const Next = () => {
@@ -41,10 +42,10 @@ export const Next = () => {
 
   const onScrollTop = () => {
     window.scroll({
-      top: 0, 
-      behavior: 'smooth'
+      top: 0,
+      behavior: "smooth",
     });
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -66,6 +67,8 @@ export const Next = () => {
           </Fab>
         </Container>
       </main>
+
+      <SigninSignupDialog />
     </div>
   );
 };

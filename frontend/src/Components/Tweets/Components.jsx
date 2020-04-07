@@ -11,10 +11,16 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 
+import { fetchCategories } from "../../slice/categoriesSlice";
+import {
+  getReportTweetAdd,
+  getReportTweetRemove,
+  fetchTweets,
+  reportTweet,
+} from "../../slice/tweetsSlice";
+import { getShowLoginModal } from "../../slice/sessionSlice";
 import Filters from "../Filters";
 import Tweet, { TweetLoading } from "../Tweet";
-import { fetchCategories } from "../../slice/categoriesSlice";
-import { fetchTweets, reportTweet } from "../../slice/tweetsSlice";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -35,12 +41,11 @@ export default function Tweets(props) {
     hashtag: "",
   });
   const [openModal, setOpenModal] = useState(false);
-  const [chosenTweet, setChosenTweet] = useState();
 
   const dispatch = useDispatch();
-  const { data: { token } } = useSelector((state) => state.session);
+  const { isLoggedIn } = useSelector((state) => state.session);
   const { data: categories } = useSelector((state) => state.categories);
-  const { data, count, loading } = useSelector((state) => state.tweets);
+  const { chosenTweet, data, count, loading } = useSelector((state) => state.tweets);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -48,6 +53,13 @@ export default function Tweets(props) {
   useEffect(() => {
     dispatch(fetchTweets());
   }, [dispatch]);
+
+  useEffect(() => {
+    // after login, if there was a pending report tweet
+    if (isLoggedIn && chosenTweet && !openModal) {
+      setOpenModal(true);
+    }
+  }, [isLoggedIn, chosenTweet, openModal, setOpenModal]);
 
   const onFilterChange = ([category, country, hashtag]) => {
     const fill = { page: 1 };
@@ -82,16 +94,21 @@ export default function Tweets(props) {
     setOpenModal(false);
   };
 
-  const onReport = id => {
-    setOpenModal(true);
-    setChosenTweet(id);
-  }
+  const onReport = (tweet) => {
+    dispatch(getReportTweetAdd({ chosenTweet: tweet }));
+
+    if (isLoggedIn) {
+      setOpenModal(true);
+    } else {
+      dispatch(getShowLoginModal());
+    }
+  };
 
   const onReportConfirm = () => {
     setOpenModal(false);
     dispatch(reportTweet({ id: chosenTweet }));
-    setChosenTweet();
-  }
+    dispatch(getReportTweetRemove());
+  };
 
   const loadingFiller = Array.from({ length: 6 }, (_, i) => (
     <TweetLoading key={i} />
@@ -140,6 +157,7 @@ export default function Tweets(props) {
           Load more tweets
         </Button>
       ) : null}
+
       <Dialog
         open={openModal}
         TransitionComponent={Transition}
@@ -149,9 +167,7 @@ export default function Tweets(props) {
         aria-labelledby="dialog-title"
         aria-describedby="dialog-description"
       >
-        <DialogTitle id="dialog-title">
-          Report tweet
-        </DialogTitle>
+        <DialogTitle id="dialog-title">Report tweet</DialogTitle>
         <DialogContent>
           <DialogContentText id="dialog-description">
             Do you wish to report this tweet as inappropriate?

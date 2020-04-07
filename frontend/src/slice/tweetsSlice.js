@@ -5,6 +5,7 @@ import { showToaster } from "./toasterSlice";
 
 const initialState = {
   count: 0,
+  chosenTweet: null,
   data: [],
   loading: false,
   error: null,
@@ -33,6 +34,12 @@ const tweets = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    getReportTweetAdd(state, action) {
+      state.chosenTweet = action.payload.chosenTweet;
+    },
+    getReportTweetRemove(state) {
+      state.chosenTweet = null;
+    },
     getReportTweetSuccess(state, action) {
       const index = state.data.find((item) => item.id === action.payload.id);
 
@@ -47,6 +54,8 @@ export const {
   getTweetsStart,
   getTweetsSuccess,
   getTweetsFailure,
+  getReportTweetAdd,
+  getReportTweetRemove,
   getReportTweetSuccess,
 } = tweets.actions;
 export default tweets.reducer;

@@ -113,7 +113,7 @@ const Tweet = ({
           <IconButton
             size="small"
             aria-label="report tweet"
-            onClick={() => onReport(id)}
+            onClick={() => onReport({ id, url, text, created_at, hashtags })}
           >
             <ReportIcon />
           </IconButton>

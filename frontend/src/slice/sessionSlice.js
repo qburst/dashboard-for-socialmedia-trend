@@ -6,10 +6,10 @@ import { showToaster } from "./toasterSlice";
 const savedName = localStorage.getItem("session.name");
 const savedToken = localStorage.getItem("session.token");
 const initialState = {
-  data: {
-    name: savedName || "",
-    token: savedToken || "",
-  },
+  name: savedName || "",
+  token: savedToken || "",
+  isLoggedIn: Boolean(savedToken),
+  showLoginModal: false,
   loading: false,
   error: null,
 };
@@ -18,6 +18,12 @@ const session = createSlice({
   name: "session",
   initialState,
   reducers: {
+    getShowLoginModal(state) {
+      state.showLoginModal = true;
+    },
+    getHideLoginModal(state) {
+      state.showLoginModal = false;
+    },
     getSessionStart(state) {
       state.loading = true;
       state.error = null;
@@ -27,12 +33,14 @@ const session = createSlice({
 
       state.name = name;
       state.token = token;
+      state.isLoggedIn = true;
       localStorage.setItem("session.name", name);
       localStorage.setItem("session.token", token);
     },
     getLogoutSuccess(state) {
       state.name = "";
       state.token = "";
+      state.isLoggedIn = false;
       localStorage.removeItem("session.name");
       localStorage.removeItem("session.token");
     },
@@ -48,6 +56,8 @@ const session = createSlice({
 });
 
 export const {
+  getShowLoginModal,
+  getHideLoginModal,
   getSessionStart,
   getLoginSuccess,
   getLogoutSuccess,
