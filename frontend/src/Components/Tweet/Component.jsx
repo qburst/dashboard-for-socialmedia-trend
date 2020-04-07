@@ -12,6 +12,7 @@ import ReportIcon from "@material-ui/icons/Report";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { blue } from "@material-ui/core/colors";
 import Skeleton from "@material-ui/lab/Skeleton";
+import Link from '@material-ui/core/Link';
 import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
@@ -67,7 +68,6 @@ const Tweet = ({
   text,
   created_at,
   hashtags,
-  onOpen,
   onReport,
   onHastagClick,
 }) => {
@@ -114,13 +114,14 @@ const Tweet = ({
           >
             <ReportIcon />
           </IconButton>
-          <IconButton
-            size="small"
-            aria-label="view tweet"
-            onClick={() => onOpen(url)}
-          >
-            <ChevronRightIcon />
-          </IconButton>
+          <Link href={url} rel="noopener noreferrer" target="_blank">
+            <IconButton
+              size="small"
+              aria-label="view tweet"
+            >
+              <ChevronRightIcon />
+            </IconButton>
+          </Link>
         </CardActions>
       </Card>
     </div>

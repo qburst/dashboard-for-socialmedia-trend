@@ -20,7 +20,7 @@ class Tweets extends Component {
             mobileView: false,
             showTweet: true,
             reportingSpam: false,
-            showLoginModal: false,
+            showSignInModal: false,
             showPopup: false,
             isSignedIn: sessionStorage.getItem('isLoggedIn')
         };
@@ -85,7 +85,7 @@ class Tweets extends Component {
     hideLoginModal () {
         this.setState({isSignedIn: sessionStorage.getItem('isLoggedIn')});
         this.setState({ showPopup: false});
-        this.setState({showLoginModal: false})
+        this.setState({showSignInModal: false})
         this.props.setIsLoggedIn();
     }
     handleClick(event) {
@@ -95,9 +95,9 @@ class Tweets extends Component {
         this.fetchDataFromAPI(1);
     }
     getPopupBody(){
-        if(!this.state.showLoginModal){
+        if(!this.state.showSignInModal){
             return (<div>Inorder to report spam you have to login. To login click 
-                <a href="#" onClick={()=>this.setState({showLoginModal: true})}> here</a></div>);
+                <a href="#" onClick={()=>this.setState({showSignInModal: true})}> here</a></div>);
         }
         else{
             return(<LandingPage isLoginModal='true' hideLoginModal={this.hideLoginModal}/>);
@@ -158,7 +158,7 @@ class Tweets extends Component {
                     }
                     <MyVerticallyCenteredModal
                         show={this.state.showPopup}
-                        onHide={() => this.setState({showPopup: false, showLoginModal: false})}
+                        onHide={() => this.setState({showPopup: false, showSignInModal: false})}
                         header="Login"
                         bodyClass="popupBody"
                         body={this.getPopupBody()}

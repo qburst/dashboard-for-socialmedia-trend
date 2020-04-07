@@ -10,7 +10,8 @@ const initialState = {
   token: savedToken || "",
   isSignedIn: Boolean(savedToken),
   isSignedUp: false,
-  showLoginModal: false,
+  showSignInModal: false,
+  showSignUpModal: false,
   loading: false,
 };
 
@@ -18,11 +19,17 @@ const session = createSlice({
   name: "session",
   initialState,
   reducers: {
-    getShowLoginModal(state) {
-      state.showLoginModal = true;
+    getShowSignInModal(state) {
+      state.showSignInModal = true;
+      state.showSignUpModal = false;
     },
-    getHideLoginModal(state) {
-      state.showLoginModal = false;
+    getShowSignUpModal(state) {
+      state.showSignInModal = false;
+      state.showSignUpModal = true;
+    },
+    getHideSessionModal(state) {
+      state.showSignInModal = false;
+      state.showSignUpModal = false;
     },
     getSessionStart(state) {
       state.loading = true;
@@ -52,8 +59,9 @@ const session = createSlice({
 });
 
 export const {
-  getShowLoginModal,
-  getHideLoginModal,
+  getShowSignInModal,
+  getShowSignUpModal,
+  getHideSessionModal,
   getSessionStart,
   getLoginSuccess,
   getLogoutSuccess,
@@ -73,7 +81,7 @@ export const signIn = ({ username, password }) => async (dispatch) => {
     dispatch(getLoginSuccess({ ...response }));
     dispatch(showToaster({ message: `Welcome ${response.name}!` }));
   } catch (error) {
-    const { response: { data = {} } } = error;
+    const { response: { data = {} } = {} } = error;
     const { non_field_errors } = data;
 
     dispatch(
@@ -114,7 +122,7 @@ export const signUp = ({ name, email, password }) => async (dispatch) => {
     dispatch(getSignupSuccess());
     dispatch(showToaster({ message: `Sign up successful!` }));
   } catch (error) {
-    const { response: { data = {} } } = error;
+    const { response: { data = {} } = {} } = error;
     const { email, non_field_errors } = data;
     const field = email || non_field_errors;
 

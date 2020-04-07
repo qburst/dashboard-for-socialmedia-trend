@@ -6,16 +6,26 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/Mail";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
+import OpenInNewIcon from "@material-ui/icons/OpenInNew";
+import HowToRegIcon from "@material-ui/icons/HowToReg";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import CallMadeIcon from "@material-ui/icons/CallMade";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import { deepOrange } from "@material-ui/core/colors";
-import { useSelector } from "react-redux";
+import Link from "@material-ui/core/Link";
+import { Typography } from "@material-ui/core";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  getShowSignInModal,
+  getShowSignUpModal,
+  logout,
+} from "../../slice/sessionSlice";
 
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
-    width: 250,
+    width: 300,
   },
   avatar: {
     color: theme.palette.getContrastText(deepOrange[500]),
@@ -24,11 +34,15 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(10),
   },
   user: {
-    width: '100%',
+    width: "100%",
     height: theme.spacing(30),
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    flexFlow: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  name: {
+    marginTop: theme.spacing(2)
   }
 }));
 
@@ -39,6 +53,7 @@ const propTypes = {
 const Nav = ({ open, onToggleDrawer }) => {
   const classes = useStyles();
 
+  const dispatch = useDispatch();
   const { isSignedIn, name } = useSelector((state) => state.session);
 
   const drawer = (
@@ -49,31 +64,61 @@ const Nav = ({ open, onToggleDrawer }) => {
     >
       <div className={classes.user}>
         <Avatar className={classes.avatar}>
-          {isSignedIn ? name[0].toUppercase() : "U"}
+          {isSignedIn ? name[0].toUpperCase() : "U"}
         </Avatar>
-        <span>{name}</span>
+        {isSignedIn ? <Typography variant="body1" className={classes.name}>{name}</Typography> : null}
       </div>
       <Divider />
       <List>
-        {["Sign in", "Sign up"].map((text, index) => (
-          <ListItem button key={text}>
+        {!isSignedIn ? (
+          <>
+            <ListItem
+              button
+              onClick={() => {
+                dispatch(getShowSignUpModal());
+              }}
+            >
+              <ListItemIcon>
+                <HowToRegIcon />
+              </ListItemIcon>
+              <ListItemText primary="Sign up" />
+            </ListItem>
+            <ListItem
+              button
+              onClick={() => {
+                dispatch(getShowSignInModal());
+              }}
+            >
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Sign in" />
+            </ListItem>
+          </>
+        ) : (
+          <ListItem
+            button
+            onClick={() => {
+              dispatch(logout());
+            }}
+          >
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              <CallMadeIcon />
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemText primary="Logout" />
           </ListItem>
-        ))}
+        )}
       </List>
       <Divider />
       <List>
-        {["WHO"].map((text, index) => (
-          <ListItem button key={text}>
+        <Link href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019" rel="noopener noreferrer" target="_blank">
+          <ListItem button>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              <OpenInNewIcon />
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemText primary="WHO COVID-19" />
           </ListItem>
-        ))}
+        </Link>
       </List>
     </div>
   );

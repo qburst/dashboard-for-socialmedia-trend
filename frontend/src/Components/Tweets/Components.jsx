@@ -18,7 +18,7 @@ import {
   fetchTweets,
   reportTweet,
 } from "../../slice/tweetsSlice";
-import { getShowLoginModal } from "../../slice/sessionSlice";
+import { getShowSignInModal } from "../../slice/sessionSlice";
 import Filters from "../Filters";
 import Tweet, { TweetLoading } from "../Tweet";
 
@@ -101,10 +101,6 @@ export default function Tweets(props) {
     dispatch(fetchTweets({ ...fill }));
   };
 
-  const onOpen = (url) => {
-    window.open(url, "_blank");
-  };
-
   const onCancelReport = () => {
     setOpenModal(false);
   };
@@ -115,7 +111,7 @@ export default function Tweets(props) {
     if (isSignedIn) {
       setOpenModal(true);
     } else {
-      dispatch(getShowLoginModal());
+      dispatch(getShowSignInModal());
     }
   };
 
@@ -148,7 +144,6 @@ export default function Tweets(props) {
                 key={item.id}
                 {...item}
                 onHastagClick={onHastagClick}
-                onOpen={onOpen}
                 onReport={onReport}
               />
             ))}

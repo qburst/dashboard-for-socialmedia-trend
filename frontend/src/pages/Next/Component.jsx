@@ -16,11 +16,9 @@ import Nav from "../../Components/Nav";
 import Masthead from "../../Components/Masthead";
 import Tweets from "../../Components/Tweets";
 import SigninSignupDialog from "../../Components/SigninSignupDialog";
+import Footer from '../../Components/Footer';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
   toolbar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
@@ -68,7 +66,7 @@ export const Next = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <div>
       <CssBaseline />
       <Header onToggleDrawer={onToggleDrawer} />
       <Nav open={showDrawer} onToggleDrawer={onToggleDrawer} />
@@ -87,6 +85,7 @@ export const Next = () => {
           </Fab>
         </Container>
       </main>
+      <Footer />
 
       <SigninSignupDialog />
 

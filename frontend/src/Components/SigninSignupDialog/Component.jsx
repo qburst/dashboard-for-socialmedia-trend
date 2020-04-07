@@ -15,7 +15,13 @@ import CloseIcon from "@material-ui/icons/Close";
 import { useSelector, useDispatch } from "react-redux";
 
 import { showToaster } from "../../slice/toasterSlice";
-import { getHideLoginModal, signIn, signUp } from "../../slice/sessionSlice";
+import {
+  getHideSessionModal,
+  getShowSignInModal,
+  getShowSignUpModal,
+  signIn,
+  signUp,
+} from "../../slice/sessionSlice";
 import { getReportTweetRemove } from "../../slice/tweetsSlice";
 import { useEffect } from "react";
 
@@ -67,12 +73,15 @@ const SigninSignupDialog = () => {
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   const dispatch = useDispatch();
-  const { showLoginModal, isSignedIn, isSignedUp } = useSelector(
-    (state) => state.session
-  );
   const { chosenTweet } = useSelector((state) => state.tweets);
+  const {
+    showSignInModal,
+    showSignUpModal,
+    isSignedIn,
+    isSignedUp,
+  } = useSelector((state) => state.session);
 
-  const [showSignup, setShowSignup] = useState(false);
+  // const [showSignup, setShowSignup] = useState(showModal ? showSignUpModal : false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -80,21 +89,22 @@ const SigninSignupDialog = () => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (showLoginModal && isSignedIn) {
-      dispatch(getHideLoginModal());
+    if (showSignInModal && isSignedIn) {
+      dispatch(getHideSessionModal());
     }
 
-    if (showLoginModal && isSignedUp) {
-      setShowSignup(false);
+    if (showSignUpModal && isSignedUp) {
       setPassword("");
+
+      dispatch(getShowSignInModal());
       setTimeout(() => {
         dispatch(showToaster({ message: "Please sign in to continue" }));
       }, 1000);
     }
-  }, [showLoginModal, isSignedIn, isSignedUp, dispatch]);
+  }, [showSignInModal, isSignedIn, showSignUpModal, isSignedUp, dispatch]);
 
   const onHide = () => {
-    dispatch(getHideLoginModal());
+    dispatch(getHideSessionModal());
     dispatch(getReportTweetRemove());
   };
 
@@ -124,7 +134,7 @@ const SigninSignupDialog = () => {
 
     const errors = {};
 
-    if (showSignup && !name) {
+    if (showSignUpModal && !name) {
       errors.name = "Please provide your name";
     }
 
@@ -136,12 +146,12 @@ const SigninSignupDialog = () => {
 
     if (!password) {
       errors.password = "Please provide your password";
-    } else if (showSignup && !PASSWORD_REGEX.test(password)) {
+    } else if (showSignUpModal && !PASSWORD_REGEX.test(password)) {
       errors.password =
         "Please choose a stronger password. At least 8 characters, uppercase and lowercase letters, numbers and symbols";
     }
 
-    if (showSignup && password && password !== confirmPassword) {
+    if (showSignUpModal && password && password !== confirmPassword) {
       errors.confirmPassword = "Please make sure the passwords match";
     }
 
@@ -150,7 +160,7 @@ const SigninSignupDialog = () => {
     if (Object.keys(errors).length) {
       dispatch(showToaster({ message: "Please fix the form errors" }));
     } else {
-      if (showSignup) {
+      if (showSignUpModal) {
         dispatch(signUp({ name, email, password }));
       } else {
         dispatch(signIn({ username: email, password }));
@@ -161,7 +171,7 @@ const SigninSignupDialog = () => {
   return (
     <Dialog
       fullScreen={fullScreen}
-      open={showLoginModal}
+      open={showSignInModal || showSignUpModal}
       TransitionComponent={Transition}
       onClose={onHide}
       aria-labelledby="dialog-title"
@@ -169,7 +179,7 @@ const SigninSignupDialog = () => {
       className={classes.root}
     >
       <DialogTitle id="dialog-title">
-        {showSignup ? "Sign up" : "Sign in"}
+        {showSignUpModal ? "Sign up" : "Sign in"}
         <IconButton
           aria-label="close"
           className={classes.closeButton}
@@ -180,10 +190,12 @@ const SigninSignupDialog = () => {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="dialog-description" className={classes.message}>
-          {chosenTweet ? 'You need to sign in order to report a tweet' : 'You can report tweets as abusive with account'}
+          {chosenTweet
+            ? "You need to sign in order to report a tweet"
+            : "You can report tweets as abusive with account"}
         </DialogContentText>
         <form onSubmit={onSubmit} className={classes.content}>
-          {showSignup ? (
+          {showSignUpModal ? (
             <TextField
               autoFocus
               variant="outlined"
@@ -219,7 +231,7 @@ const SigninSignupDialog = () => {
             error={Boolean(errors.password)}
             helperText={errors.password}
           />
-          {showSignup ? (
+          {showSignUpModal ? (
             <TextField
               variant="outlined"
               type="password"
@@ -233,11 +245,11 @@ const SigninSignupDialog = () => {
             />
           ) : null}
           <div className={classes.formActions}>
-            {showSignup ? (
+            {showSignUpModal ? (
               <Button
                 onClick={() => {
-                  setShowSignup(false);
                   setErrors({});
+                  dispatch(getShowSignInModal());
                 }}
                 color="primary"
                 className={classes.switch}
@@ -248,8 +260,8 @@ const SigninSignupDialog = () => {
             ) : (
               <Button
                 onClick={() => {
-                  setShowSignup(true);
                   setErrors({});
+                  dispatch(getShowSignUpModal());
                 }}
                 color="primary"
                 className={classes.switch}
@@ -258,7 +270,7 @@ const SigninSignupDialog = () => {
                 Create account
               </Button>
             )}
-            {showSignup ? (
+            {showSignUpModal ? (
               <Button
                 disableElevation
                 variant="contained"
