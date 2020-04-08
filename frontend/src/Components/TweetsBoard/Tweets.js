@@ -5,6 +5,8 @@ import Icon from '@material-ui/core/Icon';
 import { REPORT_SPAM, FETCH_TWEET_DATA, FETCH_TWEET_DATA_CATEGORY_WISE } from '../../Actions/Actions';
 import { NotificationManager } from 'react-notifications';
 import '../../Components/Main/Main.css';
+import MyVerticallyCenteredModal from '../Popup/Popup';
+import  LandingPage  from '../LandingPage/LandingPage';
 import './Tweets.css';
 import "bootstrap-less";
 
@@ -18,10 +20,13 @@ class Tweets extends Component {
             mobileView: false,
             showTweet: true,
             reportingSpam: false,
+            showLoginModal: false,
+            showPopup: false,
             isLoggedIn: sessionStorage.getItem('isLoggedIn')
         };
 
         this.fetchDataFromAPI = this.fetchDataFromAPI.bind(this);
+        this.hideLoginModal = this.hideLoginModal.bind(this);
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.category !== this.props.category) {
@@ -33,6 +38,9 @@ class Tweets extends Component {
         if (prevProps.isSpamReportedSuccess !== this.props.isSpamReportedSuccess && this.state.reportingSpam
             && !this.props.spinner) {
             this.showNotification();
+        }
+        if(prevProps.isLoggedIn !== this.props.isLoggedIn){
+            this.setState({isLoggedIn: this.props.isLoggedIn});
         }
         window.addEventListener("resize", this.resize.bind(this));
         this.resize();
@@ -65,16 +73,35 @@ class Tweets extends Component {
         }
     }
     reportSpam(id) {
-        this.setState({ reportingSpam: true });
-        this.props.reportSpam(id);
-        const removedList = this.state.tweets.filter((item) => item.id !== id);
-        this.setState({ tweets: removedList });
+        if (this.state.isLoggedIn) {
+            this.setState({ reportingSpam: true });
+            this.props.reportSpam(id);
+            const removedList = this.state.tweets.filter((item) => item.id !== id);
+            this.setState({ tweets: removedList });
+        }else{
+            this.setState({ showPopup: true});
+        }
+    }
+    hideLoginModal () {
+        this.setState({isLoggedIn: sessionStorage.getItem('isLoggedIn')});
+        this.setState({ showPopup: false});
+        this.setState({showLoginModal: false})
+        this.props.setIsLoggedIn();
     }
     handleClick(event) {
         this.setState({ showTweet: !this.state.showTweet });
     }
     refreshTweets() {
         this.fetchDataFromAPI(1);
+    }
+    getPopupBody(){
+        if(!this.state.showLoginModal){
+            return (<div>Inorder to report spam you have to login. To login click 
+                <a href="#" onClick={()=>this.setState({showLoginModal: true})}> here</a></div>);
+        }
+        else{
+            return(<LandingPage isLoginModal='true' hideLoginModal={this.hideLoginModal}/>);
+        }
     }
     render() {
         return (
@@ -92,7 +119,11 @@ class Tweets extends Component {
                             <div class="twitter_tweets__content">
                                 <div class="twitter_tweets__meta text-mutes">
                                     <span class="badge" style={{ float: "left" }}>Posted on{" "}
-                                    <span class="text-mutes"> - {new Date(tweet.created_at).toLocaleDateString()}</span>
+                                        <span class="text-mutes"> - {new Intl.DateTimeFormat("en-GB", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "2-digit"
+                                        }).format(new Date(tweet.created_at))}</span>
                                     </span>
                                     <span class="badge" style={{ float: "right" }}>
                                     <span class="text-mutes">{new Date(tweet.created_at).toLocaleTimeString()}</span>
@@ -101,12 +132,12 @@ class Tweets extends Component {
                                 <p class="m-0 my-1 mb-2 text-muted">{tweet.text}</p>
                                 <div class="blog-comments__actions">
                                     <div class="btn-group-sm btn-group">
-                                        <button type="button" hidden={!this.state.isLoggedIn} onClick={() => this.reportSpam(tweet.id)} class="btn btn-danger">
-                                            <span class="text-white"><Icon class="material-icons">clear</Icon></span>
+                                        <button type="button" onClick={() => this.reportSpam(tweet.id)} class="btn btn-danger">
+                                            <span class="text-white"><i class="fa fa-times-circle icons"></i></span>
                                             Report Spam
                                         </button>
-                                        <button type="button" onClick={event => window.location.href = tweet.url} class="btn btn-primary">
-                                            <span class="text-white"><Icon class="material-icons">link</Icon></span>
+                                        <button type="button" onClick={event => window.open(tweet.url,'_blank')} target="_blank" class="btn btn-primary">
+                                            <span class="text-white"><i class="fa fa-twitter icons"></i></span>
                                             Go To
                                         </button>
                                     </div>
@@ -123,7 +154,15 @@ class Tweets extends Component {
                         onChange={this.fetchDataFromAPI}
                         itemClass="page-item"
                         linkClass="page-link"
-                    />}
+                    />
+                    }
+                    <MyVerticallyCenteredModal
+                        show={this.state.showPopup}
+                        onHide={() => this.setState({showPopup: false, showLoginModal: false})}
+                        header="Login"
+                        bodyClass="popupBody"
+                        body={this.getPopupBody()}
+                    />
                 </div>
             </div>)
     }

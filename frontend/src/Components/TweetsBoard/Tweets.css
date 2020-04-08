@@ -31,9 +31,8 @@
     font-size: 0.75rem;
     width: 7rem;
 }
-.material-icons{
-    vertical-align: bottom;
-    font-size: 1rem;
+.icons{
+    padding: 0 5px;
 }
 .expand-icon{
     position: absolute;
@@ -49,4 +48,7 @@
 }
 .badge{
     padding: 0rem;
+}
+.popupBody{
+    text-align: center;
 }

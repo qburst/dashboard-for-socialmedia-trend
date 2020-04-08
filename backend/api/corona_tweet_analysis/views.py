@@ -3,11 +3,11 @@ from json import loads
 from django.shortcuts import render
 from corona_tweet_analysis.utils.base_view import BaseViewManager
 from corona_tweet_analysis.utils.responses import send_response
-from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST, UNAUTHORIZED
 from corona_tweet_analysis.models import TwitterData, Category, CoronaReport, UserHashtag
+from corona_tweet_analysis.utils.constants import SUCCESS, FAIL, INVALID_PARAMETERS, BAD_REQUEST, UNAUTHORIZED, COUNTRIES
 from corona_tweet_analysis import serializers
 from rest_framework.authentication import TokenAuthentication
-from rest_framework import permissions, generics
+from rest_framework import permissions, generics, views
 from rest_framework.response import Response
 from corona_tweet_analysis.serializers import TwitterDataSerializer, CategorySerializer, UserHashtagSerializer
 from rest_framework import filters
@@ -62,12 +62,20 @@ class TwitterDataView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         category = request.query_params.get('category')
+        country = request.query_params.get('country')
+        if country:
+            if country.lower() not in COUNTRIES:
+                return send_response({'status': INVALID_PARAMETERS, 'message': 'Country not found'})
         if category:
             category_obj = Category.objects(_id=category).first()
             if not category_obj:
                 return send_response({'status': INVALID_PARAMETERS, 'message':'Category not found'})
-            else:
-                self.queryset = self.queryset(category=category).order_by('-created_at', '-_id')
+        if category and country:
+            self.queryset = self.queryset(category=category, country=country.lower()).order_by('-created_at', '-_id')
+        elif category:
+            self.queryset = self.queryset(category=category).order_by('-created_at', '-_id')
+        elif country:
+            self.queryset = self.queryset(country=country.lower()).order_by('-created_at', '-_id')
         return super().get(request, *args, **kwargs)
 
 
@@ -139,3 +147,9 @@ class UserHashtagView(generics.ListCreateAPIView):
     http_method_names = ['get']
     filter_backends = (filters.SearchFilter,)
     search_fields = ('hashtag',)
+
+
+class ListCountries(views.APIView):
+    def get(self, request, format=None):
+        return Response({'countries': COUNTRIES})
+

@@ -2,8 +2,8 @@ import datetime
 import mongoengine
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from mongoengine import fields, DynamicDocument, EmbeddedDocument, StringField, DateTimeField, IntField
 from djongo import models
+from mongoengine import fields, DynamicDocument, EmbeddedDocument, StringField, DateTimeField, IntField, DynamicEmbeddedDocument
 
 
 class Category(DynamicDocument):
@@ -11,8 +11,14 @@ class Category(DynamicDocument):
     created_at = fields.DateTimeField(default=datetime.datetime.now)
 
 
+class User(DynamicEmbeddedDocument):
+    name = fields.StringField(required=True)
+    profile_image_url_https = fields.StringField(required=True)
+
+
 class TwitterData(DynamicDocument):
     text = fields.StringField(required=True)
+    user = fields.EmbeddedDocumentField(User)
     country = fields.ListField(fields.StringField(),default=list)
     created_at = fields.DateTimeField(default=datetime.datetime.now)
     category = fields.ListField(fields.StringField(), default=list)

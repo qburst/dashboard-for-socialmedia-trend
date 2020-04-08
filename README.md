@@ -1,20 +1,10 @@
-# Data Analysis Platform
+# Social Data Analysis Platform
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 Currently crunching twitter data and transforming that to several categories and using a web platform to show the data to the world. 
 
-# Finding Solutions to Fight Corona Problems:
-
-* Too much data coming in twitter stream
-* Categorizing the data:
-    * Corona Positive Tweets(Recovery cases, New Policy to avoid Corona, Trials Success) vs Negative Tweets(New Corona Case Reported, More patients dead, Spread to new area)
-    * Corona Supply Request(We need to identify supply shortages in area)
-    * Corona Notice(Major announcements)
-* Country based categorisation:
-
-    * Will have further drilled down with following:
-        * Death
-        * Recovery
-        * New Case
-        * Reoccurrence
+It's inspired by COVID-19, but can be used for any trending topic's dashboard
 
 
 ## Implementation Plan:
@@ -24,12 +14,38 @@ Currently crunching twitter data and transforming that to several categories and
 Visualization of the Data on DB using a web platform
 * Implement a user login based platform where users could request for additional twitter tags from which we need to pull data.
 * Generate statistics based on the above data.
-* Will visualize statistics in the later phase into a dashboard like this
+* Will visualize statistics in the later phase.
 
 # Web Platform Technologies considered:
-* Django/Flask
-* Angular based frontend and backend using DRF
+* Django based API Implementation.
+* React based frontend.
+
+## Contribution Guidelines
+
+Check out [here](https://github.com/qburst/dashboard-for-socialmedia-trend/blob/master/CONTRIBUTING.md) for our contribution guidelines.
 
 ## Block Diagram
 
 ![Block Diagram](backend/api/static/images/blockdiagram.jpg)
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/Bhavyalakshmi95"><img src="https://avatars1.githubusercontent.com/u/62279569?v=4" width="100px;" alt=""/><br /><sub><b>Bhavyalakshmi95</b></sub></a><br /><a href="#design-Bhavyalakshmi95" title="Design">🎨</a></td>
+    <td align="center"><a href="https://github.com/chandan-urs"><img src="https://avatars3.githubusercontent.com/u/43086966?v=4" width="100px;" alt=""/><br /><sub><b>chandan-urs</b></sub></a><br /><a href="https://github.com/qburst/dashboard-for-socialmedia-trend/commits?author=chandan-urs" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/joannjacob"><img src="https://avatars3.githubusercontent.com/u/38246378?v=4" width="100px;" alt=""/><br /><sub><b>joannjacob</b></sub></a><br /><a href="https://github.com/qburst/dashboard-for-socialmedia-trend/commits?author=joannjacob" title="Code">💻</a></td>
+    <td align="center"><a href="https://jino.work"><img src="https://avatars1.githubusercontent.com/u/13327976?v=4" width="100px;" alt=""/><br /><sub><b>Jino Jossy</b></sub></a><br /><a href="#platform-jinojossy93" title="Packaging/porting to new platform">📦</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
