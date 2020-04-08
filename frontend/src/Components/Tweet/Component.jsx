@@ -12,7 +12,7 @@ import ReportIcon from "@material-ui/icons/Report";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { blue } from "@material-ui/core/colors";
 import Skeleton from "@material-ui/lab/Skeleton";
-import Link from '@material-ui/core/Link';
+import Link from "@material-ui/core/Link";
 import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
@@ -70,6 +70,7 @@ const Tweet = ({
   hashtags,
   onReport,
   onHastagClick,
+  user,
 }) => {
   const classes = useStyles();
 
@@ -78,12 +79,16 @@ const Tweet = ({
       <Card variant="outlined" className={classes.card}>
         <CardHeader
           avatar={
-            <Avatar aria-label="user" className={classes.avatar}>
-              T
+            <Avatar
+              aria-label={user.name}
+              className={classes.avatar}
+              src={user.profile_image_url_https}
+            >
+              {user.name[0].toUpperCase()}
             </Avatar>
           }
-          title="Twitter user"
-          subheader="@t_user"
+          title={user.name}
+          subheader={`@${user.name.replace(' ', '')}`}
         />
         <CardContent className={classes.contentRoot}>
           <Typography
@@ -115,10 +120,7 @@ const Tweet = ({
             <ReportIcon />
           </IconButton>
           <Link href={url} rel="noopener noreferrer" target="_blank">
-            <IconButton
-              size="small"
-              aria-label="view tweet"
-            >
+            <IconButton size="small" aria-label="view tweet">
               <ChevronRightIcon />
             </IconButton>
           </Link>

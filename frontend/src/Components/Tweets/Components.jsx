@@ -11,7 +11,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 
-import { fetchCategories } from "../../slice/categoriesSlice";
 import {
   getReportTweetAdd,
   getReportTweetRemove,
@@ -52,23 +51,19 @@ export default function Tweets(props) {
   const classes = useStyles();
   const [filters, setFilter] = useState({
     page: 1,
-    category: "",
-    country: "",
-    hashtag: "",
+    category: null,
+    country: null,
+    hashtag: null,
   });
   const [openModal, setOpenModal] = useState(false);
 
   const dispatch = useDispatch();
   const { isSignedIn } = useSelector((state) => state.session);
-  const { data: categories } = useSelector((state) => state.categories);
   const { chosenTweet, data, count, loading } = useSelector(
     (state) => state.tweets
   );
   const [searchSuggestion, setSearchSuggestion] = useState([]);
 
-  useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
   useEffect(() => {
     dispatch(fetchTweets());
   }, [dispatch]);
@@ -85,7 +80,7 @@ export default function Tweets(props) {
 
     if (category) fill.category = category._id;
     if (country) fill.country = country.label;
-    if (hashtag) fill.hashtag = hashtag.id;
+    if (hashtag) fill.hashtag = hashtag.label;
 
     setFilter(fill);
     dispatch(fetchTweets({ ...fill }));
@@ -133,9 +128,8 @@ export default function Tweets(props) {
   return (
     <Paper className={classes.root} elevation={2}>
       <Filters
-        categories={categories}
         searchSuggestion={searchSuggestion}
-        searchSelected={{ name: filters.hashtag }}
+        searchSelected={filters.hashtag}
         searchLoading={false}
         onSearch={console.log}
         onFilterChange={onFilterChange}

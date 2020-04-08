@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,9 +16,10 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 import throttle from "lodash.throttle";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { countries } from "./constants";
+import { fetchCategories } from "../../slice/categoriesSlice";
+import { fetchCountries} from "../../slice/countriesSlice";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -53,7 +54,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Filters = ({
-  categories,
   searchSuggestion,
   searchSelected,
   searchLoading,
@@ -62,16 +62,23 @@ const Filters = ({
 }) => {
   const classes = useStyles();
 
+  const dispatch = useDispatch();
   const [openAsyncAuto, setOpenAsyncAuto] = useState(false);
-
   const [choosenCategory, setChoosenCategory] = useState(null);
   const [choosenCountry, setChoosenCountry] = useState(null);
-  const [choosenHash, setChoosenHash] = useState(searchSelected || null);
+  const [choosenHash, setChoosenHash] = useState(searchSelected ? { label: searchSelected } : null);
   const [openModal, setOpenModal] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
+  const { data: categories } = useSelector((state) => state.categories);
+  const { data: countries } = useSelector((state) => state.countries);
   const { loading } = useSelector((state) => state.tweets);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+    dispatch(fetchCountries());
+  }, [dispatch]);
 
   const cleanCaterogy = (category) => {
     const replace = category._id.replace(/_/g, " ");
@@ -114,7 +121,7 @@ const Filters = ({
       onFilterChange([choosenCategory, null, choosenHash]);
     }
     if (type === "hash") {
-      onFilterChange(null);
+      setChoosenHash(null);
       onFilterChange([choosenCategory, choosenCountry, null]);
     }
   };
@@ -138,7 +145,7 @@ const Filters = ({
           value={choosenCategory}
           onChange={(e, value, reason) => {
             setChoosenCategory(value);
-            onFilterChange([value, choosenCountry, choosenHash]);
+            !openModal && onFilterChange([value, choosenCountry, choosenHash]);
           }}
           disabled={loading}
         />
@@ -173,9 +180,9 @@ const Filters = ({
           value={choosenCountry}
           onChange={(e, value, reason) => {
             setChoosenCountry(value);
-            onFilterChange([choosenCategory, value, choosenHash]);
+            !openModal && onFilterChange([choosenCategory, value, choosenHash]);
           }}
-          disabled={true}
+          disabled={loading}
         />
       </Grid>
     </>
@@ -194,8 +201,8 @@ const Filters = ({
         onClose={() => {
           setOpenAsyncAuto(false);
         }}
-        getOptionSelected={(option, value) => option.name === value.name}
-        getOptionLabel={(option) => option.name}
+        getOptionSelected={(option, value) => option.label === value.label}
+        getOptionLabel={(option) => option.label}
         options={searchSuggestion}
         loading={searchLoading}
         renderInput={(params) => (
@@ -222,9 +229,9 @@ const Filters = ({
         value={choosenHash}
         onChange={(e, value, reason) => {
           setChoosenHash(value);
-          onFilterChange([choosenCategory, choosenCountry, value]);
+          !openModal && onFilterChange([choosenCategory, choosenCountry, value]);
         }}
-        disabled={true}
+        disabled={loading}
       />
     </>
   );
@@ -251,6 +258,8 @@ const Filters = ({
     </>
   );
 
+  console.log(choosenHash, Boolean(choosenHash));
+
   return (
     <Grid
       container
@@ -263,7 +272,7 @@ const Filters = ({
         <Grid item md={6}>
           <div className={classes.filterChips}>
             <div>Filters:</div>
-            {choosenCategory ? (
+            {Boolean(choosenCategory) ? (
               <Chip
                 label={cleanCaterogy(choosenCategory)}
                 color="primary"
@@ -271,7 +280,7 @@ const Filters = ({
                 onDelete={onRemove("category")}
               />
             ) : null}
-            {choosenCountry ? (
+            {Boolean(choosenCountry) ? (
               <Chip
                 label={choosenCountry.label}
                 color="primary"
@@ -279,9 +288,9 @@ const Filters = ({
                 onDelete={onRemove("country")}
               />
             ) : null}
-            {choosenHash ? (
+            {Boolean(choosenHash) ? (
               <Chip
-                label={choosenHash}
+                label={choosenHash.id + 'a'}
                 color="primary"
                 size="small"
                 onDelete={onRemove("hash")}
