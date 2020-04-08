@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import "./App.css";
-import { BrowserRouter as Router, Switch} from 'react-router-dom';
-import Route from 'react-router-dom/Route';
-import Dashboard from './Components/Dashboard/Dashboard';
-import LandingPage from './Components/LandingPage/LandingPage'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
 
 class App extends Component {
   render() {
@@ -11,15 +8,17 @@ class App extends Component {
       <Router>
         <div className="App">
           <Switch>
-            <Route path="/" exact component = { Dashboard }/>
-            <Route path="/login" exact component = { LandingPage }/>
-            <Route path="*" exact component = { Dashboard }/>
+            <Route path="/">
+              <Dashboard />
+            </Route>
+            <Route path="*">
+              <Dashboard />
+            </Route>
           </Switch>
         </div>
       </Router>
     );
   }
 }
-
 
 export default App;
