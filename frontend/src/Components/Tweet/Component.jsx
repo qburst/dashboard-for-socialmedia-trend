@@ -103,7 +103,7 @@ const Tweet = ({
                 size="small"
                 key={h}
                 className={classes.hashLinks}
-                onClick={() => onHastagClick({ id: h })}
+                onClick={() => onHastagClick(h)}
               >{`#${h}`}</Button>
             ))}
           </Typography>

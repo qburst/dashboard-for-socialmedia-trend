@@ -6,6 +6,7 @@ import countReducer from '../slice/countSlice';
 import sessionReducer from '../slice/sessionSlice';
 import toasterReducer from '../slice/toasterSlice';
 import tweetsReducer from '../slice/tweetsSlice';
+import hashtagsReducer from '../slice/hashtagsSlice';
 
 
 const rootReducer = combineReducers({
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   session: sessionReducer,
   toaster: toasterReducer,
   tweets: tweetsReducer,
+  hashtags: hashtagsReducer,
 })
 
 export default rootReducer

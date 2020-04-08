@@ -28,6 +28,7 @@ export default countries.reducer;
 export const fetchCountries = () => async (dispatch) => {
   try {
     dispatch(getCountriesStart());
+
     const response = await api.get("/countries");
     const countries = countryList.filter((item) =>
       response.countries.includes(item.label.toLowerCase())
