@@ -64,6 +64,7 @@ export default function Tweets(props) {
   const { chosenTweet, data, count, loading } = useSelector(
     (state) => state.tweets
   );
+  const [searchSuggestion, setSearchSuggestion] = useState([]);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -93,6 +94,7 @@ export default function Tweets(props) {
   const onHastagClick = ({ id }) => {
     const fill = { ...filters, page: 1, hashtag: id };
 
+    setSearchSuggestion([{ id, name: id }])
     setFilter(fill);
     dispatch(fetchTweets({ ...fill }));
   };
@@ -132,12 +134,11 @@ export default function Tweets(props) {
     <Paper className={classes.root} elevation={2}>
       <Filters
         categories={categories}
-        searchSuggestion={[]}
-        searchSelected={filters.hashtag}
+        searchSuggestion={searchSuggestion}
+        searchSelected={{ name: filters.hashtag }}
         searchLoading={false}
         onSearch={console.log}
         onFilterChange={onFilterChange}
-        disabled={false}
       />
       <div className={classes.wrapper}>
         {data.length ? (

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://api.covid-dashboard.qburst.build",
+  baseURL: "https://api.covid-dashboard.qburst.build",
   timeout: 5000,
 });
 

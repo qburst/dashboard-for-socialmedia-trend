@@ -23,7 +23,7 @@ const categories = createSlice({
     },
     getCategoriesFailure(state, action) {
       state.loading = false;
-      state.error = action.payload;
+      state.error = action.payload.error;
     },
   },
 });
@@ -45,7 +45,7 @@ export const fetchCategories = () => async (
     dispatch(
       getCategoriesSuccess({ data: response.results })
     );
-  } catch (err) {
-    dispatch(getCategoriesFailure(err));
+  } catch ({ error }) {
+    dispatch(getCategoriesFailure({ error }));
   }
 };

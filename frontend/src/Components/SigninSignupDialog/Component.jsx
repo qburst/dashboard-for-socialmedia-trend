@@ -81,7 +81,6 @@ const SigninSignupDialog = () => {
     isSignedUp,
   } = useSelector((state) => state.session);
 
-  // const [showSignup, setShowSignup] = useState(showModal ? showSignUpModal : false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

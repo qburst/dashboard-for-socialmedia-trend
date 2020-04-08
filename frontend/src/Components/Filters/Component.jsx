@@ -16,6 +16,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 import throttle from "lodash.throttle";
+import { useSelector } from "react-redux";
 
 import { countries } from "./constants";
 
@@ -58,7 +59,6 @@ const Filters = ({
   searchLoading,
   onSearch,
   onFilterChange,
-  disabled,
 }) => {
   const classes = useStyles();
 
@@ -70,6 +70,8 @@ const Filters = ({
   const [openModal, setOpenModal] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
+
+  const { loading } = useSelector((state) => state.tweets);
 
   const cleanCaterogy = (category) => {
     const replace = category._id.replace(/_/g, " ");
@@ -138,7 +140,7 @@ const Filters = ({
             setChoosenCategory(value);
             onFilterChange([value, choosenCountry, choosenHash]);
           }}
-          disabled={disabled}
+          disabled={loading}
         />
       </Grid>
       <Grid item xs={12} md={6}>

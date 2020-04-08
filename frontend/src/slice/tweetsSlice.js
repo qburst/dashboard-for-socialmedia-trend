@@ -32,7 +32,7 @@ const tweets = createSlice({
     },
     getTweetsFailure(state, action) {
       state.loading = false;
-      state.error = action.payload;
+      state.error = action.payload.error;
     },
     getReportTweetAdd(state, action) {
       state.chosenTweet = action.payload.chosenTweet;
@@ -87,8 +87,9 @@ export const fetchTweets = ({
       })
     );
     dispatch(showToaster({ message: "Tweets loaded successfully" }));
-  } catch (err) {
-    dispatch(getTweetsFailure(err));
+  } catch ({ error }) {
+    dispatch(getTweetsFailure({ error }));
+    dispatch(showToaster({ message: `Unable to load tweets for ${category.toLowerCase()}` }));
   }
 };
 
