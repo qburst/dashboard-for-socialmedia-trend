@@ -20,7 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { fetchCategories } from "../../slice/categoriesSlice";
 import { fetchCountries } from "../../slice/countriesSlice";
-import { fetchHashtags } from  "../../slice/hashtagsSlice";
+import { fetchHashtags } from "../../slice/hashtagsSlice";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -55,10 +55,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Filters = ({
-  searchSuggestion,
-  searchSelected,
-  searchLoading,
-  onSearch,
+  selectedHashtag,
+  onClearSelectedHashtag,
   onFilterChange,
 }) => {
   const classes = useStyles();
@@ -68,18 +66,19 @@ const Filters = ({
 
   const [openHashtags, setOpenHashtags] = useState(false);
   const [hashtagOptions, setHashtagOptions] = useState([]);
-  const loading1 = openHashtags && hashtagOptions.length === 0;
-  
+
   const [choosenCategory, setChoosenCategory] = useState(null);
   const [choosenCountry, setChoosenCountry] = useState(null);
-  const [choosenHash, setChoosenHash] = useState(searchSelected ? { label: searchSelected } : null);
+  const [choosenHash, setChoosenHash] = useState(null);
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   const { data: categories } = useSelector((state) => state.categories);
   const { data: countries } = useSelector((state) => state.countries);
-  const { data: hashtags, loading: hastagsLoading } = useSelector((state) => state.hashtags);
+  const { data: hashtags, loading: hastagsLoading } = useSelector(
+    (state) => state.hashtags
+  );
   const { loading } = useSelector((state) => state.tweets);
 
   useEffect(() => {
@@ -93,13 +92,28 @@ const Filters = ({
     }
 
     setHashtagOptions(hashtags);
-  }, [hashtags, hastagsLoading]);
-
+  }, [hastagsLoading, hashtags, selectedHashtag]);
   useEffect(() => {
     if (!openHashtags) {
       setHashtagOptions([]);
     }
   }, [openHashtags]);
+  useEffect(() => {
+    if (selectedHashtag) {
+      const value = { id: selectedHashtag, hashtag: selectedHashtag };
+
+      setHashtagOptions([value]);
+      setChoosenHash(value);
+      onFilterChange([choosenCategory, choosenCountry, value]);
+      onClearSelectedHashtag();
+    }
+  }, [
+    selectedHashtag,
+    onFilterChange,
+    choosenCategory,
+    choosenCountry,
+    onClearSelectedHashtag,
+  ]);
 
   const onHashtagSearch = throttle((search) => {
     if (search.length > 2) {
@@ -125,6 +139,7 @@ const Filters = ({
     onFilterChange([choosenCategory, choosenCountry, choosenHash]);
     setTimeout(() => setShowModal(false), 300);
   };
+
   const onClearFilters = () => {
     setChoosenCategory(null);
     setChoosenCountry(null);
@@ -224,7 +239,7 @@ const Filters = ({
         getOptionSelected={(option, value) => option.hashtag === value.hashtag}
         getOptionLabel={(option) => `#${option.hashtag}`}
         options={hashtagOptions}
-        loading={searchLoading}
+        loading={hastagsLoading}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -234,7 +249,7 @@ const Filters = ({
               ...params.InputProps,
               endAdornment: (
                 <React.Fragment>
-                  {searchLoading ? (
+                  {hastagsLoading ? (
                     <CircularProgress color="inherit" size={20} />
                   ) : null}
                   {params.InputProps.endAdornment}
@@ -249,7 +264,8 @@ const Filters = ({
         value={choosenHash}
         onChange={(e, value, reason) => {
           setChoosenHash(value);
-          !showModal && onFilterChange([choosenCategory, choosenCountry, value]);
+          !showModal &&
+            onFilterChange([choosenCategory, choosenCountry, value]);
         }}
         disabled={loading}
       />
@@ -308,7 +324,7 @@ const Filters = ({
             ) : null}
             {Boolean(choosenHash) ? (
               <Chip
-                label={choosenHash.id + 'a'}
+                label={`#${choosenHash.hashtag}`}
                 color="primary"
                 size="small"
                 onDelete={onRemove("hash")}

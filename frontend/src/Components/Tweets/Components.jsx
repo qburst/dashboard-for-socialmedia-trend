@@ -56,6 +56,7 @@ export default function Tweets(props) {
     hashtag: null,
   });
   const [openModal, setOpenModal] = useState(false);
+  const [selectedHashtag, setSelectedHashtag] = useState();
 
   const dispatch = useDispatch();
   const { isSignedIn } = useSelector((state) => state.session);
@@ -83,14 +84,18 @@ export default function Tweets(props) {
 
     setFilter(fill);
     dispatch(fetchTweets({ ...fill }));
+    window.scroll({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   const onHastagClick = (hashtag) => {
-    const fill = { ...filters, page: 1, hashtag: { id: hashtag, hashtag } };
-
-    setFilter(fill);
-    dispatch(fetchTweets({ ...fill }));
+    setSelectedHashtag(hashtag);
   };
+  const onClearSelectedHashtag = () => {
+    setSelectedHashtag();
+  }
 
   const onLoadMore = () => {
     const fill = { ...filters, page: filters.page + 1 };
@@ -126,7 +131,8 @@ export default function Tweets(props) {
   return (
     <Paper className={classes.root} elevation={2}>
       <Filters
-        hashtagSelected={filters.hashtag}
+        selectedHashtag={selectedHashtag}
+        onClearSelectedHashtag={onClearSelectedHashtag}
         onFilterChange={onFilterChange}
       />
       <div className={classes.wrapper}>

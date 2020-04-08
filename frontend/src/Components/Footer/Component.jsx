@@ -18,7 +18,7 @@ export default () => {
   return (
     <footer className={classes.footer}>
       <Typography variant="body1">
-        Copyright &copy; 2020
+        Copyright &copy; 2020{" "}
         <Link
           href="https://www.qburst.com/"
           rel="noopener noreferrer"
