@@ -89,7 +89,7 @@ export const fetchTweets = ({
     dispatch(showToaster({ message: "Tweets loaded successfully" }));
   } catch ({ error }) {
     dispatch(getTweetsFailure({ error }));
-    dispatch(showToaster({ message: `Unable to load tweets for ${category.toLowerCase()}` }));
+    dispatch(showToaster({ message: "Unable to load tweets. Please try again." }));
   }
 };
 
