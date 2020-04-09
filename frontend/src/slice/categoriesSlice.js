@@ -5,7 +5,6 @@ import api from "../utils/api";
 const initialState = {
   data: {},
   loading: false,
-  error: null,
 };
 
 const categories = createSlice({
@@ -21,31 +20,20 @@ const categories = createSlice({
       state.loading = false;
       state.error = null;
     },
-    getCategoriesFailure(state, action) {
-      state.loading = false;
-      state.error = action.payload.error;
-    },
   },
 });
 
-export const {
-  getCategoriesStart,
-  getCategoriesSuccess,
-  getCategoriesFailure,
-} = categories.actions;
+export const { getCategoriesStart, getCategoriesSuccess } = categories.actions;
 export default categories.reducer;
 
-export const fetchCategories = () => async (
-  dispatch
-) => {
+export const fetchCategories = () => async (dispatch) => {
   try {
     dispatch(getCategoriesStart());
+
     const response = await api.get("/categories");
 
-    dispatch(
-      getCategoriesSuccess({ data: response.results })
-    );
+    dispatch(getCategoriesSuccess({ data: response.results }));
   } catch ({ error }) {
-    dispatch(getCategoriesFailure({ error }));
+    // no op
   }
 };
