@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import api from "../utils/api";
+import fetch from "../utils/fetch";
 
 const initialState = {
   data: {},
@@ -32,7 +32,7 @@ export const fetchCount = () => async (dispatch) => {
   try {
     dispatch(getCountStart());
 
-    const response = await api.get("/report/world");
+    const response = await fetch("/report/world/");
 
     dispatch(
       getCountSuccess({ data: { ...response.data, date: response.created_at } })

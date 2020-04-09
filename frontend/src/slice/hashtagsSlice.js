@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import api from "../utils/api";
+import fetch from "../utils/fetch";
 
 const initialState = {
   data: [],
@@ -25,15 +25,16 @@ export const { getHashtagsStart, getHashtagsSuccess } = hashtags.actions;
 export default hashtags.reducer;
 
 export const fetchHashtags = ({ search }) => async (dispatch) => {
-  console.log(search);
   try {
     dispatch(getHashtagsStart());
 
-    const response = await api.get("/userHashtags", { params: { search } });
+    const queries = { search };
+    const response = await fetch("/userHashtags/", {
+      queries,
+    });
 
     dispatch(getHashtagsSuccess({ data: response.results }));
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
     // no op
   }
 };

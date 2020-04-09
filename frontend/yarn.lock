@@ -2107,13 +2107,6 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.9.1.tgz#7e33d8f7d449b3f673cd72deb9abdc552dbe528e"
   integrity sha512-wMHVg2EOHaMRxbzgFJ9gtjOOCrI80OHLG14rxi28XwOW8ux6IiEbRCGGGqCtdAIg4FQCbW20k9RsT4y3gJlFug==
 
-axios@^0.19.2:
-  version "0.19.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
-  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
-  dependencies:
-    follow-redirects "1.5.10"
-
 axobject-query@^2.0.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/axobject-query/-/axobject-query-2.1.2.tgz#2bdffc0371e643e5f03ba99065d5179b9ca79799"
@@ -2515,6 +2508,11 @@ bser@2.1.1:
   integrity sha512-gQxTNE/GAfIIrmHLUE3oJyp5FO6HRBfhjnw4/wMmA63ZGDJnWBmgY/lyQBpnDUkGmAhbSe39tx2d/iTOAfglwQ==
   dependencies:
     node-int64 "^0.4.0"
+
+btoa@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/btoa/-/btoa-1.2.1.tgz#01a9909f8b2c93f6bf680ba26131eb30f7fa3d73"
+  integrity sha512-SB4/MIGlsiVkMcHmT+pSmIPoNDoHg+7cMzmt3Uxt628MTz2487DKSqK/fuhFBrkuqrYv5UCEnACpF4dTFNKc/g==
 
 buffer-from@^1.0.0:
   version "1.1.1"
@@ -3205,6 +3203,14 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+cross-fetch@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.0.4.tgz#7bef7020207e684a7638ef5f2f698e24d9eb283c"
+  integrity sha512-MSHgpjQqgbT/94D4CyADeNoYh52zMkCX4pcJvPP5WqPsLFMKjr2TCMg381ox5qI0ii2dPwaLx/00477knXqXVw==
+  dependencies:
+    node-fetch "2.6.0"
+    whatwg-fetch "3.0.0"
+
 cross-spawn@7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.1.tgz#0ab56286e0f7c24e153d04cc2aa027e43a9a5d14"
@@ -3523,13 +3529,6 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
   integrity sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
-  dependencies:
-    ms "2.0.0"
-
-debug@=3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
-  integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
   dependencies:
     ms "2.0.0"
 
@@ -4650,13 +4649,6 @@ flush-write-stream@^1.0.0:
   dependencies:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
-
-follow-redirects@1.5.10:
-  version "1.5.10"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
-  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
-  dependencies:
-    debug "=3.1.0"
 
 follow-redirects@^1.0.0:
   version "1.11.0"
@@ -7176,6 +7168,11 @@ no-case@^3.0.3:
   dependencies:
     lower-case "^2.0.1"
     tslib "^1.10.0"
+
+node-fetch@2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
+  integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
 
 node-forge@0.9.0:
   version "0.9.0"
@@ -10968,7 +10965,7 @@ whatwg-encoding@^1.0.1, whatwg-encoding@^1.0.3, whatwg-encoding@^1.0.5:
   dependencies:
     iconv-lite "0.4.24"
 
-whatwg-fetch@^3.0.0:
+whatwg-fetch@3.0.0, whatwg-fetch@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.0.0.tgz#fc804e458cc460009b1a2b966bc8817d2578aefb"
   integrity sha512-9GSJUgz1D4MfyKU7KRqwOjXCXTqWdFNvEr7eUBYchQiVc744mqK/MzXPNR2WsPkmkOa4ywfg8C2n8h+13Bey1Q==
@@ -11326,3 +11323,12 @@ yargs@^13.3.0:
     which-module "^2.0.0"
     y18n "^4.0.0"
     yargs-parser "^13.1.2"
+
+zl-fetch@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/zl-fetch/-/zl-fetch-3.2.2.tgz#234cdd6ddb6badbc496e0ff7872a2b6fd60a267f"
+  integrity sha512-mUbnXQb+dKI4hIbhdzPYLFAqaWLQgkZc83NN05OcenPYKmAosBK4oL32g7aSiSBeIZw/eDSdnZWbzYcV9tUPjQ==
+  dependencies:
+    "@babel/runtime" "^7.8.4"
+    btoa "^1.2.1"
+    cross-fetch "^3.0.4"

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import api from "../utils/api";
+import fetch from "../utils/fetch";
 import countryList from "../utils/countries";
 
 const initialState = {
@@ -29,12 +29,13 @@ export const fetchCountries = () => async (dispatch) => {
   try {
     dispatch(getCountriesStart());
 
-    const response = await api.get("/countries");
+    const response = await fetch("/countries/");
     const countries = countryList.filter((item) =>
       response.countries.includes(item.label.toLowerCase())
     );
+
     dispatch(getCountriesSuccess({ data: countries }));
-  } catch (e) {
+  } catch (error) {
     // no op
   }
 };
