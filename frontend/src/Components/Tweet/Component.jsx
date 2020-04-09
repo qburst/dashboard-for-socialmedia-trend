@@ -122,15 +122,12 @@ const Tweet = ({
           >
             {text}{" "}
             {hashtags.map((h) => (
-              // <Button
-              //   size="small"
-              //   key={h}
-              //   className={classes.hashLinks}
-              //   onClick={() => onHastagClick(h)}
-              // >{`#${h}`}</Button>
-              <span key={h}>
-                <span>{`#${h}`}</span>{" "}
-              </span>
+              <Button
+                size="small"
+                key={h}
+                className={classes.hashLinks}
+                onClick={() => onHastagClick(h)}
+              >{`#${h}`}</Button>
             ))}
           </Typography>
           <Typography className={classes.title} color="textSecondary">
