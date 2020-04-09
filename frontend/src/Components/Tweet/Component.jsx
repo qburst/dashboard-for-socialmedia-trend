@@ -74,11 +74,11 @@ const propTypes = {
   onHastagClick: PropTypes.func.isRequired,
 };
 const defaultProps = {
-  url: '',
-  text: '',
-  created_at: '',
+  url: "",
+  text: "",
+  created_at: "",
   hashtags: [],
-  user: {}
+  user: {},
 };
 const Tweet = ({
   id,
@@ -101,12 +101,17 @@ const Tweet = ({
               aria-label={user.name}
               className={classes.avatar}
               src={user.profile_image_url_https}
+              imgProps={{
+                loading: "lazy",
+                width: "40px",
+                height: "40px"
+              }}
             >
               {user.name[0].toUpperCase()}
             </Avatar>
           }
           title={user.name}
-          subheader={`@${user.name.replace(' ', '')}`}
+          subheader={`@${user.name.replace(" ", "")}`}
         />
         <CardContent className={classes.contentRoot}>
           <Typography
@@ -123,7 +128,9 @@ const Tweet = ({
               //   className={classes.hashLinks}
               //   onClick={() => onHastagClick(h)}
               // >{`#${h}`}</Button>
-              <span>{`#${h}`}</span>
+              <span key={h}>
+                <span>{`#${h}`}</span>{" "}
+              </span>
             ))}
           </Typography>
           <Typography className={classes.title} color="textSecondary">
