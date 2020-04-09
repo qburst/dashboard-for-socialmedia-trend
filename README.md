@@ -37,10 +37,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
+     <td align="center"><a href="https://jino.work"><img src="https://avatars1.githubusercontent.com/u/13327976?v=4" width="100px;" alt=""/><br /><sub><b>Jino Jossy</b></sub></a><br /><a href="#platform-jinojossy93" title="Packaging/porting to new platform">📦</a></td>
     <td align="center"><a href="https://github.com/Bhavyalakshmi95"><img src="https://avatars1.githubusercontent.com/u/62279569?v=4" width="100px;" alt=""/><br /><sub><b>Bhavyalakshmi95</b></sub></a><br /><a href="#design-Bhavyalakshmi95" title="Design">🎨</a></td>
     <td align="center"><a href="https://github.com/joannjacob"><img src="https://avatars3.githubusercontent.com/u/38246378?v=4" width="100px;" alt=""/><br /><sub><b>joannjacob</b></sub></a><br /><a href="https://github.com/qburst/dashboard-for-socialmedia-trend/commits?author=joannjacob" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/chandan-urs"><img src="https://avatars3.githubusercontent.com/u/43086966?v=4" width="100px;" alt=""/><br /><sub><b>chandan-urs</b></sub></a><br /><a href="https://github.com/qburst/dashboard-for-socialmedia-trend/commits?author=chandan-urs" title="Code">💻</a></td>
-    <td align="center"><a href="https://jino.work"><img src="https://avatars1.githubusercontent.com/u/13327976?v=4" width="100px;" alt=""/><br /><sub><b>Jino Jossy</b></sub></a><br /><a href="#platform-jinojossy93" title="Packaging/porting to new platform">📦</a></td>
     <td align="center"><a href="https://github.com/vijay-qburst"><img src="https://avatars0.githubusercontent.com/u/3763351?v=4" width="100px;" alt=""/><br /><sub><b>Vijay Dev</b></sub></a><br /><a href="#design-vijay-qburst" title="Design">🎨</a></td>
   </tr>
 </table>
