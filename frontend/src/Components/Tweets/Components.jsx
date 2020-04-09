@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Tweets(props) {
+const Tweets = () => {
   const classes = useStyles();
   const [filters, setFilter] = useState({
     page: 1,
@@ -156,7 +156,7 @@ export default function Tweets(props) {
             variant="body1"
             className={classes.noTweets}
           >
-            No matching tweets available
+            No matching tweets available. Try changing the filters.
           </Typography>
         )}
       </div>
@@ -198,3 +198,5 @@ export default function Tweets(props) {
     </Paper>
   );
 }
+
+export default Tweets;

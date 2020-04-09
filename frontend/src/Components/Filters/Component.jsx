@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from 'prop-types';
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { makeStyles } from "@material-ui/core/styles";
@@ -54,6 +55,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const propTypes = {
+  selectedHashtag: PropTypes.string,
+  onClearSelectedHashtag: PropTypes.func.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
+};
+const defaultProps = {
+  selectedHashtag: undefined,
+}
 const Filters = ({
   selectedHashtag,
   onClearSelectedHashtag,
@@ -274,9 +283,9 @@ const Filters = ({
   const mobileFilters = (
     <Grid container direction="row" justify="space-between" spacing={2}>
       {categoryCountryFilter}
-      <Grid item xs={12}>
+      {/* <Grid item xs={12}>
         {hashFilter}
-      </Grid>
+      </Grid> */}
     </Grid>
   );
   const filters = (
@@ -286,11 +295,11 @@ const Filters = ({
           {categoryCountryFilter}
         </Grid>
       </Grid>
-      <Grid item sm={12} md={6}>
+      {/* <Grid item sm={12} md={6}>
         <Grid container direction="row" justify="flex-end">
           {hashFilter}
         </Grid>
-      </Grid>
+      </Grid> */}
     </>
   );
 
@@ -380,4 +389,6 @@ const Filters = ({
   );
 };
 
+Filters.propTypes = propTypes;
+Filters.defaultProps = defaultProps;
 export default Filters;

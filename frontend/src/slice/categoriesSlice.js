@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import api from "../utils/api";
 
 const initialState = {
-  data: {},
+  data: [],
   loading: false,
 };
 
@@ -13,12 +13,10 @@ const categories = createSlice({
   reducers: {
     getCategoriesStart(state) {
       state.loading = true;
-      state.error = null;
     },
     getCategoriesSuccess(state, action) {
       state.data = action.payload.data;
       state.loading = false;
-      state.error = null;
     },
   },
 });

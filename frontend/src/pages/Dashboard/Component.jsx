@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
@@ -35,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Next = () => {
+export const Dashboard = () => {
   const classes = useStyles();
   const [showDrawer, setShowDrawer] = useState(false);
 
@@ -114,4 +113,4 @@ export const Next = () => {
   );
 };
 
-export default Next;
+export default Dashboard;

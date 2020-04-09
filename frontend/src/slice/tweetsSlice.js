@@ -8,7 +8,6 @@ const initialState = {
   chosenTweet: null,
   data: [],
   loading: false,
-  error: null,
 };
 
 const tweets = createSlice({
@@ -19,16 +18,13 @@ const tweets = createSlice({
       if (action.payload.replace) state.data = [];
 
       state.loading = true;
-      state.error = null;
     },
     getTweetsSuccess(state, action) {
       const { data, count, replace } = action.payload;
 
       state.count = count;
       state.data = replace ? data : [...state.data, ...data];
-      // state.data = [];
       state.loading = false;
-      state.error = null;
     },
     getTweetsFailure(state, action) {
       state.loading = false;
@@ -45,7 +41,6 @@ const tweets = createSlice({
 
       if (index > -1) state.data.splice(index, 1);
       state.loading = false;
-      state.error = null;
     },
   },
 });
@@ -89,7 +84,7 @@ export const fetchTweets = ({
     dispatch(showToaster({ message: "Tweets loaded successfully" }));
   } catch ({ error }) {
     dispatch(getTweetsFailure({ error }));
-    dispatch(showToaster({ message: `Unable to load tweets for ${category.toLowerCase()}` }));
+    dispatch(showToaster({ message: "Unable to load tweets. Please try again." }));
   }
 };
 
