@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -62,15 +63,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const propTypes = {
+  id: PropTypes.string.isRequired,
+  url: PropTypes.string,
+  text: PropTypes.string,
+  created_at: PropTypes.string,
+  hashtags: PropTypes.arrayOf(PropTypes.string),
+  user: PropTypes.shape({}),
+  onReport: PropTypes.func.isRequired,
+  onHastagClick: PropTypes.func.isRequired,
+};
+const defaultProps = {
+  url: '',
+  text: '',
+  created_at: '',
+  hashtags: [],
+  user: {}
+};
 const Tweet = ({
   id,
   url,
   text,
   created_at,
   hashtags,
+  user,
   onReport,
   onHastagClick,
-  user,
 }) => {
   const classes = useStyles();
 
@@ -180,4 +198,6 @@ export const TweetLoading = () => {
   );
 };
 
+Tweet.propTypes = propTypes;
+Tweet.defaultProps = defaultProps;
 export default Tweet;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from 'prop-types';
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { makeStyles } from "@material-ui/core/styles";
@@ -54,6 +55,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const propTypes = {
+  selectedHashtag: PropTypes.string,
+  onClearSelectedHashtag: PropTypes.func.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
+};
+const defaultProps = {
+  selectedHashtag: undefined,
+}
 const Filters = ({
   selectedHashtag,
   onClearSelectedHashtag,
@@ -380,4 +389,6 @@ const Filters = ({
   );
 };
 
+Filters.propTypes = propTypes;
+Filters.defaultProps = defaultProps;
 export default Filters;

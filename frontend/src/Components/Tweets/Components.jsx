@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Tweets(props) {
+const Tweets = () => {
   const classes = useStyles();
   const [filters, setFilter] = useState({
     page: 1,
@@ -198,3 +198,5 @@ export default function Tweets(props) {
     </Paper>
   );
 }
+
+export default Tweets;
