@@ -6,6 +6,15 @@
   "commit": false,
   "contributors": [
     {
+      "login": "jinojossy93",
+      "name": "Jino Jossy",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/13327976?v=4",
+      "profile": "https://jino.work",
+      "contributions": [
+        "platform"
+      ]
+    },
+    {
       "login": "Bhavyalakshmi95",
       "name": "Bhavyalakshmi95",
       "avatar_url": "https://avatars1.githubusercontent.com/u/62279569?v=4",
@@ -30,15 +39,6 @@
       "profile": "https://github.com/chandan-urs",
       "contributions": [
         "code"
-      ]
-    },
-    {
-      "login": "jinojossy93",
-      "name": "Jino Jossy",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/13327976?v=4",
-      "profile": "https://jino.work",
-      "contributions": [
-        "platform"
       ]
     },
     {
