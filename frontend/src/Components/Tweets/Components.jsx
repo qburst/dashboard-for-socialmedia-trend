@@ -140,7 +140,7 @@ const Tweets = () => {
           <>
             {data.map((item) => (
               <Tweet
-                key={item.id}
+                key={item.id + item.user.name}
                 {...item}
                 onHastagClick={onHastagClick}
                 onReport={onReport}

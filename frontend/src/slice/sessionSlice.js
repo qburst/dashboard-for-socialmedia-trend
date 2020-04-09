@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import api from "../utils/api";
+import fetch from "../utils/fetch";
 import { showToaster } from "./toasterSlice";
 
 const savedName = localStorage.getItem("session.name");
@@ -73,16 +73,16 @@ export const signIn = ({ username, password }) => async (dispatch) => {
   try {
     dispatch(getSessionStart());
 
-    const response = await api.post("users/login/", {
-      username,
-      password,
+    const body = { username, password };
+    const response = await fetch("/users/login/", {
+      method: 'post',
+      body,
     });
 
     dispatch(getLoginSuccess({ ...response }));
     dispatch(showToaster({ message: `Welcome ${response.name}!` }));
   } catch (error) {
-    const { response: { data = {} } = {} } = error;
-    const { non_field_errors } = data;
+    const { non_field_errors } = error;
 
     dispatch(
       showToaster({
@@ -94,14 +94,14 @@ export const signIn = ({ username, password }) => async (dispatch) => {
   }
 };
 
-export const logout = () => async (dispatch) => {
+export const logout = () => async (dispatch, getState) => {
   dispatch(getLogoutSuccess());
   dispatch(showToaster({ message: "Sign out successful" }));
 
   try {
-    let token = localStorage.getItem("session.token");
+    let token = getState().session.token;
 
-    await api.get("/users/logout", {
+    await fetch("/users/logout/", {
       headers: { Authorization: `Token ${token}` },
     });
   } catch (error) {
@@ -113,17 +113,20 @@ export const signUp = ({ name, email, password }) => async (dispatch) => {
   try {
     dispatch(getSessionStart());
 
-    await api.post("users/profile/", {
+    const body = {
       name,
       email,
       password,
+    };
+    await fetch("/users/profile/", {
+      method: 'post',
+      body,
     });
 
     dispatch(getSignupSuccess());
     dispatch(showToaster({ message: `Sign up successful!` }));
   } catch (error) {
-    const { response: { data = {} } = {} } = error;
-    const { email, non_field_errors } = data;
+    const { email, non_field_errors } = error;
     const field = email || non_field_errors;
 
     dispatch(

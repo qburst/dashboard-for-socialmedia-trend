@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import api from "../utils/api";
+import fetch from "../utils/fetch";
 
 const initialState = {
   data: [],
@@ -28,10 +28,10 @@ export const fetchCategories = () => async (dispatch) => {
   try {
     dispatch(getCategoriesStart());
 
-    const response = await api.get("/categories");
+    const response = await fetch("/categories/");
 
     dispatch(getCategoriesSuccess({ data: response.results }));
-  } catch ({ error }) {
+  } catch (error) {
     // no op
   }
 };
