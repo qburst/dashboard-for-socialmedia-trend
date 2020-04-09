@@ -13,12 +13,10 @@ const categories = createSlice({
   reducers: {
     getCategoriesStart(state) {
       state.loading = true;
-      state.error = null;
     },
     getCategoriesSuccess(state, action) {
       state.data = action.payload.data;
       state.loading = false;
-      state.error = null;
     },
   },
 });
