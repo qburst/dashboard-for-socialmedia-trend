@@ -156,7 +156,7 @@ export default function Tweets(props) {
             variant="body1"
             className={classes.noTweets}
           >
-            No matching tweets available
+            No matching tweets available. Try changing the filters.
           </Typography>
         )}
       </div>
