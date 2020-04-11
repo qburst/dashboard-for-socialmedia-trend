@@ -63,7 +63,7 @@ class TwitterDataView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         category = request.query_params.get('category')
         country = request.query_params.get('country')
-        data = request.query_params
+        hashtags = request.query_params.get('hashtags')
         if country:
             if country.lower() not in COUNTRIES:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Country not found'})
@@ -71,7 +71,22 @@ class TwitterDataView(generics.ListAPIView):
             category_obj = Category.objects(_id=category).first()
             if not category_obj:
                 return send_response({'status': INVALID_PARAMETERS, 'message':'Category not found'})
-        self.queryset = self.queryset(**data).order_by('-created_at', '-_id')
+        if request.query_params:
+            if category and country:
+                if hashtags:
+                    self.queryset = self.queryset(category=category, country=country.lower(), hashtags=hashtags).order_by('-created_at', '-_id')
+                else:
+                    self.queryset = self.queryset(category=category, country=country.lower()).order_by('-created_at', '-_id')
+            elif country and hashtags:
+                self.queryset = self.queryset(hashtags=hashtags, country=country.lower()).order_by('-created_at', '-_id')
+            elif category and hashtags:
+                self.queryset = self.queryset(hashtags=hashtags, category=category).order_by('-created_at', '-_id')
+            elif category:
+                self.queryset = self.queryset(category=category).order_by('-created_at', '-_id')
+            elif country:
+                self.queryset = self.queryset(country=country.lower()).order_by('-created_at', '-_id')
+            elif hashtags:
+                self.queryset = self.queryset(hashtags=hashtags).order_by('-created_at', '-_id')
         return super().get(request, *args, **kwargs)
 
 
