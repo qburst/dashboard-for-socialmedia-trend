@@ -63,6 +63,9 @@ class TwitterDataView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         category = request.query_params.get('category')
         country = request.query_params.get('country')
+        hashtags = request.query_params.get('hashtags')
+        data = request.query_params
+        print(data)
         if country:
             if country.lower() not in COUNTRIES:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Country not found'})
@@ -70,12 +73,7 @@ class TwitterDataView(generics.ListAPIView):
             category_obj = Category.objects(_id=category).first()
             if not category_obj:
                 return send_response({'status': INVALID_PARAMETERS, 'message':'Category not found'})
-        if category and country:
-            self.queryset = self.queryset(category=category, country=country.lower()).order_by('-created_at', '-_id')
-        elif category:
-            self.queryset = self.queryset(category=category).order_by('-created_at', '-_id')
-        elif country:
-            self.queryset = self.queryset(country=country.lower()).order_by('-created_at', '-_id')
+        self.queryset = self.queryset(**data).order_by('-created_at', '-_id')
         return super().get(request, *args, **kwargs)
 
 
