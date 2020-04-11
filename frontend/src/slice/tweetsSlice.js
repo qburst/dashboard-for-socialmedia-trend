@@ -59,7 +59,7 @@ export const fetchTweets = ({
   page = 1,
   category,
   country,
-  hashtag,
+  hashtags,
 } = {}) => async (dispatch) => {
   try {
     dispatch(getTweetsStart({ replace: page === 1 }));
@@ -68,7 +68,7 @@ export const fetchTweets = ({
 
     if (category) queries.category = category;
     if (country) queries.country = country;
-    if (hashtag) queries.hashtag = hashtag;
+    if (hashtags) queries.hashtags = hashtags;
 
     const response = await fetch("/tweets/", {
       queries,
