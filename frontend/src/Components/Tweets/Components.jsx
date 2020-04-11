@@ -11,7 +11,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 
-import { fetchCategories } from "../../slice/categoriesSlice";
 import {
   getReportTweetAdd,
   getReportTweetRemove,
@@ -48,27 +47,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Tweets(props) {
+const Tweets = () => {
   const classes = useStyles();
   const [filters, setFilter] = useState({
     page: 1,
-    category: "",
-    country: "",
-    hashtag: "",
+    category: null,
+    country: null,
+    hashtag: null,
   });
   const [openModal, setOpenModal] = useState(false);
+  const [selectedHashtag, setSelectedHashtag] = useState();
 
   const dispatch = useDispatch();
   const { isSignedIn } = useSelector((state) => state.session);
-  const { data: categories } = useSelector((state) => state.categories);
   const { chosenTweet, data, count, loading } = useSelector(
     (state) => state.tweets
   );
-  const [searchSuggestion, setSearchSuggestion] = useState([]);
 
-  useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
   useEffect(() => {
     dispatch(fetchTweets());
   }, [dispatch]);
@@ -85,19 +80,22 @@ export default function Tweets(props) {
 
     if (category) fill.category = category._id;
     if (country) fill.country = country.label;
-    if (hashtag) fill.hashtag = hashtag.id;
+    if (hashtag) fill.hashtag = hashtag.hashtag;
 
     setFilter(fill);
     dispatch(fetchTweets({ ...fill }));
+    window.scroll({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
-  const onHastagClick = ({ id }) => {
-    const fill = { ...filters, page: 1, hashtag: id };
-
-    setSearchSuggestion([{ id, name: id }])
-    setFilter(fill);
-    dispatch(fetchTweets({ ...fill }));
+  const onHastagClick = (hashtag) => {
+    setSelectedHashtag(hashtag);
   };
+  const onClearSelectedHashtag = () => {
+    setSelectedHashtag();
+  }
 
   const onLoadMore = () => {
     const fill = { ...filters, page: filters.page + 1 };
@@ -133,11 +131,8 @@ export default function Tweets(props) {
   return (
     <Paper className={classes.root} elevation={2}>
       <Filters
-        categories={categories}
-        searchSuggestion={searchSuggestion}
-        searchSelected={{ name: filters.hashtag }}
-        searchLoading={false}
-        onSearch={console.log}
+        selectedHashtag={selectedHashtag}
+        onClearSelectedHashtag={onClearSelectedHashtag}
         onFilterChange={onFilterChange}
       />
       <div className={classes.wrapper}>
@@ -145,7 +140,7 @@ export default function Tweets(props) {
           <>
             {data.map((item) => (
               <Tweet
-                key={item.id}
+                key={item.id + item.user.name}
                 {...item}
                 onHastagClick={onHastagClick}
                 onReport={onReport}
@@ -161,7 +156,7 @@ export default function Tweets(props) {
             variant="body1"
             className={classes.noTweets}
           >
-            No matching tweets available
+            No matching tweets available. Try changing the filters.
           </Typography>
         )}
       </div>
@@ -203,3 +198,5 @@ export default function Tweets(props) {
     </Paper>
   );
 }
+
+export default Tweets;

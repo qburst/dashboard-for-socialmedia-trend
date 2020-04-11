@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -6,13 +7,13 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import ReportIcon from "@material-ui/icons/Report";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import { blue } from "@material-ui/core/colors";
 import Skeleton from "@material-ui/lab/Skeleton";
-import Link from '@material-ui/core/Link';
+import Link from "@material-ui/core/Link";
 import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
@@ -62,12 +63,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const propTypes = {
+  id: PropTypes.string.isRequired,
+  url: PropTypes.string,
+  text: PropTypes.string,
+  created_at: PropTypes.string,
+  hashtags: PropTypes.arrayOf(PropTypes.string),
+  user: PropTypes.shape({}),
+  onReport: PropTypes.func.isRequired,
+  onHastagClick: PropTypes.func.isRequired,
+};
+const defaultProps = {
+  url: "",
+  text: "",
+  created_at: "",
+  hashtags: [],
+  user: {},
+};
 const Tweet = ({
   id,
   url,
   text,
   created_at,
   hashtags,
+  user,
   onReport,
   onHastagClick,
 }) => {
@@ -78,12 +97,21 @@ const Tweet = ({
       <Card variant="outlined" className={classes.card}>
         <CardHeader
           avatar={
-            <Avatar aria-label="user" className={classes.avatar}>
-              T
+            <Avatar
+              aria-label={user.name}
+              className={classes.avatar}
+              src={user.profile_image_url_https}
+              imgProps={{
+                loading: "lazy",
+                width: "40px",
+                height: "40px"
+              }}
+            >
+              {user.name[0].toUpperCase()}
             </Avatar>
           }
-          title="Twitter user"
-          subheader="@t_user"
+          title={user.name}
+          subheader={`@${user.name.replace(" ", "")}`}
         />
         <CardContent className={classes.contentRoot}>
           <Typography
@@ -94,12 +122,15 @@ const Tweet = ({
           >
             {text}{" "}
             {hashtags.map((h) => (
-              <Button
-                size="small"
-                key={h}
-                className={classes.hashLinks}
-                onClick={() => onHastagClick({ id: h })}
-              >{`#${h}`}</Button>
+              // <Button
+              //   size="small"
+              //   key={h}
+              //   className={classes.hashLinks}
+              //   onClick={() => onHastagClick(h)}
+              // >{`#${h}`}</Button>
+              <span key={h}>
+                <span>{`#${h}`}</span>{" "}
+              </span>
             ))}
           </Typography>
           <Typography className={classes.title} color="textSecondary">
@@ -115,10 +146,7 @@ const Tweet = ({
             <ReportIcon />
           </IconButton>
           <Link href={url} rel="noopener noreferrer" target="_blank">
-            <IconButton
-              size="small"
-              aria-label="view tweet"
-            >
+            <IconButton size="small" aria-label="view tweet">
               <ChevronRightIcon />
             </IconButton>
           </Link>
@@ -178,4 +206,6 @@ export const TweetLoading = () => {
   );
 };
 
+Tweet.propTypes = propTypes;
+Tweet.defaultProps = defaultProps;
 export default Tweet;

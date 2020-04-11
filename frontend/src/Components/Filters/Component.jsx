@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from 'prop-types';
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,9 +17,11 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 import throttle from "lodash.throttle";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { countries } from "./constants";
+import { fetchCategories } from "../../slice/categoriesSlice";
+import { fetchCountries } from "../../slice/countriesSlice";
+import { fetchHashtags } from "../../slice/hashtagsSlice";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -52,26 +55,80 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const propTypes = {
+  selectedHashtag: PropTypes.string,
+  onClearSelectedHashtag: PropTypes.func.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
+};
+const defaultProps = {
+  selectedHashtag: undefined,
+}
 const Filters = ({
-  categories,
-  searchSuggestion,
-  searchSelected,
-  searchLoading,
-  onSearch,
+  selectedHashtag,
+  onClearSelectedHashtag,
   onFilterChange,
 }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const [openAsyncAuto, setOpenAsyncAuto] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const [openHashtags, setOpenHashtags] = useState(false);
+  const [hashtagOptions, setHashtagOptions] = useState([]);
 
   const [choosenCategory, setChoosenCategory] = useState(null);
   const [choosenCountry, setChoosenCountry] = useState(null);
-  const [choosenHash, setChoosenHash] = useState(searchSelected || null);
-  const [openModal, setOpenModal] = useState(false);
+  const [choosenHash, setChoosenHash] = useState(null);
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
+  const { data: categories } = useSelector((state) => state.categories);
+  const { data: countries } = useSelector((state) => state.countries);
+  const { data: hashtags, loading: hastagsLoading } = useSelector(
+    (state) => state.hashtags
+  );
   const { loading } = useSelector((state) => state.tweets);
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+    dispatch(fetchCountries());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (hastagsLoading) {
+      return undefined;
+    }
+
+    setHashtagOptions(hashtags);
+  }, [hastagsLoading, hashtags, selectedHashtag]);
+  useEffect(() => {
+    if (!openHashtags) {
+      setHashtagOptions([]);
+    }
+  }, [openHashtags]);
+  useEffect(() => {
+    if (selectedHashtag) {
+      const value = { id: selectedHashtag, hashtag: selectedHashtag };
+
+      setHashtagOptions([value]);
+      setChoosenHash(value);
+      onFilterChange([choosenCategory, choosenCountry, value]);
+      onClearSelectedHashtag();
+    }
+  }, [
+    selectedHashtag,
+    onFilterChange,
+    choosenCategory,
+    choosenCountry,
+    onClearSelectedHashtag,
+  ]);
+
+  const onHashtagSearch = throttle((search) => {
+    if (search.length > 2) {
+      dispatch(fetchHashtags({ search }));
+    }
+  }, 300);
 
   const cleanCaterogy = (category) => {
     const replace = category._id.replace(/_/g, " ");
@@ -87,22 +144,17 @@ const Filters = ({
           )
       : isoCode;
 
-  const onTweetSearch = throttle((value) => {
-    if (value.length > 2) {
-      onSearch(value);
-    }
-  }, 300);
-
   const onApplyChanges = () => {
     onFilterChange([choosenCategory, choosenCountry, choosenHash]);
-    setTimeout(() => setOpenModal(false), 300);
+    setTimeout(() => setShowModal(false), 300);
   };
+
   const onClearFilters = () => {
     setChoosenCategory(null);
     setChoosenCountry(null);
     setChoosenHash(null);
     onFilterChange([]);
-    setTimeout(() => setOpenModal(false), 300);
+    setTimeout(() => setShowModal(false), 300);
   };
   const onRemove = (type) => () => {
     if (type === "category") {
@@ -114,7 +166,7 @@ const Filters = ({
       onFilterChange([choosenCategory, null, choosenHash]);
     }
     if (type === "hash") {
-      onFilterChange(null);
+      setChoosenHash(null);
       onFilterChange([choosenCategory, choosenCountry, null]);
     }
   };
@@ -138,7 +190,7 @@ const Filters = ({
           value={choosenCategory}
           onChange={(e, value, reason) => {
             setChoosenCategory(value);
-            onFilterChange([value, choosenCountry, choosenHash]);
+            !showModal && onFilterChange([value, choosenCountry, choosenHash]);
           }}
           disabled={loading}
         />
@@ -173,9 +225,9 @@ const Filters = ({
           value={choosenCountry}
           onChange={(e, value, reason) => {
             setChoosenCountry(value);
-            onFilterChange([choosenCategory, value, choosenHash]);
+            !showModal && onFilterChange([choosenCategory, value, choosenHash]);
           }}
-          disabled={true}
+          disabled={loading}
         />
       </Grid>
     </>
@@ -183,21 +235,20 @@ const Filters = ({
   const hashFilter = (
     <>
       <Autocomplete
-        freeSolo
         id="hastag-suggestion"
         style={{ minWidth: "300px" }}
         size="small"
-        open={openAsyncAuto}
+        open={openHashtags}
         onOpen={() => {
-          setOpenAsyncAuto(true);
+          setOpenHashtags(true);
         }}
         onClose={() => {
-          setOpenAsyncAuto(false);
+          setOpenHashtags(false);
         }}
-        getOptionSelected={(option, value) => option.name === value.name}
-        getOptionLabel={(option) => option.name}
-        options={searchSuggestion}
-        loading={searchLoading}
+        getOptionSelected={(option, value) => option.hashtag === value.hashtag}
+        getOptionLabel={(option) => `#${option.hashtag}`}
+        options={hashtagOptions}
+        loading={hastagsLoading}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -207,7 +258,7 @@ const Filters = ({
               ...params.InputProps,
               endAdornment: (
                 <React.Fragment>
-                  {searchLoading ? (
+                  {hastagsLoading ? (
                     <CircularProgress color="inherit" size={20} />
                   ) : null}
                   {params.InputProps.endAdornment}
@@ -215,25 +266,26 @@ const Filters = ({
               ),
             }}
             onChange={(e) => {
-              onTweetSearch(e.target.value);
+              onHashtagSearch(e.target.value);
             }}
           />
         )}
         value={choosenHash}
         onChange={(e, value, reason) => {
           setChoosenHash(value);
-          onFilterChange([choosenCategory, choosenCountry, value]);
+          !showModal &&
+            onFilterChange([choosenCategory, choosenCountry, value]);
         }}
-        disabled={true}
+        disabled={loading}
       />
     </>
   );
   const mobileFilters = (
     <Grid container direction="row" justify="space-between" spacing={2}>
       {categoryCountryFilter}
-      <Grid item xs={12}>
+      {/* <Grid item xs={12}>
         {hashFilter}
-      </Grid>
+      </Grid> */}
     </Grid>
   );
   const filters = (
@@ -243,11 +295,11 @@ const Filters = ({
           {categoryCountryFilter}
         </Grid>
       </Grid>
-      <Grid item sm={12} md={6}>
+      {/* <Grid item sm={12} md={6}>
         <Grid container direction="row" justify="flex-end">
           {hashFilter}
         </Grid>
-      </Grid>
+      </Grid> */}
     </>
   );
 
@@ -263,7 +315,7 @@ const Filters = ({
         <Grid item md={6}>
           <div className={classes.filterChips}>
             <div>Filters:</div>
-            {choosenCategory ? (
+            {Boolean(choosenCategory) ? (
               <Chip
                 label={cleanCaterogy(choosenCategory)}
                 color="primary"
@@ -271,7 +323,7 @@ const Filters = ({
                 onDelete={onRemove("category")}
               />
             ) : null}
-            {choosenCountry ? (
+            {Boolean(choosenCountry) ? (
               <Chip
                 label={choosenCountry.label}
                 color="primary"
@@ -279,9 +331,9 @@ const Filters = ({
                 onDelete={onRemove("country")}
               />
             ) : null}
-            {choosenHash ? (
+            {Boolean(choosenHash) ? (
               <Chip
-                label={choosenHash}
+                label={`#${choosenHash.hashtag}`}
                 color="primary"
                 size="small"
                 onDelete={onRemove("hash")}
@@ -297,7 +349,7 @@ const Filters = ({
             variant="contained"
             size="small"
             color="primary"
-            onClick={setOpenModal}
+            onClick={setShowModal}
           >
             Change
           </Button>
@@ -308,10 +360,10 @@ const Filters = ({
       </Hidden>
       <Dialog
         fullScreen={fullScreen}
-        open={openModal}
+        open={showModal}
         TransitionComponent={Transition}
         onClose={() => {
-          setOpenModal(false);
+          setShowModal(false);
         }}
         aria-labelledby="dialog-title"
         aria-describedby="dialog-description"
@@ -337,4 +389,6 @@ const Filters = ({
   );
 };
 
+Filters.propTypes = propTypes;
+Filters.defaultProps = defaultProps;
 export default Filters;

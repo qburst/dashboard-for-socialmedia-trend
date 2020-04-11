@@ -47,6 +47,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: "linear-gradient(132deg,  #e53e3e 0%, #c53030 100%)",
     color: theme.palette.grey["50"],
   },
+  countLabel: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
 }));
 
 export default function Masthead() {
@@ -108,7 +113,7 @@ export default function Masthead() {
                   <Typography component="h4" variant="h4">
                     {format(data.total_cases)}
                   </Typography>
-                  <Typography variant="subtitle1">Total cases</Typography>
+                  <Typography variant="subtitle1" className={classes.countLabel}>Total cases</Typography>
                 </>
               )}
             </Paper>
@@ -129,7 +134,7 @@ export default function Masthead() {
                   <Typography component="h4" variant="h4">
                     {format(data.new_cases)}
                   </Typography>
-                  <Typography variant="subtitle1">New cases</Typography>
+                  <Typography variant="subtitle1" className={classes.countLabel}>New cases</Typography>
                 </>
               )}
             </Paper>
@@ -150,7 +155,7 @@ export default function Masthead() {
                   <Typography component="h4" variant="h4">
                     {format(data.total_deaths)}
                   </Typography>
-                  <Typography variant="subtitle1">Deceased cases</Typography>
+                  <Typography variant="subtitle1" className={classes.countLabel}>Deceased cases</Typography>
                 </>
               )}
             </Paper>

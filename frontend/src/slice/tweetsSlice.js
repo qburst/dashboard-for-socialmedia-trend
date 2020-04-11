@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import api from "../utils/api";
+import fetch from "../utils/fetch";
 import { showToaster } from "./toasterSlice";
 
 const initialState = {
@@ -8,7 +8,6 @@ const initialState = {
   chosenTweet: null,
   data: [],
   loading: false,
-  error: null,
 };
 
 const tweets = createSlice({
@@ -19,16 +18,13 @@ const tweets = createSlice({
       if (action.payload.replace) state.data = [];
 
       state.loading = true;
-      state.error = null;
     },
     getTweetsSuccess(state, action) {
       const { data, count, replace } = action.payload;
 
       state.count = count;
       state.data = replace ? data : [...state.data, ...data];
-      // state.data = [];
       state.loading = false;
-      state.error = null;
     },
     getTweetsFailure(state, action) {
       state.loading = false;
@@ -45,7 +41,6 @@ const tweets = createSlice({
 
       if (index > -1) state.data.splice(index, 1);
       state.loading = false;
-      state.error = null;
     },
   },
 });
@@ -61,7 +56,7 @@ export const {
 export default tweets.reducer;
 
 export const fetchTweets = ({
-  page,
+  page = 1,
   category,
   country,
   hashtag,
@@ -69,14 +64,14 @@ export const fetchTweets = ({
   try {
     dispatch(getTweetsStart({ replace: page === 1 }));
 
-    const params = { page };
+    const queries = { page };
 
-    if (category) params.category = category;
-    if (country) params.country = country;
-    if (hashtag) params.hashtag = hashtag;
+    if (category) queries.category = category;
+    if (country) queries.country = country;
+    if (hashtag) queries.hashtag = hashtag;
 
-    const response = await api.get("/tweets", {
-      params,
+    const response = await fetch("/tweets/", {
+      queries,
     });
 
     dispatch(
@@ -86,26 +81,29 @@ export const fetchTweets = ({
         replace: page === 1,
       })
     );
-    dispatch(showToaster({ message: "Tweets loaded successfully" }));
-  } catch ({ error }) {
+    dispatch(showToaster({ message: response.results.length ? "Tweets loaded successfully" : "There are no tweets" }));
+  } catch (error) {
     dispatch(getTweetsFailure({ error }));
-    dispatch(showToaster({ message: `Unable to load tweets for ${category.toLowerCase()}` }));
+    dispatch(
+      showToaster({ message: "Unable to load tweets. Please try again." })
+    );
   }
 };
 
-export const reportTweet = ({ id }) => async (dispatch) => {
+export const reportTweet = ({ id }) => async (dispatch, getState) => {
   try {
     dispatch(getTweetsStart({ replace: false }));
 
-    const token = localStorage.getItem("session.token");
+    const token = getState().session.token;
+    const queries = {
+      tweet_id: id,
+    };
 
-    await api.put(
-      `/add_spam_count?tweet_id=${id}`,
-      {},
-      {
-        headers: { Authorization: `Token ${token}` },
-      }
-    );
+    await fetch("/add_spam_count/", {
+      method: 'put',
+      headers: { Authorization: `Token ${token}` },
+      queries,
+    });
 
     dispatch(getReportTweetSuccess({ id }));
     dispatch(showToaster({ message: "Tweet reported successfully" }));

@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,7 +15,7 @@ import Nav from "../../Components/Nav";
 import Masthead from "../../Components/Masthead";
 import Tweets from "../../Components/Tweets";
 import SigninSignupDialog from "../../Components/SigninSignupDialog";
-import Footer from '../../Components/Footer';
+import Footer from "../../Components/Footer";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -29,21 +28,34 @@ const useStyles = makeStyles((theme) => ({
   },
   scrollToTop: {
     position: "fixed",
+    zIndex: theme.zIndex["2"],
     right: theme.spacing(5),
     bottom: theme.spacing(5),
-    zIndex: theme.zIndex["2"],
+    [theme.breakpoints.down('xs')]: {
+      right: theme.spacing(3),
+      bottom: theme.spacing(3),
+    },
+  },
+  snackbar: {
+    [theme.breakpoints.down('xs')]: {
+      bottom: theme.spacing(10),
+    },
   },
 }));
 
-export const Next = () => {
+export const Dashboard = () => {
   const classes = useStyles();
   const [showDrawer, setShowDrawer] = useState(false);
+  const [showScrollTop, setScrollTop] = useState(false);
 
   const dispatch = useDispatch();
   const { message } = useSelector((state) => state.toaster);
 
   const onToggleDrawer = (open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
       return;
     }
 
@@ -56,6 +68,17 @@ export const Next = () => {
       behavior: "smooth",
     });
   };
+  const onScroll = () => {
+    setScrollTop(window.scrollY > 300);
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll, false);
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    }
+  })
 
   const onToasterClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -74,15 +97,6 @@ export const Next = () => {
         <Masthead />
         <Container maxWidth="lg" className={classes.tweetsContainer}>
           <Tweets />
-          <Fab
-            size="small"
-            color="default"
-            aria-label="scroll to top"
-            className={classes.scrollToTop}
-            onClick={onScrollTop}
-          >
-            <ExpandLessIcon />
-          </Fab>
         </Container>
       </main>
       <Footer />
@@ -90,7 +104,7 @@ export const Next = () => {
       <SigninSignupDialog />
 
       <Snackbar
-      key={message || undefined}
+        key={message || undefined}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left",
@@ -109,9 +123,21 @@ export const Next = () => {
             <CloseIcon fontSize="small" />
           </IconButton>
         }
+        className={classes.snackbar}
       />
+
+      <Fab
+        size="small"
+        color="default"
+        aria-label="scroll to top"
+        className={classes.scrollToTop}
+        onClick={onScrollTop}
+        style={{ display: showScrollTop ? 'inline-flex' : 'none' }}
+      >
+        <ExpandLessIcon />
+      </Fab>
     </div>
   );
 };
 
-export default Next;
+export default Dashboard;
