@@ -63,9 +63,7 @@ class TwitterDataView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         category = request.query_params.get('category')
         country = request.query_params.get('country')
-        hashtags = request.query_params.get('hashtags')
         data = request.query_params
-        print(data)
         if country:
             if country.lower() not in COUNTRIES:
                 return send_response({'status': INVALID_PARAMETERS, 'message': 'Country not found'})
