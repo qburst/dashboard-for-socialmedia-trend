@@ -7,7 +7,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
-// import Button from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import ReportIcon from "@material-ui/icons/Report";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
@@ -122,15 +122,12 @@ const Tweet = ({
           >
             {text}{" "}
             {hashtags.map((h) => (
-              // <Button
-              //   size="small"
-              //   key={h}
-              //   className={classes.hashLinks}
-              //   onClick={() => onHastagClick(h)}
-              // >{`#${h}`}</Button>
-              <span key={h}>
-                <span>{`#${h}`}</span>{" "}
-              </span>
+              <Button
+                size="small"
+                key={h}
+                className={classes.hashLinks}
+                onClick={() => onHastagClick(h)}
+              >{`#${h}`}</Button>
             ))}
           </Typography>
           <Typography className={classes.title} color="textSecondary">
